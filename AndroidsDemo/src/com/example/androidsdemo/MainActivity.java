@@ -8,9 +8,11 @@ import java.util.Map;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import cn.forward.androids.utils.LogUtil;
 
 /**
  * @author huangziwei

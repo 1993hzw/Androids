@@ -1,6 +1,7 @@
 package cn.forward.androids.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,122 +12,135 @@ import android.graphics.Path.FillType;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import cn.forward.androids.R;
 
 /**
  * 可设置形状的ImageView
- * 
+ *
  * @author huangziwei
  */
 public class ShapeImageView extends ImageView {
 
-	public static int SHAPE_REC = 1; // 矩形
-	public static int SHAPE_CIRCLE = 2; // 圆形
+    public static int SHAPE_REC = 1; // 矩形
+    public static int SHAPE_CIRCLE = 2; // 圆形
 
-	private int mBorderSize = 0; // 边框大小,默认为０，即无边框
-	private int mBorderColor = Color.WHITE; // 边框颜色，默认为白色
-	private int mShape = SHAPE_REC; // 形状，默认为直接矩形
-	private float mRoundRadius = 0; // 矩形的圆角半径,默认为０，即直角矩形
-	private Path mPath = new Path();
-	private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-	private RectF mRectF = new RectF(); // imageview的矩形区域
+    private int mBorderSize = 0; // 边框大小,默认为０，即无边框
+    private int mBorderColor = Color.WHITE; // 边框颜色，默认为白色
+    private int mShape = SHAPE_REC; // 形状，默认为直接矩形
+    private float mRoundRadius = 0; // 矩形的圆角半径,默认为０，即直角矩形
+    private Path mPath = new Path();
+    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private RectF mRectF = new RectF(); // imageview的矩形区域
 
-	public ShapeImageView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
+    public ShapeImageView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-	public ShapeImageView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		mPaint.setStyle(Style.STROKE);
-		mPaint.setStrokeWidth(mBorderSize);
-		mPaint.setColor(mBorderColor);
-	}
+    public ShapeImageView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(attrs);
+        mPaint.setStyle(Style.STROKE);
+        mPaint.setStrokeWidth(mBorderSize);
+        mPaint.setColor(mBorderColor);
+    }
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		// 只绘制中间的圆形部分
-		canvas.clipPath(mPath);
-		super.onDraw(canvas);
-		if (mBorderSize > 0) { // 绘制边框
-			if (mShape == SHAPE_CIRCLE) {
-				canvas.drawCircle(mRectF.right / 2, mRectF.bottom / 2,
-						Math.min(mRectF.right, mRectF.bottom) / 2, mPaint);
-			} else {
-				canvas.drawRoundRect(mRectF, mRoundRadius, mRoundRadius, mPaint);
-			}
-		}
-	}
+    private void init(AttributeSet attrs) {
 
-	// 宽度高度已确定，设置圆形
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right,
-			int bottom) {
-		super.onLayout(changed, left, top, right, bottom);
-		mRectF.top = 0;
-		mRectF.left = 0;
-		mRectF.right = getWidth(); // 宽度
-		mRectF.bottom = getHeight(); // 高度
-		initShape();
-	}
+        TypedArray a = getContext().obtainStyledAttributes(attrs,
+                R.styleable.ShapeImageView);
+        mShape = a.getInt(R.styleable.ShapeImageView_shape, mShape);
+        mRoundRadius = a.getDimension(R.styleable.ShapeImageView_round_radius, mRoundRadius);
+        mBorderSize = a.getDimensionPixelSize(R.styleable.ShapeImageView_border_size, mBorderSize);
+        mBorderColor = a.getColor(R.styleable.ShapeImageView_border_color, mBorderColor);
+        a.recycle();
+    }
 
-	private void initShape() {
-		if (mShape == SHAPE_CIRCLE) {
-			int x = (int) (mRectF.right / 2);
-			int y = (int) (mRectF.bottom / 2);
-			int r = Math.min(x, y); // 半径取宽度和高度两者中的较小值的一半
-			mPath.reset();
-			mPath.addCircle(x, y, r, Direction.CW);
-			mPath.close();
-			mPath.setFillType(FillType.WINDING);
-		} else if (mShape == SHAPE_REC) { // 圆角矩形
-			mPath.reset();
-			mPath.addRoundRect(mRectF, mRoundRadius, mRoundRadius, Direction.CW);
-			mPath.close();
-			mPath.setFillType(FillType.WINDING);
-		} else { // 默认为直接矩形，即原始的ImageView
-			mPath.reset();
-			mPath.addRect(mRectF, Direction.CW);
-			mPath.close();
-			mPath.setFillType(FillType.WINDING);
-		}
-		invalidate();
-	}
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // 只绘制中间的圆形部分
+        canvas.clipPath(mPath);
+        super.onDraw(canvas);
+        if (mBorderSize > 0) { // 绘制边框
+            if (mShape == SHAPE_CIRCLE) {
+                canvas.drawCircle(mRectF.right / 2, mRectF.bottom / 2,
+                        Math.min(mRectF.right, mRectF.bottom) / 2, mPaint);
+            } else {
+                canvas.drawRoundRect(mRectF, mRoundRadius, mRoundRadius, mPaint);
+            }
+        }
+    }
 
-	public int getShape() {
-		return mShape;
-	}
+    // 宽度高度已确定，设置圆形
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right,
+                            int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        mRectF.top = 0;
+        mRectF.left = 0;
+        mRectF.right = getWidth(); // 宽度t
+        mRectF.bottom = getHeight(); // 高度
+        initShape();
+    }
 
-	public void setShape(int shape) {
-		mShape = shape;
-		initShape();
-	}
+    private void initShape() {
+        if (mShape == SHAPE_CIRCLE) {
+            int x = (int) (mRectF.right / 2);
+            int y = (int) (mRectF.bottom / 2);
+            int r = Math.min(x, y); // 半径取宽度和高度两者中的较小值的一半
+            mPath.reset();
+            mPath.addCircle(x, y, r, Direction.CW);
+            mPath.close();
+            mPath.setFillType(FillType.WINDING);
+        } else if (mShape == SHAPE_REC) { // 圆角矩形
+            mPath.reset();
+            mPath.addRoundRect(mRectF, mRoundRadius, mRoundRadius, Direction.CW);
+            mPath.close();
+            mPath.setFillType(FillType.WINDING);
+        } else { // 默认为直接矩形，即原始的ImageView
+            mPath.reset();
+            mPath.addRect(mRectF, Direction.CW);
+            mPath.close();
+            mPath.setFillType(FillType.WINDING);
+        }
+        invalidate();
+    }
 
-	public int getBorderSize() {
-		return mBorderSize;
-	}
+    public int getShape() {
+        return mShape;
+    }
 
-	public void setBorderSize(int mBorderSize) {
-		this.mBorderSize = mBorderSize;
-		mPaint.setStrokeWidth(mBorderSize);
-		invalidate();
-	}
+    public void setShape(int shape) {
+        mShape = shape;
+        initShape();
+    }
 
-	public int getBorderColor() {
-		return mBorderColor;
-	}
+    public int getBorderSize() {
+        return mBorderSize;
+    }
 
-	public void setBorderColor(int mBorderColor) {
-		this.mBorderColor = mBorderColor;
-		mPaint.setColor(mBorderColor);
-		invalidate();
-	}
+    public void setBorderSize(int mBorderSize) {
+        this.mBorderSize = mBorderSize;
+        mPaint.setStrokeWidth(mBorderSize);
+        invalidate();
+    }
 
-	public float getRoundRadius() {
-		return mRoundRadius;
-	}
+    public int getBorderColor() {
+        return mBorderColor;
+    }
 
-	public void setRoundRadius(float mRoundRadius) {
-		this.mRoundRadius = mRoundRadius;
-		invalidate();
-	}
+    public void setBorderColor(int mBorderColor) {
+        this.mBorderColor = mBorderColor;
+        mPaint.setColor(mBorderColor);
+        invalidate();
+    }
+
+    public float getRoundRadius() {
+        return mRoundRadius;
+    }
+
+    public void setRoundRadius(float mRoundRadius) {
+        this.mRoundRadius = mRoundRadius;
+        invalidate();
+    }
 
 }
