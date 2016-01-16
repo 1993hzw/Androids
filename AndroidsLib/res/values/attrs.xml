@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 百分比缩放 -->
+    <declare-styleable name="PercentImageView">
+
+        <!-- 高度设置，参考宽度，如0.5 , 表示 高度＝宽度×０.5 -->
+        <attr name="height_to_width_ratio" format="float" />
+        <!-- 宽度设置，参考高度，如0.5 , 表示 宽度＝高度×０.5 -->
+        <attr name="width_to_height_ratio" format="float" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <cn.forward.androids.views.RatioImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        app:height_to_width_ratio="0.2"
+        android:src="@drawable/chatplane_main_bg" />
+
+    <cn.forward.androids.views.RatioImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/chatplane_main_bg" />
+
+</LinearLayout>
