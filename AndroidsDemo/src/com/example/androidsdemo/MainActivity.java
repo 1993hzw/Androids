@@ -28,22 +28,30 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 
 		setListAdapter(new SimpleAdapter(this, createData(),
-				android.R.layout.simple_list_item_2, new String[] { TITLE,
-						SUBTITLE }, new int[] { android.R.id.text1,
-						android.R.id.text2 }));
+                android.R.layout.simple_list_item_2, new String[]{TITLE,
+                SUBTITLE}, new int[]{android.R.id.text1,
+                android.R.id.text2}));
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if (position == 0) {
 			startActivity(new Intent(getApplicationContext(),
-					RatioImageViewDemo.class));
-		}
+					ShapeImageViewDemo.class));
+		}else if(position==1){
+            startActivity(new Intent(getApplicationContext(),
+                    MaskImageViewDemo.class));
+        }else if(position==2){
+            startActivity(new Intent(getApplicationContext(),
+                    RatioImageViewDemo.class));
+        }
 	}
 
 	private List<Map<String, String>> createData() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		data.add(createItem("RatioImageview", "test RatioImageview"));
+		data.add(createItem("ShapeImageview", "可设置形状(圆形、圆角矩形)的ImageView，抗锯齿"));
+        data.add(createItem("MaskImageview", "test MaskImageview"));
+        data.add(createItem("RatioImageview", "test RatioImageview"));
 		return data;
 	}
 
@@ -51,7 +59,7 @@ public class MainActivity extends ListActivity {
 		Map<String, String> item = new HashMap<String, String>();
 
 		item.put(TITLE, title);
-		item.put(subtitle, subtitle);
+		item.put(SUBTITLE, subtitle);
 
 		return item;
 	}
