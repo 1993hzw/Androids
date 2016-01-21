@@ -10,7 +10,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:is_height_fix_drawable_size_ratio="true"
-            android:src="@drawable/chatplane_main_bg"/>
+            android:src="@drawable/world_map"/>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -41,7 +41,7 @@
             app:shape="circle"
             app:border_size="10dp"
             app:border_color="#ffffff"
-            android:src="@drawable/chatplane_main_bg"/>
+            android:src="@drawable/world_map"/>
     <cn.forward.androids.views.ShapeImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -50,6 +50,6 @@
             app:round_radius="45px"
             app:border_size="10dp"
             app:border_color="#ff0000"
-            android:src="@drawable/chatplane_main_bg"/>
+            android:src="@drawable/world_map"/>
 
 </LinearLayout>
