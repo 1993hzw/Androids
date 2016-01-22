@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import cn.forward.androids.R;
 
 /**
- * 点击时，显示遮罩 (前提设置了setClickable(true))
+ * 可在背景图和前景图显示遮罩效果的ImageView (前提设置了setClickable(true))
  *
  * @author huangziwei
  * @date 2015.12.29
@@ -21,8 +21,8 @@ public class MaskImageView extends ImageView {
     public static final int MASK_LEVEL_FOREGROUND = 2; // 前景图显示遮罩
     private boolean mIsIgnoreAlpha = true; // 是否忽略图片的透明度，默认为true,透明部分不显示遮罩
 
-    private boolean mIsShowMaskOnClick = true; // 点击时是否显示遮罩
-    private int mShadeColor = 0x00ffffff; // 遮罩颜色（argb）
+    private boolean mIsShowMaskOnClick = true; // 点击时是否显示遮罩，默认开启
+    private int mShadeColor = 0x00ffffff; // 遮罩颜色（argb,需要设置透明度）
 
     private int mMaskLevel = MASK_LEVEL_FOREGROUND; // 默认为前景图显示遮罩
     private boolean mIsPressed; // 是否正在点击
@@ -43,7 +43,6 @@ public class MaskImageView extends ImageView {
     public MaskImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
-        setClickable(true);
     }
 
     private void init(AttributeSet attrs) {
@@ -57,7 +56,7 @@ public class MaskImageView extends ImageView {
         mShadeColor = a.getColor(R.styleable.MaskImageView_mask_color, mShadeColor);
         mMaskLevel = a.getInt(R.styleable.MaskImageView_mask_level, mMaskLevel);
 
-        // 忽略透明度是的颜色矩阵
+        // 忽略透明度时的颜色矩阵
         float r = Color.alpha(mShadeColor) / 255f;
         r=r-(1 - r)*0.15f;
         float rr = (1 - r)*1.15f;
@@ -90,7 +89,7 @@ public class MaskImageView extends ImageView {
             if (getDrawable() != null) {
                 getDrawable().mutate();
                 getDrawable().setColorFilter(colorFilter);
-                getBackground().invalidateSelf();
+                getDrawable().invalidateSelf();
             }
         }
     }
@@ -200,7 +199,7 @@ public class MaskImageView extends ImageView {
 
     public void setShadeColor(int mShadeColor) {
         this.mShadeColor = mShadeColor;
-        // 忽略透明度是的颜色矩阵
+        // 忽略透明度时的颜色矩阵
         float r = Color.alpha(mShadeColor) / 255f;
         r=r-(1 - r)*0.15f;
         float rr = (1 - r)*1.15f;
