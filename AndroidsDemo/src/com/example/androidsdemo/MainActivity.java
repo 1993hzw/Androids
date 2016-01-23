@@ -44,14 +44,18 @@ public class MainActivity extends ListActivity {
         }else if(position==2){
             startActivity(new Intent(getApplicationContext(),
                     RatioImageViewDemo.class));
-        }
+        }else if(position==3){
+			startActivity(new Intent(getApplicationContext(),
+					ScrollPickerViewDemo.class));
+		}
 	}
 
 	private List<Map<String, String>> createData() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 		data.add(createItem("ShapeImageview", "可设置形状(圆形、圆角矩形)的ImageView，抗锯齿"));
-        data.add(createItem("MaskImageview", "test MaskImageview"));
+        data.add(createItem("MaskImageview", "Android自定义View——可在背景图和前景图显示遮罩效果的ImageView"));
         data.add(createItem("RatioImageview", "test RatioImageview"));
+		data.add(createItem("ScrollPickerView", "ScrollPickerView的使用例子：日期选择器"));
 		return data;
 	}
 

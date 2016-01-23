@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffff"
+              android:padding="5dp"
+              android:orientation="vertical">
+  <LinearLayout
+          android:background="#aaaaaa"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              android:gravity="center"
+              android:layout_weight="1"
+              android:textColor="#000000"
+            android:text="月"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              android:gravity="center"
+              android:layout_weight="1"
+              android:textColor="#000000"
+              android:text="日"/>
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="16sp"
+              android:gravity="center"
+              android:layout_weight="1"
+              android:textColor="#000000"
+              android:text="年"/>
+    </LinearLayout>
+  <LinearLayout
+          android:layout_marginTop="5dp"
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+    <cn.forward.androids.views.ScrollPickerView
+            android:id="@+id/view_month"
+            app:min_text_size="24dp"
+            app:max_text_size="30dp"
+            app:visible_item_count="3"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"/>
+    <cn.forward.androids.views.ScrollPickerView
+            android:id="@+id/view_day"
+            app:min_text_size="24dp"
+            app:max_text_size="30dp"
+            app:visible_item_count="3"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"/>
+    <cn.forward.androids.views.ScrollPickerView
+            android:id="@+id/view_year"
+            app:min_text_size="24dp"
+            app:max_text_size="30dp"
+            app:visible_item_count="3"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"/>
+
+  </LinearLayout>
+
+
+</LinearLayout>

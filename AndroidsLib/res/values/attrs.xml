@@ -39,4 +39,12 @@
         <attr name="border_color" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="ScrollPickerView">
+        <attr name="min_text_size" format="dimension"/>
+        <attr name="max_text_size" format="dimension"/>
+        <attr name="start_color" format="color"/>
+        <attr name="end_color" format="color"/>
+        <attr name="visible_item_count" format="integer"/>
+    </declare-styleable>
+
 </resources>
