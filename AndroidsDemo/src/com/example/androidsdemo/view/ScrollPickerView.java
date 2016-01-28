@@ -1,4 +1,4 @@
-package cn.forward.androids.views;
+package com.example.androidsdemo.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,13 +15,17 @@ import android.view.View;
 import android.widget.Scroller;
 import cn.forward.androids.R;
 import cn.forward.androids.utils.ColorUtil;
+import cn.forward.androids.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * 滚动选择器,带惯性滑动
+ *
+ * （为了便以理解滚动选择器的实现原理，该滚动选择器默认开启循环滚动，设置是否循环滚动不生效，）
  *
  * @author huangziwei
  * @date 2016.1.11
@@ -41,7 +45,7 @@ public class ScrollPickerView extends View {
     private Paint mPaint; //
     private int mMeasureWidth;
     private int mMeasureHeight;
-    private int mSelected; // 当前选中的item下标
+    private int mSelected; // 当前选中的item下标，实际保持不变一直为中间位置的那个元素
     private List<String> mData;
     private int mItemHeight = 0; // 每个条目的高度=mMeasureHeight／mVisibleItemCount
     private int mCenterY; // 中间item的起始坐标y
@@ -58,6 +62,7 @@ public class ScrollPickerView extends View {
     // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次触屏滑动的坐标
     private int mLastScrollY = 0; // Scroller的坐标y
 
+
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -72,7 +77,7 @@ public class ScrollPickerView extends View {
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
 
-        setData(new ArrayList<String>(Arrays.asList("one", "two", "three", "four", "five","six","seven")));
+        setData(new ArrayList<String>(Arrays.asList("1", "2", "3", "4", "5")));
         init(attrs);
     }
 
@@ -81,9 +86,11 @@ public class ScrollPickerView extends View {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
                     R.styleable.ScrollPickerView);
             mMinTextSize = typedArray.getDimensionPixelSize(
-                    R.styleable.ScrollPickerView_min_text_size, mMinTextSize);
+                    R.styleable.ScrollPickerView_min_text_size,
+                    mMinTextSize);
             mMaxTextSize = typedArray.getDimensionPixelSize(
-                    R.styleable.ScrollPickerView_max_text_size, mMaxTextSize);
+                    R.styleable.ScrollPickerView_max_text_size,
+                    mMaxTextSize);
             mStartColor = typedArray.getColor(
                     R.styleable.ScrollPickerView_start_color, mStartColor);
             mEndColor = typedArray.getColor(
@@ -91,46 +98,22 @@ public class ScrollPickerView extends View {
             mVisibleItemCount = typedArray.getInt(
                     R.styleable.ScrollPickerView_visible_item_count,
                     mVisibleItemCount);
-            mIsCirculation = typedArray.getBoolean(R.styleable.ScrollPickerView_is_circulation, mIsCirculation);
             typedArray.recycle();
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // 中间item
-        drawItem(canvas, mSelected, 0);
+        drawItem(canvas, mSelected);
         int length = mVisibleItemCount / 2 + 1;
-        int positon;
-        // 上下两边
         for (int i = 1; i <= length && i <= mData.size() / 2; i++) {
-
-            // 上面的items
-            positon = mSelected - i < 0 ? mData.size() + mSelected - i
-                    : mSelected - i;
-            if (mIsCirculation) {
-                drawItem(canvas, positon, -i);
-            } else if (mSelected - i >= 0) { // 非循环滚动
-                drawItem(canvas, positon, -i);
-            }
-
-            // 下面的items
-            positon = mSelected + i >= mData.size() ? mSelected + i
-                    - mData.size() : mSelected + i;
-            if (mIsCirculation) {
-                drawItem(canvas, positon, i);
-            } else if (mSelected + i < mData.size()) { // 非循环滚动
-                drawItem(canvas, positon, i);
-            }
+            drawItem(canvas, mSelected - i);
+            drawItem(canvas, mSelected + i);
         }
     }
 
-    /**
-     * @param canvas
-     * @param position 在mData数据集中的位置
-     * @param relative 相对中间item的位置　postion-mSelected
-     */
-    private void drawItem(Canvas canvas, int position, int relative) {
+    private void drawItem(Canvas canvas, int position) {
+        int relative = position - mSelected;
         String text = mData.get(position);
         float x = 0;
         if (relative == -1) { // 上一个
@@ -198,6 +181,7 @@ public class ScrollPickerView extends View {
         mItemHeight = mMeasureHeight / mVisibleItemCount;
         mCenterY = mVisibleItemCount / 2 * mItemHeight;
 
+        LogUtil.i("hzw", "itemheight " + mItemHeight);
     }
 
     @Override
@@ -256,44 +240,11 @@ public class ScrollPickerView extends View {
     // 循环滚动
     private void checkCirculation() {
         if (mMoveLength >= mItemHeight) { // 向下滑动,最后一个元素放在头部
-            mSelected--;
-            if (mSelected < 0) {  // 滚动顶部，判断是否循环滚动
-                if (mIsCirculation) {
-                    mSelected = mData.size() - 1;
-                    mMoveLength = 0;
-                } else { // 非循环滚动
-                    mSelected = 0;
-                    mMoveLength = mItemHeight;
-                    if(mIsFling){ // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
-                        mScroller.forceFinished(true);
-                    }
-                    if(mIsMovingCenter) { //  移回中间位置
-                        scroll(mMoveLength,0);
-                    }
-                }
-            }else{
-                mMoveLength = 0;
-            }
-
+            mData.add(0, mData.remove(mData.size() - 1));
+            mMoveLength = 0;
         } else if (mMoveLength <= -mItemHeight) { // 向上滑动，第一个元素放在尾部
-            mSelected++;
-            if (mSelected >= mData.size()) { // 滚动末尾，判断是否循环滚动
-                if (mIsCirculation) {
-                    mSelected = 0;
-                    mMoveLength = 0;
-                } else { // 非循环滚动
-                    mSelected = mData.size() - 1;
-                    mMoveLength = -mItemHeight;
-                    if(mIsFling){ // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
-                        mScroller.forceFinished(true);
-                    }
-                    if(mIsMovingCenter) { //  移回中间位置
-                        scroll(mMoveLength,0);
-                    }
-                }
-            }else{
-                mMoveLength = 0;
-            }
+            mData.add(mData.remove(0));
+            mMoveLength = 0;
         }
     }
 
@@ -336,8 +287,8 @@ public class ScrollPickerView extends View {
         mLastScrollY = (int) from;
         mIsFling = true;
         // 最多可以惯性滑动10个item
-        mScroller.fling(0, (int) from, 0, (int) vY, 0, 0, -10 * mItemHeight,
-                10 * mItemHeight);
+        mScroller.fling(0, (int) from, 0, (int) vY, 0, 0, -10
+                * mItemHeight, 10 * mItemHeight);
         invalidate();
     }
 
@@ -367,8 +318,7 @@ public class ScrollPickerView extends View {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
                                final float velocityY) {
-            // 惯性滑动
-            if (mIsInertiaScroll) {
+            if(mIsInertiaScroll) {
                 cancelScroll();
                 fling(mMoveLength, velocityY);
             }
@@ -381,7 +331,7 @@ public class ScrollPickerView extends View {
     }
 
     public void setData(List<String> data) {
-        if (data == null) {
+        if(data==null){
             mData = new ArrayList<String>();
         }
         this.mData = data;
@@ -418,10 +368,19 @@ public class ScrollPickerView extends View {
                 || position == mSelected) {
             return;
         }
-        mSelected = position;
+        int count = Math.abs(mSelected - position);
+        List<String> list = new ArrayList<String>();
+        if (position < mSelected) {
+            list.addAll(mData.subList(mData.size() - count, mData.size()));
+            list.addAll(mData.subList(0, mData.size() - count));
+        } else {
+            list.addAll(mData.subList(count, mData.size()));
+            list.addAll(mData.subList(0, count));
+        }
+        mData = list;
         invalidate();
         if (mListener != null) {
-            notifySelected();
+            mListener.onSelected(mData, mSelected);
         }
     }
 
@@ -441,19 +400,10 @@ public class ScrollPickerView extends View {
         this.mIsInertiaScroll = inertiaScroll;
     }
 
-    public boolean isIsCirculation() {
-        return mIsCirculation;
-    }
-
-    public void setIsCirculation(boolean isCirculation) {
-        this.mIsCirculation = isCirculation;
-    }
-
     /**
      * @author huangziwei
      */
     public interface OnSelectedListener {
         void onSelected(List<String> data, int position);
     }
-
 }

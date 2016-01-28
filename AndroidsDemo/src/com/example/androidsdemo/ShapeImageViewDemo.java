@@ -11,6 +11,8 @@ public class ShapeImageViewDemo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shapeimageview);
 
+		setTitle("ShapeImageView");
+
 	}
 
 }

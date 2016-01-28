@@ -10,6 +10,8 @@ public class RatioImageViewDemo extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ratioimageview);
 
+		setTitle("RatioImageView");
+
 	}
 
 }

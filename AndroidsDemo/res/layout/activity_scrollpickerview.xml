@@ -6,6 +6,11 @@
               android:background="#ffffff"
               android:padding="5dp"
               android:orientation="vertical">
+  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            android:text="循环滚动"
+          />
   <LinearLayout
           android:background="#aaaaaa"
           android:orientation="horizontal"
@@ -17,7 +22,7 @@
               android:gravity="center"
               android:layout_weight="1"
               android:textColor="#000000"
-            android:text="月"/>
+              android:text="月"/>
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:textSize="16sp"
@@ -32,7 +37,7 @@
               android:layout_weight="1"
               android:textColor="#000000"
               android:text="年"/>
-    </LinearLayout>
+  </LinearLayout>
   <LinearLayout
           android:layout_marginTop="5dp"
           android:orientation="horizontal"
@@ -65,5 +70,39 @@
 
   </LinearLayout>
 
+  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            android:text="非循环滚动"
+            android:layout_marginTop="20dp"
+          />
 
+  <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          >
+    <cn.forward.androids.views.ScrollPickerView
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#eeeeee"
+            app:is_circulation="false"
+            app:min_text_size="24dp"
+            app:max_text_size="30dp"
+            app:visible_item_count="5"
+            app:start_color="#ff0000"
+            android:layout_width="wrap_content"
+            android:layout_height="220dp"/>
+    <cn.forward.androids.views.ScrollPickerView
+            android:layout_weight="1"
+            android:background="#888888"
+            app:is_circulation="false"
+            app:min_text_size="24dp"
+            app:max_text_size="30dp"
+            app:visible_item_count="4"
+            app:start_color="#0000ff"
+            app:end_color="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="220dp"/>
+  </LinearLayout>
 </LinearLayout>

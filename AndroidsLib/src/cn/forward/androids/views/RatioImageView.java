@@ -15,19 +15,18 @@ import cn.forward.androids.R;
  */
 public class RatioImageView extends ImageView {
 
-    // 优先级从大到小：
-    // mIsWidthFitDrawableSizeRatio mIsHeightFitDrawableSizeRatio
-    // mWidthRatio mHeightRatio
-    // 即如果设置了mIsWidthFitDrawableSizeRatio为true，则优先级较低的三个值不生效
+    /* 优先级从大到小：
+     mIsWidthFitDrawableSizeRatio mIsHeightFitDrawableSizeRatio
+     mWidthRatio mHeightRatio
+     即如果设置了mIsWidthFitDrawableSizeRatio为true，则优先级较低的三个值不生效 */
 
+    private float mDrawableSizeRatio = -1f; // src图片(前景图)的宽高比例
     // 根据前景图宽高比例测量View,防止图片缩放变形
     private boolean mIsWidthFitDrawableSizeRatio; // 宽度是否根据src图片(前景图)的比例来测量（高度已知）
     private boolean mIsHeightFitDrawableSizeRatio; // 高度是否根据src图片(前景图)的比例来测量（宽度已知）
-
+    // 宽高比例
     private float mWidthRatio = -1; // 宽度 = 高度*mWidthRatio
     private float mHeightRatio = -1; // 高度 = 宽度*mHeightRatio
-
-    private float mDrawableSizeRatio = -1f; // src图片(前景图)的宽高比例
 
     public RatioImageView(Context context) {
         this(context, null);

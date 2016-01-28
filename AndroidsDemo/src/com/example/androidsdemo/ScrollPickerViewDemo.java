@@ -42,6 +42,8 @@ public class ScrollPickerViewDemo extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrollpickerview);
 
+        setTitle("ScrollPickerView");
+
         mYearView = (ScrollPickerView) this.findViewById(R.id.view_year);
         mMonthView = (ScrollPickerView) this.findViewById(R.id.view_month);
         mDayView = (ScrollPickerView) this.findViewById(R.id.view_day);

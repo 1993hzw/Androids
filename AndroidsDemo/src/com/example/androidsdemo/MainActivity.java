@@ -52,10 +52,10 @@ public class MainActivity extends ListActivity {
 
 	private List<Map<String, String>> createData() {
 		List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-		data.add(createItem("ShapeImageview", "可设置形状(圆形、圆角矩形)的ImageView，抗锯齿"));
-        data.add(createItem("MaskImageview", "Android自定义View——可在背景图和前景图显示遮罩效果的ImageView"));
-        data.add(createItem("RatioImageview", "test RatioImageview"));
-		data.add(createItem("ScrollPickerView", "ScrollPickerView的使用例子：日期选择器"));
+		data.add(createItem("ShapeImageView", "可设置形状(圆形、圆角矩形)的ImageView，抗锯齿"));
+        data.add(createItem("MaskImageView", "可在背景图和前景图显示遮罩效果的ImageView"));
+        data.add(createItem("RatioImageView", "可以设置宽高比例的ImageView"));
+		data.add(createItem("ScrollPickerView", "滚动选择器，可设置是否循环滚动，可见条目数"));
 		return data;
 	}
 

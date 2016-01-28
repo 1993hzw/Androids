@@ -45,6 +45,8 @@
         <attr name="start_color" format="color"/>
         <attr name="end_color" format="color"/>
         <attr name="visible_item_count" format="integer"/>
+        <!-- 是否循环滚动，默认为true，开启-->
+        <attr name="is_circulation" format="boolean"/>
     </declare-styleable>
 
 </resources>
