@@ -2,14 +2,10 @@ package cn.forward.androids.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Path.FillType;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import cn.forward.androids.R;
@@ -58,12 +54,19 @@ public class ShapeImageView extends ImageView {
         a.recycle();
     }
 
+    /**
+     *  对于普通的view,在执行到onDraw()时，背景图已绘制完成,所以必须在draw()中确定画布形状。
+     *
+     *  对于ViewGroup,当它没有背景时直接调用的是dispatchDraw()方法, 而绕过了draw()方法，
+     *  当它有背景的时候就调用draw()方法，而draw()方法里包含了dispatchDraw()方法的调用，
+     *  所以必须在dispatchDraw()中确定画布形状
+     */
     @Override
-    protected void onDraw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.save(); //　保存canvas状态
         // 只绘制中间的几何部分
         canvas.clipPath(mPath);
-        super.onDraw(canvas); // 绘制图片
+        super.draw(canvas); // 绘制图片
         canvas.restore(); // 还原canvas状态
         // 一定要有canvas.save()和canvas.restore()，否则由于clipPath造成边缘出现锯齿，导致边框内侧平滑但外侧出现锯齿
 

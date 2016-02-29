@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.widget.ImageView;
 import cn.forward.androids.R;
 
@@ -25,8 +24,6 @@ public class MaskImageView extends ImageView {
     private int mShadeColor = 0x00ffffff; // 遮罩颜色（argb,需要设置透明度）
 
     private int mMaskLevel = MASK_LEVEL_FOREGROUND; // 默认为前景图显示遮罩
-    private boolean mIsPressed; // 是否正在点击
-
 
     ColorMatrix mColorMatrix = new ColorMatrix(); // 颜色矩阵
     ColorFilter mColorFilter;
@@ -121,7 +118,7 @@ public class MaskImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
 
         if (mIsIgnoreAlpha) { // 忽略透明度
-            if (mIsShowMaskOnClick && mIsPressed && isClickable()) {
+            if (mIsShowMaskOnClick && isPressed()) {
                 // 绘制遮罩层
                 setDrawableColorFilter(mColorFilter);
             } else {
@@ -131,14 +128,14 @@ public class MaskImageView extends ImageView {
         } else { // 不忽略透明度
             setDrawableColorFilter(null);
             if (mMaskLevel == MASK_LEVEL_BACKGROUND) { // 背景图
-                if (mIsShowMaskOnClick && mIsPressed && isClickable()) {
+                if (mIsShowMaskOnClick && isPressed()) {
                     // 绘制遮罩层
                     canvas.drawColor(mShadeColor);
                 }
                 super.onDraw(canvas);
             } else { // 前景图
                 super.onDraw(canvas);
-                if (mIsShowMaskOnClick && mIsPressed && isClickable()) {
+                if (mIsShowMaskOnClick && isPressed()) {
                     // 绘制遮罩层
                     canvas.drawColor(mShadeColor);
                 }
@@ -147,32 +144,13 @@ public class MaskImageView extends ImageView {
 
     }
 
-
+    /**
+     * view状态改变
+     */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        if (!mIsShowMaskOnClick) {
-            return super.onTouchEvent(event);
-        }
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mIsPressed = true;
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_OUTSIDE:
-            case MotionEvent.ACTION_HOVER_EXIT:
-            case MotionEvent.ACTION_CANCEL:
-                // 当手指离开imageview区域时，取消遮罩
-                mIsPressed = false;
-                invalidate();
-                break;
-            default:
-                break;
-        }
-        // 不返回true，即不拦截触摸事件
-        return super.onTouchEvent(event);
+    protected void drawableStateChanged(){
+        super.drawableStateChanged();
+        invalidate();
     }
 
     public boolean isIsIgnoreAlpha() {

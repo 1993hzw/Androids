@@ -13,12 +13,12 @@ import java.util.List;
 
 public class ScrollPickerViewDemo extends Activity {
 
-    // ³õÊ¼ÔÂ·İ
+    // åˆå§‹æœˆä»½
     private static final int ORIGIN_YEAR = 2000;
     private static final int ORIGIN_MONTH = 1;
     private static final int ORIGIN_DAY = 1;
 
-    // ¿ÉÑ¡ÔñµÄÄê·İ£¬´Ó1900µ½ÏÖÔÚ
+    // å¯é€‰æ‹©çš„å¹´ä»½ï¼Œä»1900åˆ°ç°åœ¨
     private static final String[] YEARS;
     static {
         ArrayList<String> list = new ArrayList<String>();
@@ -29,7 +29,7 @@ public class ScrollPickerViewDemo extends Activity {
         YEARS = list.toArray(new String[list.size()]);
     }
 
-    // ÔÂ·İ
+    // æœˆä»½
     private static final String[] MONTHS = {"1", "2", "3", "4", "5", "6", "7",
             "8", "9", "10", "11", "12"};
 
@@ -53,32 +53,32 @@ public class ScrollPickerViewDemo extends Activity {
     }
 
     private void init() {
-        // ÉèÖÃÊı¾İ
+        // è®¾ç½®æ•°æ®
         mYearView.setData(new ArrayList<String>(Arrays.asList(YEARS)));
         mMonthView.setData(new ArrayList<String>(Arrays.asList(MONTHS)));
         mDayView.setData(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH));
 
-        // ÉèÖÃ³õÊ¼Öµ
+        // è®¾ç½®åˆå§‹å€¼
         mYearView.setSelectedPosition(mYearView.getData().indexOf(
                 "" + ORIGIN_YEAR));
         mMonthView.setSelectedPosition(ORIGIN_MONTH - 1);
         mDayView.setSelectedPosition(ORIGIN_DAY - 1);
 
-        // ¸ü¸ÄÄê·İ
+        // æ›´æ”¹å¹´ä»½
         mYearView.setOnSelectedListener(new ScrollPickerView.OnSelectedListener() {
             @Override
             public void onSelected(List<String> data, int position) {
                 LogUtil.i("hzw", "year " + mYearView.getSelectedItem());
 
                 int month = Integer.parseInt(mMonthView.getSelectedItem());
-                // £²ÔÂ·İ,¸üĞÂÌìÊı
+                // ï¼’æœˆä»½,æ›´æ–°å¤©æ•°
                 if (month == 2) {
                     changeMonthDays();
                 }
             }
         });
 
-        // ¸ü¸ÄÔÂ·İ
+        // æ›´æ”¹æœˆä»½
         mMonthView.setOnSelectedListener(new ScrollPickerView.OnSelectedListener() {
             @Override
             public void onSelected(List<String> data, int position) {
@@ -93,7 +93,7 @@ public class ScrollPickerViewDemo extends Activity {
 
     }
 
-    // ¸üĞÂÌìÊı
+    // æ›´æ–°å¤©æ•°
     private void changeMonthDays() {
         int year = Integer.parseInt(mYearView.getSelectedItem());
         int month = Integer.parseInt(mMonthView.getSelectedItem());
