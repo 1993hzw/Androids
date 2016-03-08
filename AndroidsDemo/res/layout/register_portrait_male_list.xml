@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="29dp"
+    android:paddingLeft="52dp"
+    android:paddingRight="52dp"
+    android:paddingTop="29dp" >
+
+    <!-- row 1 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+    </LinearLayout>
+
+    <!-- row 2 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal" >
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_male"
+            app:height_to_width_ratio="1" />
+    </LinearLayout>
+
+    <!-- row 3 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal" >
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_other"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_portrait_other"
+            app:height_to_width_ratio="1" />
+
+        <FrameLayout
+            android:layout_width="@dimen/socially_register_portrait_padding"
+            android:layout_height="1dp" />
+
+        <cn.forward.androids.views.RatioImageView
+            android:id="@+id/socially_register_portrait_item9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/socially_portrait_other"
+            app:height_to_width_ratio="1" />
+    </LinearLayout>
+
+</LinearLayout>

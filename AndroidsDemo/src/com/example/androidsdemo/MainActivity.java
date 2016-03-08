@@ -47,7 +47,10 @@ public class MainActivity extends ListActivity {
         }else if(position==3){
 			startActivity(new Intent(getApplicationContext(),
 					ScrollPickerViewDemo.class));
-		}
+		} else if(position==4){
+            startActivity(new Intent(getApplicationContext(),
+                    AnimatorUtilDemo.class));
+        }
 	}
 
 	private List<Map<String, String>> createData() {
@@ -56,6 +59,7 @@ public class MainActivity extends ListActivity {
         data.add(createItem("MaskImageView", "可在背景图和前景图显示遮罩效果的ImageView"));
         data.add(createItem("RatioImageView", "可以设置宽高比例的ImageView"));
 		data.add(createItem("ScrollPickerView", "滚动选择器，可设置是否循环滚动，可见条目数"));
+        data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
 		return data;
 	}
 

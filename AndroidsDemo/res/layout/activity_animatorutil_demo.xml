@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/register_sex_contanier"
+    android:background="#fbfbfb" >
+
+    <LinearLayout
+        android:id="@+id/register_sex_female"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="49dp"
+        android:layout_marginTop="74dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="female"
+            android:textColor="#0fcffd"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="11dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_default_portrait_female" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/register_sex_male"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="112dp"
+        android:layout_marginLeft="49dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="male"
+            android:textColor="#0fcffd"
+            android:textSize="20dp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="11dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/socially_default_portrait_male" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="complete your profile"
+        android:textColor="#c9c9c9"
+        android:textSize="16dp"
+        android:textStyle="normal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="275dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <FrameLayout
+                android:id="@+id/portrait_shield"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:visibility="invisible" />
+
+            <ScrollView
+                android:id="@+id/portrait_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="#ffffff"
+                android:visibility="invisible" >
+            </ScrollView>
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
