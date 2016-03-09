@@ -33,6 +33,7 @@
         <attr name="shape" format="enum">
             <enum name="rect" value="1"/>
             <enum name="circle" value="2"/>
+            <enum name="oval" value="3"/>
         </attr>
         <attr name="round_radius" format="dimension"/>
         <attr name="border_size" format="dimension"/>

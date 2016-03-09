@@ -3,7 +3,7 @@ package cn.forward.androids.utils;
 import android.graphics.Color;
 
 /**
- * ÑÕÉ«¹¤¾ßÀ¸
+ * é¢œè‰²å·¥å…·æ 
  *
  * @author hzw
  * @date 2016/1/24.
@@ -11,12 +11,12 @@ import android.graphics.Color;
 public class ColorUtil {
 
     /**
-     * ¼ÆËã½¥±äºóµÄÑÕÉ«
+     * è®¡ç®—æ¸å˜åçš„é¢œè‰²
      *
-     * @param startColor ¿ªÊ¼ÑÕÉ«
-     * @param endColor   ½áÊøÑÕÉ«
-     * @param rate       ½¥±äÂÊ£¨0,1£©
-     * @return ½¥±äºóµÄÑÕÉ«£¬µ±rate=0Ê±£¬·µ»ØstartColor£¬µ±rate=1Ê±·µ»ØendColor
+     * @param startColor å¼€å§‹é¢œè‰²
+     * @param endColor   ç»“æŸé¢œè‰²
+     * @param rate       æ¸å˜ç‡ï¼ˆ0,1ï¼‰
+     * @return æ¸å˜åçš„é¢œè‰²ï¼Œå½“rate=0æ—¶ï¼Œè¿”å›startColorï¼Œå½“rate=1æ—¶è¿”å›endColor
      */
     public static int computeGradientColor(int startColor, int endColor, float rate) {
         if (rate < 0) {

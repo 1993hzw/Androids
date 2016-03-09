@@ -19,95 +19,60 @@
                 <cn.forward.androids.views.ShapeImageView
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:scaleType="fitXY"
                         app:shape="circle"
-                        app:border_size="0dp"
-                        app:border_color="#ffffff"
                         android:src="@drawable/world_map"/>
                 <cn.forward.androids.views.ShapeImageView
                         android:layout_marginLeft="5dp"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        android:scaleType="fitXY"
                         app:shape="rect"
+                        app:round_radius="25dp"
+                        android:src="@drawable/world_map"/>
+
+                <cn.forward.androids.views.ShapeImageView
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="80dp"
+                        android:layout_height="110dp"
+                        app:shape="oval"
                         app:round_radius="15dp"
                         app:border_size="0dp"
                         app:border_color="#ffffff"
                         android:src="@drawable/world_map"/>
-
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:layout_gravity="center"
-                          android:gravity="center"
-                          android:textColor="#000000"
-                          android:textSize="20dp"
-                          android:text="无边框，锯齿明显"/>
             </LinearLayout>
 
-
-            <LinearLayout
+            <cn.forward.androids.views.ShapeImageView
                     android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <cn.forward.androids.views.ShapeImageView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:scaleType="fitXY"
-                        app:shape="circle"
-                        app:border_size="2dp"
-                        app:border_color="#000000"
-                        android:src="@drawable/world_map"/>
-                <cn.forward.androids.views.ShapeImageView
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:scaleType="fitXY"
-                        app:shape="rect"
-                        app:round_radius="15dp"
-                        app:border_size="2dp"
-                        app:border_color="#000000"
-                        android:src="@drawable/world_map"/>
+                    android:background="#000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="220dp"
+                    android:layout_height="110dp"
+                    app:shape="circle"
+                    app:round_radius="15dp"
+                    app:border_size="2dp"
+                    app:border_color="#ffffff"
+                    android:src="@drawable/world_map"/>
 
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:layout_gravity="center"
-                          android:gravity="center"
-                          android:textColor="#000000"
-                          android:textSize="20dp"
-                          android:text="黑色边框，无锯齿，边缘平滑"/>
-            </LinearLayout>
-
-            <LinearLayout
+            <cn.forward.androids.views.ShapeImageView
                     android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <cn.forward.androids.views.ShapeImageView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:scaleType="fitXY"
-                        app:shape="circle"
-                        app:border_size="2dp"
-                        app:border_color="#ffffff"
-                        android:src="@drawable/world_map"/>
-                <cn.forward.androids.views.ShapeImageView
-                        android:layout_marginLeft="5dp"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:scaleType="fitXY"
-                        app:shape="rect"
-                        app:round_radius="15dp"
-                        app:border_size="2dp"
-                        app:border_color="#ffffff"
-                        android:src="@drawable/world_map"/>
-
-                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                          android:layout_gravity="center"
-                          android:gravity="center"
-                          android:textColor="#000000"
-                          android:textSize="20dp"
-                          android:text="边框颜色与背景色相同，无锯齿，边缘平滑"/>
-            </LinearLayout>
-
+                    android:background="#000000"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="220dp"
+                    android:layout_height="110dp"
+                    app:shape="rect"
+                    app:round_radius="15dp"
+                    app:border_size="3dp"
+                    app:border_color="#00ff00"
+                    android:src="@drawable/world_map"/>
+            <cn.forward.androids.views.ShapeImageView
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="220dp"
+                    android:layout_height="110dp"
+                    app:shape="oval"
+                    app:round_radius="15dp"
+                    app:border_size="5dp"
+                    app:border_color="#ff0000"
+                    android:src="@drawable/world_map"/>
         </LinearLayout>
     </ScrollView>
 
