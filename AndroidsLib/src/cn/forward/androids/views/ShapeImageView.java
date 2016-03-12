@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.graphics.Paint.Style;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -34,6 +32,7 @@ public class ShapeImageView extends ImageView {
     private final Matrix mShaderMatrix = new Matrix();
     private Paint mBitmapPaint = new Paint();
     private BitmapShader mBitmapShader;
+    private Bitmap mBitmap;
 
     public ShapeImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -47,48 +46,21 @@ public class ShapeImageView extends ImageView {
         mBorderPaint.setColor(mBorderColor);
         mBorderPaint.setAntiAlias(true);
         mBitmapPaint.setAntiAlias(true);
-
-        setScaleType(ScaleType.CENTER_CROP); // 固定为CENTER_CROP，其他不生效
-
-    }
-
-    private void setupBitmapShader() {
-        // super(context, attrs, defStyle)调用setImageDrawable时成员变量还未被正确初始化
-        if (mBitmapPaint == null) {
-            return;
-        }
-        // 获取图片
-        Bitmap bitmap = Util.getBitmapFromDrawable(getDrawable());
-        if (bitmap == null) {
-            return;
-        }
-        mBitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        mBitmapPaint.setShader(mBitmapShader);
-
-        // 固定为CENTER_CROP,使图片在ｖｉｅｗ中居中并裁剪
-        mShaderMatrix.set(null);
-        // 缩放到高或宽　与view的高或宽　匹配
-        float scale = Math.max(mViewRect.right / bitmap.getWidth(), mViewRect.bottom / bitmap.getHeight());
-        // 由于BitmapShader默认是从画布的左上角开始绘制，所以把其平移到画布中间，即居中
-        float dx = (getWidth() - bitmap.getWidth() * scale) / 2;
-        float dy = (getHeight() - bitmap.getHeight() * scale) / 2;
-        mShaderMatrix.setScale(scale, scale);
-        mShaderMatrix.postTranslate(dx, dy);
-
-        mBitmapShader.setLocalMatrix(mShaderMatrix);
-        invalidate();
+        super.setScaleType(ScaleType.CENTER_CROP); // 固定为CENTER_CROP，其他不生效
     }
 
 
     @Override
     public void setImageResource(int resId) {
         super.setImageResource(resId);
+        mBitmap = Util.getBitmapFromDrawable(getDrawable());
         setupBitmapShader();
     }
 
     @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
+        mBitmap = Util.getBitmapFromDrawable(drawable);
         setupBitmapShader();
     }
 
@@ -119,13 +91,15 @@ public class ShapeImageView extends ImageView {
     @Override
     public void onDraw(Canvas canvas) {
 
-        if (mShape == SHAPE_CIRCLE) {
-            canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
-                    Math.min(mViewRect.right, mViewRect.bottom) / 2, mBitmapPaint);
-        } else if (mShape == SHAPE_OVAL) {
-            canvas.drawOval(mViewRect, mBitmapPaint);
-        } else {
-            canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+        if (getDrawable() != null) {
+            if (mShape == SHAPE_CIRCLE) {
+                canvas.drawCircle(getWidth() / 2, getHeight() / 2,
+                        Math.min(getWidth(), getHeight()) / 2, mBitmapPaint);
+            } else if (mShape == SHAPE_OVAL) {
+                canvas.drawOval(mViewRect, mBitmapPaint);
+            } else {
+                canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+            }
         }
 
 
@@ -142,15 +116,48 @@ public class ShapeImageView extends ImageView {
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        initRect();
+        setupBitmapShader();
+    }
+
+    // 不能在onLayout()调用invalidate()，否则导致绘制异常。（setupBitmapShader()中调用了invalidate()）
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right,
                             int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        // 宽度高度已确定,获取矩形区域
-        initShape();
+//        initRect();
+//        setupBitmapShader();
+    }
+
+    private void setupBitmapShader() {
+        // super(context, attrs, defStyle)调用setImageDrawable时,成员变量还未被正确初始化
+        if (mBitmapPaint == null) {
+            return;
+        }
+        if (mBitmap == null) {
+            invalidate();
+            return;
+        }
+        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        mBitmapPaint.setShader(mBitmapShader);
+
+        // 固定为CENTER_CROP,使图片在ｖｉｅｗ中居中并裁剪
+        mShaderMatrix.set(null);
+        // 缩放到高或宽　与view的高或宽　匹配
+        float scale = Math.max(getWidth() * 1f / mBitmap.getWidth(), getHeight() * 1f / mBitmap.getHeight());
+        // 由于BitmapShader默认是从画布的左上角开始绘制，所以把其平移到画布中间，即居中
+        float dx = (getWidth() - mBitmap.getWidth() * scale) / 2;
+        float dy = (getHeight() - mBitmap.getHeight() * scale) / 2;
+        mShaderMatrix.setScale(scale, scale);
+        mShaderMatrix.postTranslate(dx, dy);
+        mBitmapShader.setLocalMatrix(mShaderMatrix);
+        invalidate();
     }
 
     //　设置图片的绘制区域
-    private void initShape() {
+    private void initRect() {
 
         mViewRect.top = 0;
         mViewRect.left = 0;
@@ -162,10 +169,6 @@ public class ShapeImageView extends ImageView {
         mBorderRect.left = mBorderSize / 2;
         mBorderRect.right = getWidth() - mBorderSize / 2;
         mBorderRect.bottom = getHeight() - mBorderSize / 2;
-
-        setupBitmapShader();
-
-        invalidate();
     }
 
     public int getShape() {
@@ -174,7 +177,6 @@ public class ShapeImageView extends ImageView {
 
     public void setShape(int shape) {
         mShape = shape;
-        initShape();
     }
 
     public float getBorderSize() {
@@ -184,7 +186,8 @@ public class ShapeImageView extends ImageView {
     public void setBorderSize(int mBorderSize) {
         this.mBorderSize = mBorderSize;
         mBorderPaint.setStrokeWidth(mBorderSize);
-        initShape();
+        initRect();
+        invalidate();
     }
 
     public int getBorderColor() {
@@ -203,8 +206,6 @@ public class ShapeImageView extends ImageView {
 
     public void setRoundRadius(float mRoundRadius) {
         this.mRoundRadius = mRoundRadius;
-        initShape();
+        invalidate();
     }
-
-
 }
