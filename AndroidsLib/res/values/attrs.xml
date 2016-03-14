@@ -48,6 +48,8 @@
         <attr name="visible_item_count" format="integer"/>
         <!-- 是否循环滚动，默认为true，开启-->
         <attr name="is_circulation" format="boolean"/>
+        <!-- 不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效 -->
+        <attr name="disallow_intercept_touch" format="boolean"/>
     </declare-styleable>
 
 </resources>
