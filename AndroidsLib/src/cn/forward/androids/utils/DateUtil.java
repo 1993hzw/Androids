@@ -111,4 +111,26 @@ public class DateUtil {
 	public static int getSecond() {
 		return Calendar.getInstance().get(Calendar.SECOND);
 	}
+
+    /**
+     * 判断日期是否为今天
+     *  @param time
+     * @return
+     */
+    public static boolean isToday(long time) {
+        // 24*60*60*1000
+        return (System.currentTimeMillis() - time) / 86400000 == 0;
+    }
+
+    /**
+     * /**
+     * 判断日期是否为昨天
+     *  @param time
+     * @return
+     */
+    public static boolean isYestoday(long time) {
+        long span = (System.currentTimeMillis() - time) / 86400000;
+        System.out.println(span);
+        return span > 0 && span <= 1;
+    }
 }

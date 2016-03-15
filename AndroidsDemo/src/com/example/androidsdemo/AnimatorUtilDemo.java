@@ -87,12 +87,15 @@ public class AnimatorUtilDemo extends Activity {
         if (sex == Sex.FEMALE) {
             mSelectedSex = Sex.FEMALE;
             mPortraitFemal.setClickable(false);
-            float centerX = -mPortraitFemal.getX()
-                    + (Util.getScreenWidth(this) / 2 - mPortraitFemal.getWidth() / 2);
             if (mShowListAnimFemale == null) {
+                float centerX = -mPortraitFemal.getX()
+                        + (Util.getScreenWidth(this) / 2 - mPortraitFemal.getWidth() / 2);
+                float maleTranX = -mPortraitMale.getX() - mPortraitMale.getWidth();
                 mShowListAnimFemale = AnimatorUtil
                         .createAnimator(mPortraitFemal)
                         .play(ANIM_DEFAULT_DURATION, "translationX", 0, centerX)
+                        .with(mPortraitMale, ANIM_DEFAULT_DURATION, "translationX", 0, maleTranX)
+                        .with(mPortraitMale, ANIM_DEFAULT_DURATION, "alpha", 1, 0.2f)
                         .then(mPortraitShield,
                                 ANIM_SHIELD_DURATION,
                                 new BaseAnimatorListener() {
@@ -167,9 +170,13 @@ public class AnimatorUtilDemo extends Activity {
                                 mScrollView.getHeight())
                         .then(mPortraitShield, ANIM_SHIELD_DURATION,
                                 "translationY", 0, mPortraitShield.getHeight())
-                        .then(mPortraitFemal, ANIM_DEFAULT_DURATION,
-                                "translationX",
-                                mPortraitFemal.getTranslationX(), 0)
+                        .then(AnimatorUtil
+                                .createAnimator(mPortraitMale)
+                                .play(ANIM_DEFAULT_DURATION, "translationX", mPortraitMale.getTranslationX(), 0)
+                                .with(ANIM_DEFAULT_DURATION, "alpha", mPortraitMale.getAlpha(), 1)
+                                .with(mPortraitFemal, ANIM_DEFAULT_DURATION, "translationX",
+                                        mPortraitFemal.getTranslationX(), 0)
+                                .getAnimatorSet())
                         .setListener(new BaseAnimatorListener() {
                             public void onAnimationEnd(Animator animation) {
                                 mScrollView.removeAllViews();

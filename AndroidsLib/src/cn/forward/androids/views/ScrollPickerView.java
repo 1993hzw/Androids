@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Scroller;
 import cn.forward.androids.R;
 import cn.forward.androids.utils.ColorUtil;
@@ -37,6 +38,12 @@ public class ScrollPickerView extends View {
 
     private boolean mIsInertiaScroll = true; // 快速滑动时是否惯性滚动一段距离，默认开启
     private boolean mIsCirculation = true; // 是否循环滚动，默认开启
+
+    /*
+      不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效
+      当嵌入到ScrollView等滚动组件中，为了使该自定义滚动选择器可以正常工作，请设置为true
+     */
+    private boolean mDisallowInterceptTouch = false;
 
     private Paint mPaint; //
     private int mMeasureWidth;
@@ -72,7 +79,7 @@ public class ScrollPickerView extends View {
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
 
-        setData(new ArrayList<String>(Arrays.asList("one", "two", "three", "four", "five","six","seven")));
+        setData(new ArrayList<String>(Arrays.asList("one", "two", "three", "four", "five", "six", "seven")));
         init(attrs);
     }
 
@@ -92,6 +99,8 @@ public class ScrollPickerView extends View {
                     R.styleable.ScrollPickerView_visible_item_count,
                     mVisibleItemCount);
             mIsCirculation = typedArray.getBoolean(R.styleable.ScrollPickerView_is_circulation, mIsCirculation);
+            mDisallowInterceptTouch = typedArray.getBoolean(R.styleable.ScrollPickerView_disallow_intercept_touch, mDisallowInterceptTouch);
+
             typedArray.recycle();
         }
     }
@@ -207,6 +216,12 @@ public class ScrollPickerView extends View {
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
+                if (mDisallowInterceptTouch) {  // 不允许父组件拦截事件
+                    ViewParent parent = getParent();
+                    if (parent != null) {
+                        parent.requestDisallowInterceptTouchEvent(true);
+                    }
+                }
                 // 点击时取消所有滚动效果
                 cancelScroll();
                 mLastMoveY = event.getY();
@@ -264,14 +279,14 @@ public class ScrollPickerView extends View {
                 } else { // 非循环滚动
                     mSelected = 0;
                     mMoveLength = mItemHeight;
-                    if(mIsFling){ // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
+                    if (mIsFling) { // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
                         mScroller.forceFinished(true);
                     }
-                    if(mIsMovingCenter) { //  移回中间位置
-                        scroll(mMoveLength,0);
+                    if (mIsMovingCenter) { //  移回中间位置
+                        scroll(mMoveLength, 0);
                     }
                 }
-            }else{
+            } else {
                 mMoveLength = 0;
             }
 
@@ -284,14 +299,14 @@ public class ScrollPickerView extends View {
                 } else { // 非循环滚动
                     mSelected = mData.size() - 1;
                     mMoveLength = -mItemHeight;
-                    if(mIsFling){ // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
+                    if (mIsFling) { // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
                         mScroller.forceFinished(true);
                     }
-                    if(mIsMovingCenter) { //  移回中间位置
-                        scroll(mMoveLength,0);
+                    if (mIsMovingCenter) { //  移回中间位置
+                        scroll(mMoveLength, 0);
                     }
                 }
-            }else{
+            } else {
                 mMoveLength = 0;
             }
         }
