@@ -119,15 +119,16 @@ public class ShapeImageView extends ImageView {
     @Override
     public void onDraw(Canvas canvas) {
 
-        if (mShape == SHAPE_CIRCLE) {
-            canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
-                    Math.min(mViewRect.right, mViewRect.bottom) / 2, mBitmapPaint);
-        } else if (mShape == SHAPE_OVAL) {
-            canvas.drawOval(mViewRect, mBitmapPaint);
-        } else {
-            canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+        if(getDrawable()!=null) {
+            if (mShape == SHAPE_CIRCLE) {
+                canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
+                        Math.min(mViewRect.right, mViewRect.bottom) / 2, mBitmapPaint);
+            } else if (mShape == SHAPE_OVAL) {
+                canvas.drawOval(mViewRect, mBitmapPaint);
+            } else {
+                canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+            }
         }
-
 
         if (mBorderSize > 0) { // 绘制边框
             if (mShape == SHAPE_CIRCLE) {

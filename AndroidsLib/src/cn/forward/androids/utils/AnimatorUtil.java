@@ -6,7 +6,6 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.view.View;
 
 public class AnimatorUtil {
 
@@ -17,59 +16,50 @@ public class AnimatorUtil {
 	 * 
 	 *         对AnimatorSet进行封装，便以链式构建动画
 	 * 
-	 * @param view
-	 *            　要实现动画效果的View
+	 * @param obj
+	 *            　要实现动画效果的对象
 	 * @return
 	 */
-	public static AnimatorSetWrap createAnimator(View view) {
-		return new AnimatorSetWrap(view);
+	public static AnimatorSetWrap createAnimator(Object obj) {
+		return new AnimatorSetWrap(obj);
 	}
 
 	public static class AnimatorSetWrap {
 
-		private static final long DEFAULT_DURATION = 300; // ms
+		public static final long DURATION = 300; // ms,默认的动画时间
 
 		// 使用then()方法执行的动画
 		private ArrayList<Animator> mAnimatorsThen = new ArrayList<Animator>();
 
-		private View mView;
+		private Object mObject;
 		private AnimatorSet mAnimatorSet;
 		private AnimatorSet.Builder mAnimatorSetBuilder;
 		private boolean mIsPlaying = false; // 是否调用过play()方法，防止多次调用
 
-		public AnimatorSetWrap(View view) {
-			mView = view;
+		public AnimatorSetWrap(Object obj) {
+			mObject = obj;
 			mAnimatorSet = new AnimatorSet();
-		}
-
-		public AnimatorSetWrap play(String propertyName, float... values) {
-			return play(mView, DEFAULT_DURATION, null, propertyName, values);
 		}
 
 		public AnimatorSetWrap play(long duration, String propertyName,
 				float... values) {
-			return play(mView, duration, null, propertyName, values);
+			return play(mObject, duration, null, propertyName, values);
 		}
 
 		public AnimatorSetWrap play(long duration, AnimatorListener listener,
 				String propertyName, float... values) {
-			return play(mView, duration, listener, propertyName, values);
+			return play(mObject, duration, listener, propertyName, values);
 		}
 
-		public AnimatorSetWrap play(View view, String propertyName,
-				float... values) {
-			return play(view, DEFAULT_DURATION, null, propertyName, values);
-		}
-
-		public AnimatorSetWrap play(View view, long duration,
+		public AnimatorSetWrap play(Object obj, long duration,
 				String propertyName, float... values) {
-			return play(view, duration, null, propertyName, values);
+			return play(obj, duration, null, propertyName, values);
 		}
 
 		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
+		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(java.lang.Object  obj, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
 		 */
-		public AnimatorSetWrap play(View view, long duration,
+		public AnimatorSetWrap play(Object obj, long duration,
 				AnimatorListener listener, String propertyName, float... values) {
 
 			if (mIsPlaying) {
@@ -77,7 +67,7 @@ public class AnimatorUtil {
 			}
 			mIsPlaying = true;
 
-			ObjectAnimator animator = ObjectAnimator.ofFloat(view,
+			ObjectAnimator animator = ObjectAnimator.ofFloat(obj,
 					propertyName, values).setDuration(duration);
 			if (listener != null) {
 				animator.addListener(listener);
@@ -94,19 +84,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap with(View view, String propertyName,
-				float... values) {
-			return with(view, DEFAULT_DURATION, null, propertyName, values);
-		}
-
-		public AnimatorSetWrap with(View view, long duration,
+		public AnimatorSetWrap with(Object obj, long duration,
 				String propertyName, float... values) {
-			return with(view, duration, null, propertyName, values);
+			return with(obj, duration, null, propertyName, values);
 		}
 
-		public AnimatorSetWrap with(View view, long duration,
+		public AnimatorSetWrap with(Object obj, long duration,
 				AnimatorListener listener, String propertyName, float... values) {
-			ObjectAnimator animator = ObjectAnimator.ofFloat(view,
+			ObjectAnimator animator = ObjectAnimator.ofFloat(obj,
 					propertyName, values).setDuration(duration);
 			if (listener != null) {
 				animator.addListener(listener);
@@ -115,18 +100,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap with(String propertyName, float... values) {
-			return with(mView, DEFAULT_DURATION, null, propertyName, values);
-		}
-
 		public AnimatorSetWrap with(long duration, String propertyName,
 				float... values) {
-			return with(mView, duration, null, propertyName, values);
+			return with(mObject, duration, null, propertyName, values);
 		}
 
 		public AnimatorSetWrap with(long duration, AnimatorListener listener,
 				String propertyName, float... values) {
-			return with(mView, duration, listener, propertyName, values);
+			return with(mObject, duration, listener, propertyName, values);
 		}
 
 		public AnimatorSetWrap with(Animator animator) {
@@ -134,19 +115,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap before(View view, String propertyName,
-				float... values) {
-			return before(view, DEFAULT_DURATION, null, propertyName, values);
-		}
-
-		public AnimatorSetWrap before(View view, long duration,
+		public AnimatorSetWrap before(Object obj, long duration,
 				String propertyName, float... values) {
-			return before(view, duration, null, propertyName, values);
+			return before(obj, duration, null, propertyName, values);
 		}
 
-		public AnimatorSetWrap before(View view, long duration,
+		public AnimatorSetWrap before(Object obj, long duration,
 				AnimatorListener listener, String propertyName, float... values) {
-			ObjectAnimator animator = ObjectAnimator.ofFloat(view,
+			ObjectAnimator animator = ObjectAnimator.ofFloat(obj,
 					propertyName, values).setDuration(duration);
 			if (listener != null) {
 				animator.addListener(listener);
@@ -155,18 +131,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap before(String propertyName, float... values) {
-			return before(mView, DEFAULT_DURATION, null, propertyName, values);
-		}
-
 		public AnimatorSetWrap before(long duration, String propertyName,
 				float... values) {
-			return before(mView, duration, null, propertyName, values);
+			return before(mObject, duration, null, propertyName, values);
 		}
 
 		public AnimatorSetWrap before(long duration, AnimatorListener listener,
 				String propertyName, float... values) {
-			return before(mView, duration, listener, propertyName, values);
+			return before(mObject, duration, listener, propertyName, values);
 		}
 
 		public AnimatorSetWrap before(Animator animator) {
@@ -174,19 +146,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap after(View view, String propertyName,
-				float... values) {
-			return after(view, DEFAULT_DURATION, null, propertyName, values);
-		}
-
-		public AnimatorSetWrap after(View view, long duration,
+		public AnimatorSetWrap after(Object obj, long duration,
 				String propertyName, float... values) {
-			return after(view, duration, null, propertyName, values);
+			return after(obj, duration, null, propertyName, values);
 		}
 
-		public AnimatorSetWrap after(View view, long duration,
+		public AnimatorSetWrap after(Object obj, long duration,
 				AnimatorListener listener, String propertyName, float... values) {
-			ObjectAnimator animator = ObjectAnimator.ofFloat(view,
+			ObjectAnimator animator = ObjectAnimator.ofFloat(obj,
 					propertyName, values).setDuration(duration);
 			if (listener != null) {
 				animator.addListener(listener);
@@ -195,18 +162,14 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		public AnimatorSetWrap after(String propertyName, float... values) {
-			return after(mView, DEFAULT_DURATION, null, propertyName, values);
-		}
-
 		public AnimatorSetWrap after(long duration, String propertyName,
 				float... values) {
-			return after(mView, duration, null, propertyName, values);
+			return after(mObject, duration, null, propertyName, values);
 		}
 
 		public AnimatorSetWrap after(long duration, AnimatorListener listener,
 				String propertyName, float... values) {
-			return after(mView, duration, listener, propertyName, values);
+			return after(mObject, duration, listener, propertyName, values);
 		}
 
 		public AnimatorSetWrap after(Animator animator) {
@@ -247,28 +210,20 @@ public class AnimatorUtil {
 		}
 
 		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
+		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(java.lang.Object obj, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
 		 */
-		public AnimatorSetWrap then(View view, String propertyName,
-				float... values) {
-			return then(view, DEFAULT_DURATION, null, propertyName, values);
-		}
-
-		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
-		 */
-		public AnimatorSetWrap then(View view, long duration,
+		public AnimatorSetWrap then(Object obj, long duration,
 				String propertyName, float... values) {
-			return then(view, duration, null, propertyName, values);
+			return then(obj, duration, null, propertyName, values);
 		}
 
 		/**
 		 * 　play()方法的动画执行完成后，执行第一个then()方法的动画，接着执行下一个then()方法的动画，依次执行
 		 * 
 		 */
-		public AnimatorSetWrap then(View view, long duration,
+		public AnimatorSetWrap then(Object obj, long duration,
 				AnimatorListener listener, String propertyName, float... values) {
-			ObjectAnimator animator = ObjectAnimator.ofFloat(view,
+			ObjectAnimator animator = ObjectAnimator.ofFloat(obj,
 					propertyName, values).setDuration(duration);
 			if (listener != null) {
 				animator.addListener(listener);
@@ -278,31 +233,25 @@ public class AnimatorUtil {
 			return this;
 		}
 
-		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
-		 */
-		public AnimatorSetWrap then(String propertyName, float... values) {
-			return then(mView, DEFAULT_DURATION, null, propertyName, values);
-		}
 
 		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
+		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(java.lang.Object  obj, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
 		 */
 		public AnimatorSetWrap then(long duration, String propertyName,
 				float... values) {
-			return then(mView, duration, null, propertyName, values);
+			return then(mObject, duration, null, propertyName, values);
 		}
 
 		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
+		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(java.lang.Object  obj, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
 		 */
 		public AnimatorSetWrap then(long duration, AnimatorListener listener,
 				String propertyName, float... values) {
-			return then(mView, duration, listener, propertyName, values);
+			return then(mObject, duration, listener, propertyName, values);
 		}
 
 		/**
-		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(android.view.View view, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
+		 * {@link cn.forward.androids.utils.AnimatorUtil.AnimatorSetWrap#then(java.lang.Object  obj, long duration, android.animation.Animator.AnimatorListener listener, String propertyName, float... values)}
 		 */
 		public AnimatorSetWrap then(Animator animator) {
 			mAnimatorsThen.add(animator);
