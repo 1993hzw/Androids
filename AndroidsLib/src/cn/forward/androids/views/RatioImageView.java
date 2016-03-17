@@ -64,30 +64,32 @@ public class RatioImageView extends ImageView {
         a.recycle();
     }
 
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
-        if (getDrawable() != null) {
-            mDrawableSizeRatio = 1f * getDrawable().getIntrinsicWidth()
-                    / getDrawable().getIntrinsicHeight();
-            if (mDrawableSizeRatio > 0
-                    && (mIsWidthFitDrawableSizeRatio || mIsHeightFitDrawableSizeRatio)) {
+    private void onSetDrawable() {
+        Drawable drawable = getDrawable();
+        if (drawable != null) {
+            float old = mDrawableSizeRatio;
+            mDrawableSizeRatio = 1f * drawable.getIntrinsicWidth()
+                    / drawable.getIntrinsicHeight();
+            // 发生变化，重新调整布局
+            if ((mIsWidthFitDrawableSizeRatio || mIsHeightFitDrawableSizeRatio)
+                    && old != mDrawableSizeRatio
+                    && mDrawableSizeRatio > 0
+                    ) {
                 requestLayout();
             }
         }
     }
 
     @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+        onSetDrawable();
+    }
+
+    @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
-        if (getDrawable() != null) {
-            mDrawableSizeRatio = 1f * getDrawable().getIntrinsicWidth()
-                    / getDrawable().getIntrinsicHeight();
-            if (mDrawableSizeRatio > 0
-                    && (mIsWidthFitDrawableSizeRatio || mIsHeightFitDrawableSizeRatio)) {
-                requestLayout();
-            }
-        }
+        onSetDrawable();
     }
 
     @Override
@@ -130,9 +132,14 @@ public class RatioImageView extends ImageView {
     // 同时设置这两个值
     public void setIsFitDrawableSizeRatio(
             boolean isWidthFitDrawableSizeRatio, boolean isHeightFitDrawableSizeRatio) {
+        boolean oldIsWidth = mIsWidthFitDrawableSizeRatio;
+        boolean oldIsHeight = mIsHeightFitDrawableSizeRatio;
         this.mIsWidthFitDrawableSizeRatio = isWidthFitDrawableSizeRatio;
         this.mIsHeightFitDrawableSizeRatio = isHeightFitDrawableSizeRatio;
-        requestLayout();
+        if (oldIsWidth != mIsWidthFitDrawableSizeRatio
+                || oldIsHeight != mIsHeightFitDrawableSizeRatio) {
+            requestLayout();
+        }
     }
 
     public boolean isIsHeightFitDrawableSizeRatio() {
@@ -147,9 +154,13 @@ public class RatioImageView extends ImageView {
      * 设置宽度的比例，高度比例失效mHeightRatio = -1
      */
     public void setWidthRatio(float mWidthRatio) {
+        float oldWidthRatio = mWidthRatio;
+        float oldHeightRatio = mHeightRatio;
         this.mHeightRatio = -1;
         this.mWidthRatio = mWidthRatio;
-        requestLayout();
+        if (oldWidthRatio != mWidthRatio || oldHeightRatio != mHeightRatio) {
+            requestLayout();
+        }
     }
 
     public float getHeightRatio() {
@@ -160,9 +171,13 @@ public class RatioImageView extends ImageView {
      * 设置高度的比例，宽度比例失效mWidthRatio = -1
      */
     public void setHeightRatio(float mHeightRatio) {
+        float oldWidthRatio = mWidthRatio;
+        float oldHeightRatio = mHeightRatio;
         this.mWidthRatio = -1;
         this.mHeightRatio = mHeightRatio;
-        requestLayout();
+        if (oldWidthRatio != mWidthRatio || oldHeightRatio != mHeightRatio) {
+            requestLayout();
+        }
     }
 
     public float getDrawableSizeRatio() {
