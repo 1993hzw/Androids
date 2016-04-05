@@ -91,7 +91,7 @@ public class ShapeImageView extends ImageView {
     @Override
     public void onDraw(Canvas canvas) {
 
-        if(getDrawable()!=null) {
+        if (mBitmap != null) {
             if (mShape == SHAPE_CIRCLE) {
                 canvas.drawCircle(mViewRect.right / 2, mViewRect.bottom / 2,
                         Math.min(mViewRect.right, mViewRect.bottom) / 2, mBitmapPaint);
