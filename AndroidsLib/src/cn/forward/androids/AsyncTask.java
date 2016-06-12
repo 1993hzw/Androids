@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
  * 自定义的AsynTask，任务队列采用后进先出的策略
  */
 abstract public class AsyncTask<Params, Progress, Result> {
+
     public static int POLICY_FIFO = 1; // 先进先出
     public static int POLICY_LIFO = 2; // 后进先出
     private static int sPolicy = POLICY_LIFO;
@@ -35,16 +36,18 @@ abstract public class AsyncTask<Params, Progress, Result> {
         return sPolicy;
     }
 
-    private static final int THREADS = 3;//线程数
-    private Handler mHandler;
+    private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+    private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
+    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+    private static final int KEEP_ALIVE = 1;
+    private static Handler sHandler = new Handler();
 
     private static final ExecutorService executor = new ThreadPoolExecutor(
-            THREADS, THREADS,
-            0L, TimeUnit.MILLISECONDS,
+            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+            KEEP_ALIVE, TimeUnit.MILLISECONDS,
             new LinkedBlockingStack<Runnable>());
 
     public AsyncTask() {
-        mHandler = new Handler();
     }
 
     protected Result doInBackground(Params... params) {
@@ -57,7 +60,7 @@ abstract public class AsyncTask<Params, Progress, Result> {
     abstract protected void onPostExecute(Result result);
 
     protected void publishProgress(final Progress... progress) {
-        mHandler.post(new Runnable() {
+        sHandler.post(new Runnable() {
             @Override
             public void run() {
                 onProgressUpdate(progress);
@@ -70,7 +73,7 @@ abstract public class AsyncTask<Params, Progress, Result> {
             @Override
             public void run() {
                 final Result result = doInBackground(params);
-                mHandler.post(new Runnable() {
+                sHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         onPostExecute(result);
@@ -96,5 +99,6 @@ abstract public class AsyncTask<Params, Progress, Result> {
             return true;
         }
     }
+
 
 }

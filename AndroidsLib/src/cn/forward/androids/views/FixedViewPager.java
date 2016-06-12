@@ -8,15 +8,15 @@ import android.view.View;
 /**
  * 解决ViewPager设置切换动画PageTransformer后子页无法触摸的问题
  */
-public class SimpleViewPager extends ViewPager {
+public class FixedViewPager extends ViewPager {
 
     private PageTransformer mPageTransformer;
 
-    public SimpleViewPager(Context context) {
+    public FixedViewPager(Context context) {
         this(context, null);
     }
 
-    public SimpleViewPager(Context context, AttributeSet attrs) {
+    public FixedViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

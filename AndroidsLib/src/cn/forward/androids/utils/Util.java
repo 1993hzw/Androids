@@ -6,6 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.view.ViewCompat;
+import android.view.View;
+import android.widget.AbsListView;
+
+import cn.forward.androids.base.BaseApplication;
 
 /**
  * Created by huangziwei on 16-3-8.
@@ -49,5 +54,25 @@ public class Util {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean canScrollUp(View view) {
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            if (view instanceof AbsListView) {
+                final AbsListView absListView = (AbsListView) view;
+                return absListView.getChildCount() > 0
+                        && (absListView.getFirstVisiblePosition() > 0 || absListView
+                        .getChildAt(0).getTop() < absListView.getPaddingTop());
+            } else {
+                return view.getScrollY() > 0;
+            }
+        } else {
+            return ViewCompat.canScrollVertically(view, -1);
+        }
+    }
+
+
+    public static int dp2px(float dp) {
+        return (int) (BaseApplication.sContext.getResources().getDisplayMetrics().density * dp + 0.5f);
     }
 }

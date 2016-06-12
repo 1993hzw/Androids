@@ -5,7 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
 import cn.forward.androids.R;
+
 
 /**
  * 可以设置宽度和高度的比例，
@@ -67,15 +69,14 @@ public class RatioImageView extends ImageView {
     private void onSetDrawable() {
         Drawable drawable = getDrawable();
         if (drawable != null) {
-            float old = mDrawableSizeRatio;
-            mDrawableSizeRatio = 1f * drawable.getIntrinsicWidth()
-                    / drawable.getIntrinsicHeight();
             // 发生变化，重新调整布局
-            if ((mIsWidthFitDrawableSizeRatio || mIsHeightFitDrawableSizeRatio)
-                    && old != mDrawableSizeRatio
-                    && mDrawableSizeRatio > 0
-                    ) {
-                requestLayout();
+            if (mIsWidthFitDrawableSizeRatio || mIsHeightFitDrawableSizeRatio) {
+                float old = mDrawableSizeRatio;
+                mDrawableSizeRatio = 1f * drawable.getIntrinsicWidth()
+                        / drawable.getIntrinsicHeight();
+                if (old != mDrawableSizeRatio && mDrawableSizeRatio > 0) {
+                    requestLayout();
+                }
             }
         }
     }
@@ -113,7 +114,7 @@ public class RatioImageView extends ImageView {
         if (mWidthRatio > 0) { // 高度已知，根据比例，设置宽度
             int height = MeasureSpec.getSize(heightMeasureSpec);
             super.onMeasure(MeasureSpec.makeMeasureSpec(
-                            (int) (height * mWidthRatio), MeasureSpec.EXACTLY),
+                    (int) (height * mWidthRatio), MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         } else if (mHeightRatio > 0) { // 宽度已知，根据比例，设置高度
             int width = MeasureSpec.getSize(widthMeasureSpec);
@@ -136,6 +137,13 @@ public class RatioImageView extends ImageView {
         boolean oldIsHeight = mIsHeightFitDrawableSizeRatio;
         this.mIsWidthFitDrawableSizeRatio = isWidthFitDrawableSizeRatio;
         this.mIsHeightFitDrawableSizeRatio = isHeightFitDrawableSizeRatio;
+        Drawable drawable = getDrawable();
+        if (drawable != null) {
+            mDrawableSizeRatio = 1f * drawable.getIntrinsicWidth()
+                    / drawable.getIntrinsicHeight();
+        } else {
+            mDrawableSizeRatio = -1;
+        }
         if (oldIsWidth != mIsWidthFitDrawableSizeRatio
                 || oldIsHeight != mIsHeightFitDrawableSizeRatio) {
             requestLayout();

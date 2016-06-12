@@ -293,28 +293,4 @@ public class AnimatorUtil {
 
 	}
 
-	/**
-	 * AnimatorListener实现类
-	 * 
-	 * @author huangziwei
-	 * 
-	 */
-	public static class BaseAnimatorListener implements AnimatorListener {
-
-		public BaseAnimatorListener() {
-		}
-
-		public void onAnimationStart(Animator animation) {
-		}
-
-		public void onAnimationEnd(Animator animation) {
-		}
-
-		public void onAnimationCancel(Animator animation) {
-		}
-
-		public void onAnimationRepeat(Animator animation) {
-		}
-	}
-
 }

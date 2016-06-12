@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="View">
+        <attr name="injectListener" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="RatioImageView">
 
         <!--宽度是否根据src图片的比例来测量（高度已知）-->

@@ -1,17 +1,21 @@
 package cn.forward.androids.utils;
 
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 /**
- * 日志输出工具类
- *
  * @author hzw
  * @date 2016/1/16.
  */
 public class LogUtil {
 
+    public static String LOG_DIR = "ALog";
+
     public static boolean sIsLog = true;
-    public static final String LOG_TAG  = "log";
+    public static final String LOG_TAG = "log";
 
     public static void v(String msg) {
         v(LOG_TAG, msg);
@@ -99,5 +103,45 @@ public class LogUtil {
         }
     }
 
+    public static boolean writeLog(String log, String dirPath) {
+        File sdCardDir;
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            sdCardDir = Environment.getExternalStorageDirectory();// 鑾峰彇SDCard鐩綍
+        } else { // sd1
+            sdCardDir = new File("/storage/sdcard1");
+        }
+
+        if (!sdCardDir.exists()) {
+            return false;
+        }
+
+        try {
+            if (dirPath == null) {
+                dirPath = LOG_DIR;
+            }
+
+            String date = DateUtil.getDate();
+
+            log = "\r\n" + date + "==>" + log;
+            String fileName = "log-" + date + ".txt";
+            File dir = new File(sdCardDir, dirPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir, fileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(log.getBytes());
+            fos.close();
+        } catch (Exception e) {
+            Log.e("LogUtil", e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean writeLog(String log) {
+        return writeLog(log, null);
+    }
 
 }
