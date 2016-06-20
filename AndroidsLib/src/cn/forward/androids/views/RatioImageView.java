@@ -26,9 +26,15 @@ public class RatioImageView extends ImageView {
     // 根据前景图宽高比例测量View,防止图片缩放变形
     private boolean mIsWidthFitDrawableSizeRatio; // 宽度是否根据src图片(前景图)的比例来测量（高度已知）
     private boolean mIsHeightFitDrawableSizeRatio; // 高度是否根据src图片(前景图)的比例来测量（宽度已知）
+    private int mMaxWidthWhenWidthFixDrawable = -1; // 当mIsWidthFitDrawableSizeRatio生效时，最大宽度
+    private int mMaxHeightWhenHeightFixDrawable = -1; // 当mIsHeightFitDrawableSizeRatio生效时，最大高度
+
     // 宽高比例
     private float mWidthRatio = -1; // 宽度 = 高度*mWidthRatio
     private float mHeightRatio = -1; // 高度 = 宽度*mHeightRatio
+
+    private int mDesiredWidth = -1; // 宽度和高度,避免layout_width/layout_height会在超过屏幕尺寸时特殊处理的情况
+    private int mDesiredHeight = -1;
 
     public RatioImageView(Context context) {
         this(context, null);
@@ -59,10 +65,17 @@ public class RatioImageView extends ImageView {
                 mIsWidthFitDrawableSizeRatio);
         mIsHeightFitDrawableSizeRatio = a.getBoolean(R.styleable.RatioImageView_is_height_fix_drawable_size_ratio,
                 mIsHeightFitDrawableSizeRatio);
+        mMaxWidthWhenWidthFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_max_width_when_width_fix_drawable,
+                mMaxWidthWhenWidthFixDrawable);
+        mMaxHeightWhenHeightFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_max_height_when_height_fix_drawable,
+                mMaxHeightWhenHeightFixDrawable);
         mHeightRatio = a.getFloat(
                 R.styleable.RatioImageView_height_to_width_ratio, mHeightRatio);
         mWidthRatio = a.getFloat(
                 R.styleable.RatioImageView_width_to_height_ratio, mWidthRatio);
+        mDesiredWidth = a.getDimensionPixelOffset(R.styleable.RatioImageView_width, mDesiredWidth);
+        mDesiredHeight = a.getDimensionPixelOffset(R.styleable.RatioImageView_height, mDesiredHeight);
+
         a.recycle();
     }
 
@@ -112,27 +125,54 @@ public class RatioImageView extends ImageView {
         }
 
         if (mWidthRatio > 0) { // 高度已知，根据比例，设置宽度
-            int height = MeasureSpec.getSize(heightMeasureSpec);
-            super.onMeasure(MeasureSpec.makeMeasureSpec(
-                    (int) (height * mWidthRatio), MeasureSpec.EXACTLY),
+            int height = 0;
+            if (mDesiredHeight > 0) {
+                height = mDesiredHeight;
+            } else {
+                height = MeasureSpec.getSize(heightMeasureSpec);
+            }
+            int width = (int) (height * mWidthRatio);
+            if (mIsWidthFitDrawableSizeRatio && mMaxWidthWhenWidthFixDrawable > 0
+                    && width > mMaxWidthWhenWidthFixDrawable) { // 限制最大宽度
+                width = mMaxWidthWhenWidthFixDrawable;
+                height = (int) (width / mWidthRatio);
+            }
+            super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         } else if (mHeightRatio > 0) { // 宽度已知，根据比例，设置高度
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            super.onMeasure(MeasureSpec.makeMeasureSpec(width,
-                    MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(
-                    (int) (width * mHeightRatio), MeasureSpec.EXACTLY));
+            int width = 0;
+            if (mDesiredWidth > 0) {
+                width = mDesiredWidth;
+            } else {
+                width = MeasureSpec.getSize(widthMeasureSpec);
+            }
+            int height = (int) (width * mHeightRatio);
+            if (mIsHeightFitDrawableSizeRatio && mMaxHeightWhenHeightFixDrawable > 0
+                    && height > mMaxHeightWhenHeightFixDrawable) { // 限制最大高度
+                height = mMaxHeightWhenHeightFixDrawable;
+                width = (int) (height / mHeightRatio);
+            }
+            super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+        } else if (mDesiredHeight > 0 && mDesiredWidth > 0) { // 当没有设置其他属性时，width和height必须同时设置才生效
+            int width = mDesiredWidth;
+            int height = mDesiredHeight;
+            super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         } else { // 系统默认测量
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
-    public boolean isIsWidthFitDrawableSizeRatio() {
-        return mIsWidthFitDrawableSizeRatio;
-    }
-
-    // 同时设置这两个值
+    /**
+     * 同时设置这两个值,如果两个值都为true，则isWidthFitDrawableSizeRatio优先
+     *
+     * @param isWidthFitDrawableSizeRatio
+     * @param isHeightFitDrawableSizeRatio
+     */
     public void setIsFitDrawableSizeRatio(
             boolean isWidthFitDrawableSizeRatio, boolean isHeightFitDrawableSizeRatio) {
+        mWidthRatio = mHeightRatio = -1;
         boolean oldIsWidth = mIsWidthFitDrawableSizeRatio;
         boolean oldIsHeight = mIsHeightFitDrawableSizeRatio;
         this.mIsWidthFitDrawableSizeRatio = isWidthFitDrawableSizeRatio;
@@ -150,18 +190,11 @@ public class RatioImageView extends ImageView {
         }
     }
 
-    public boolean isIsHeightFitDrawableSizeRatio() {
-        return mIsHeightFitDrawableSizeRatio;
-    }
-
-    public float getWidthRatio() {
-        return mWidthRatio;
-    }
-
     /*
      * 设置宽度的比例，高度比例失效mHeightRatio = -1
      */
     public void setWidthRatio(float mWidthRatio) {
+        mIsWidthFitDrawableSizeRatio = mIsHeightFitDrawableSizeRatio = false;
         float oldWidthRatio = mWidthRatio;
         float oldHeightRatio = mHeightRatio;
         this.mHeightRatio = -1;
@@ -171,14 +204,11 @@ public class RatioImageView extends ImageView {
         }
     }
 
-    public float getHeightRatio() {
-        return mHeightRatio;
-    }
-
     /*
      * 设置高度的比例，宽度比例失效mWidthRatio = -1
      */
     public void setHeightRatio(float mHeightRatio) {
+        mIsWidthFitDrawableSizeRatio = mIsHeightFitDrawableSizeRatio = false;
         float oldWidthRatio = mWidthRatio;
         float oldHeightRatio = mHeightRatio;
         this.mWidthRatio = -1;
@@ -186,6 +216,33 @@ public class RatioImageView extends ImageView {
         if (oldWidthRatio != mWidthRatio || oldHeightRatio != mHeightRatio) {
             requestLayout();
         }
+    }
+
+    public void setWidthAndHeight(int width, int height) {
+        int oldW = mDesiredWidth;
+        int oldH = mDesiredHeight;
+        mDesiredWidth = width;
+        mDesiredHeight = height;
+        if (oldW != mDesiredWidth || oldH != mDesiredHeight) {
+            requestLayout();
+        }
+    }
+
+
+    public boolean isIsWidthFitDrawableSizeRatio() {
+        return mIsWidthFitDrawableSizeRatio;
+    }
+
+    public boolean isIsHeightFitDrawableSizeRatio() {
+        return mIsHeightFitDrawableSizeRatio;
+    }
+
+    public float getWidthRatio() {
+        return mWidthRatio;
+    }
+
+    public float getHeightRatio() {
+        return mHeightRatio;
     }
 
     public float getDrawableSizeRatio() {

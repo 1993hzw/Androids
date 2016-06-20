@@ -2,58 +2,63 @@
 <resources>
 
     <declare-styleable name="View">
-        <attr name="injectListener" format="boolean"/>
+        <attr name="injectListener" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="RatioImageView">
 
-        <!--宽度是否根据src图片的比例来测量（高度已知）-->
-        <attr name="is_width_fix_drawable_size_ratio" format="boolean"/>
-        <!--高度是否根据src图片的比例来测量（宽度已知）-->
-        <attr name="is_height_fix_drawable_size_ratio" format="boolean"/>
-
+        <!-- 宽度是否根据src图片的比例来测量（高度已知） -->
+        <attr name="is_width_fix_drawable_size_ratio" format="boolean" />
+        <!-- 高度是否根据src图片的比例来测量（宽度已知） -->
+        <attr name="is_height_fix_drawable_size_ratio" format="boolean" />
+        <!--当mIsWidthFitDrawableSizeRatio生效时，最大宽度-->
+        <attr name="max_width_when_width_fix_drawable" format="dimension" />
+        <!--当mIsHeightFitDrawableSizeRatio生效时-->
+        <attr name="max_height_when_height_fix_drawable" format="dimension" />
         <!-- 高度设置，参考宽度，如0.5 , 表示 高度＝宽度×０.5 -->
-        <attr name="height_to_width_ratio" format="float"/>
+        <attr name="height_to_width_ratio" format="float" />
         <!-- 宽度设置，参考高度，如0.5 , 表示 宽度＝高度×０.5 -->
-        <attr name="width_to_height_ratio" format="float"/>
-
+        <attr name="width_to_height_ratio" format="float" />
+        <!--宽度和高度,避免layout_width/layout_height会在超过屏幕尺寸时特殊处理的情况-->
+        <attr name="width" format="dimension" />
+        <attr name="height" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="MaskImageView">
 
         <attr name="mask_level" format="enum">
-            <enum name="background" value="1"/>
-            <enum name="foreground" value="2"/>
+            <enum name="background" value="1" />
+            <enum name="foreground" value="2" />
         </attr>
         <!-- 设置了setClickable(true)才生效,默认开启遮罩-->
-        <attr name="is_show_mask_on_click" format="boolean"/>
-        <attr name="mask_color" format="color"/>
+        <attr name="is_show_mask_on_click" format="boolean" />
+        <attr name="mask_color" format="color" />
         <!--是否忽略图片的透明度，默认为true,透明部分不显示遮罩 -->
-        <attr name="is_ignore_alpha" format="boolean"/>
+        <attr name="is_ignore_alpha" format="boolean" />
 
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
         <attr name="shape" format="enum">
-            <enum name="rect" value="1"/>
-            <enum name="circle" value="2"/>
-            <enum name="oval" value="3"/>
+            <enum name="rect" value="1" />
+            <enum name="circle" value="2" />
+            <enum name="oval" value="3" />
         </attr>
-        <attr name="round_radius" format="dimension"/>
-        <attr name="border_size" format="dimension"/>
-        <attr name="border_color" format="color"/>
+        <attr name="round_radius" format="dimension" />
+        <attr name="border_size" format="dimension" />
+        <attr name="border_color" format="color" />
     </declare-styleable>
 
     <declare-styleable name="ScrollPickerView">
-        <attr name="min_text_size" format="dimension"/>
-        <attr name="max_text_size" format="dimension"/>
-        <attr name="start_color" format="color"/>
-        <attr name="end_color" format="color"/>
-        <attr name="visible_item_count" format="integer"/>
+        <attr name="min_text_size" format="dimension" />
+        <attr name="max_text_size" format="dimension" />
+        <attr name="start_color" format="color" />
+        <attr name="end_color" format="color" />
+        <attr name="visible_item_count" format="integer" />
         <!-- 是否循环滚动，默认为true，开启-->
-        <attr name="is_circulation" format="boolean"/>
+        <attr name="is_circulation" format="boolean" />
         <!-- 不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效 -->
-        <attr name="disallow_intercept_touch" format="boolean"/>
+        <attr name="disallow_intercept_touch" format="boolean" />
     </declare-styleable>
 
 </resources>
