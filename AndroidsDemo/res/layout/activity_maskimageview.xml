@@ -17,7 +17,7 @@
                 android:scaleType="fitXY"
                 android:clickable="true"
                 app:mask_level="background"
-                app:is_ignore_alpha="true"
+                app:is_ignore_alpha="false"
                 app:mask_color="#88000000"
                 android:background="#dddd00"
                 android:src="@drawable/ic_launcher"/>
@@ -29,7 +29,7 @@
                 android:scaleType="fitXY"
                 android:clickable="true"
                 app:mask_level="background"
-                app:is_ignore_alpha="true"
+                app:is_ignore_alpha="false"
                 app:mask_color="#88ffffff"
                 android:background="#000000"
                 android:src="@drawable/ic_launcher"/>

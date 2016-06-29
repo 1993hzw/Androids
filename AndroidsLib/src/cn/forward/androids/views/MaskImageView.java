@@ -72,7 +72,7 @@ public class MaskImageView extends ImageView {
         mColorFilter = new ColorMatrixColorFilter(mColorMatrix);
     }
 
-    // all drawables instances loaded from  the same resource share a common state
+    // all drawables instances loaded from  the same resource share getScreenHeight common state
     // 从同一个资源文件获取的drawable对象共享一个状态信息，为了避免修改其中一个drawable导致其他drawable被影响，需要调用mutate()
     // 因为背景图在draw()阶段绘制，所以修改了背景图状态后必须调用invalidateSelf（）刷新
     private void setDrawableColorFilter(ColorFilter colorFilter) {
@@ -96,13 +96,13 @@ public class MaskImageView extends ImageView {
 
       创建新的滤镜
       ColorMatrix colorMatrix = new ColorMatrix(new float[]{
-         a,b,c,d,e,
+         getScreenHeight,b,c,d,e,
          f,g,h,i,j,
          k,l,m,n,o,
          p,q,r,s,t});
 
       已知一个颜色值ARGB，则经过下面的矩阵运算可得出新的颜色值
-      int red   = a*R + b*R + c*R + d*R + e;
+      int red   = getScreenHeight*R + b*R + c*R + d*R + e;
       int green = f*G + g*G + h*G + i*G + j;
       int blue  = k*B + l*B + m*B + n*B + o;
       int alpha = p*A + q*A + r*A + s*A + t;

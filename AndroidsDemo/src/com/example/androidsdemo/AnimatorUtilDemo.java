@@ -1,13 +1,14 @@
 package com.example.androidsdemo;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ScrollView;
+
 import cn.forward.androids.utils.AnimatorUtil;
-import cn.forward.androids.utils.AnimatorUtil.BaseAnimatorListener;
 import cn.forward.androids.utils.Util;
 
 
@@ -92,13 +93,13 @@ public class AnimatorUtilDemo extends Activity {
                         + (Util.getScreenWidth(this) / 2 - mPortraitFemal.getWidth() / 2);
                 float maleTranX = -mPortraitMale.getX() - mPortraitMale.getWidth();
                 mShowListAnimFemale = AnimatorUtil
-                        .createAnimator(mPortraitFemal)
-                        .play(ANIM_DEFAULT_DURATION, "translationX", 0, centerX)
+                        .createAnimator()
+                        .play(mPortraitFemal, ANIM_DEFAULT_DURATION, "translationX", 0, centerX)
                         .with(mPortraitMale, ANIM_DEFAULT_DURATION, "translationX", 0, maleTranX)
                         .with(mPortraitMale, ANIM_DEFAULT_DURATION, "alpha", 1, 0.2f)
                         .then(mPortraitShield,
                                 ANIM_SHIELD_DURATION,
-                                new BaseAnimatorListener() {
+                                new AnimatorListenerAdapter() {
                                     public void onAnimationStart(
                                             Animator animation) {
                                         mPortraitShield.setVisibility(View.VISIBLE);
@@ -124,10 +125,10 @@ public class AnimatorUtilDemo extends Activity {
                 float portraitMaleY = -(mPortraitMale.getY() - mPortraitFemal
                         .getY());
                 mShowListAnimMale = AnimatorUtil
-                        .createAnimator(mPortraitMale)
-                        .play(ANIM_DEFAULT_DURATION, "translationX", 0,
+                        .createAnimator()
+                        .play(mPortraitMale, ANIM_DEFAULT_DURATION, "translationX", 0,
                                 portraitMaleX)
-                        .with(ANIM_DEFAULT_DURATION, "translationY", 0,
+                        .with(mPortraitMale, ANIM_DEFAULT_DURATION, "translationY", 0,
                                 portraitMaleY)
                         .with(mPortraitFemal, ANIM_DEFAULT_DURATION,
                                 "translationX", 0,
@@ -136,7 +137,7 @@ public class AnimatorUtilDemo extends Activity {
                                 1, 0.2f)
                         .then(mPortraitShield,
                                 ANIM_SHIELD_DURATION,
-                                new BaseAnimatorListener() {
+                                new AnimatorListenerAdapter() {
                                     public void onAnimationStart(
                                             Animator animation) {
                                         mPortraitShield.setVisibility(View.VISIBLE);
@@ -165,19 +166,18 @@ public class AnimatorUtilDemo extends Activity {
 
             if (mHideListAnimFemale == null) {
                 mHideListAnimFemale = AnimatorUtil
-                        .createAnimator(mScrollView)
-                        .play(ANIM_DEFAULT_DURATION, "translationY", 0,
+                        .createAnimator()
+                        .play(mScrollView, ANIM_DEFAULT_DURATION, "translationY", 0,
                                 mScrollView.getHeight())
                         .then(mPortraitShield, ANIM_SHIELD_DURATION,
                                 "translationY", 0, mPortraitShield.getHeight())
                         .then(AnimatorUtil
-                                .createAnimator(mPortraitMale)
-                                .play(ANIM_DEFAULT_DURATION, "translationX", mPortraitMale.getTranslationX(), 0)
-                                .with(ANIM_DEFAULT_DURATION, "alpha", mPortraitMale.getAlpha(), 1)
+                                .createAnimator()
+                                .play(mPortraitMale, ANIM_DEFAULT_DURATION, "translationX", mPortraitMale.getTranslationX(), 0)
+                                .with(mPortraitMale, ANIM_DEFAULT_DURATION, "alpha", mPortraitMale.getAlpha(), 1)
                                 .with(mPortraitFemal, ANIM_DEFAULT_DURATION, "translationX",
-                                        mPortraitFemal.getTranslationX(), 0)
-                                .getAnimatorSet())
-                        .setListener(new BaseAnimatorListener() {
+                                        mPortraitFemal.getTranslationX(), 0))
+                        .setListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animation) {
                                 mScrollView.removeAllViews();
                                 mPortraitShield.setVisibility(View.VISIBLE);
@@ -190,30 +190,30 @@ public class AnimatorUtilDemo extends Activity {
             mPortraitMale.setClickable(true);
             if (mHideListAnimMale == null) {
                 mHideListAnimMale = AnimatorUtil
-                        .createAnimator(mScrollView)
-                        .play(ANIM_DEFAULT_DURATION, "translationY", 0,
+                        .createAnimator()
+                        .play(mScrollView, ANIM_DEFAULT_DURATION, "translationY", 0,
                                 mScrollView.getHeight())
                         .then(mPortraitShield, ANIM_SHIELD_DURATION,
                                 "translationY", 0, mPortraitShield.getHeight())
                         .then(AnimatorUtil
-                                .createAnimator(mPortraitMale)
-                                .play(ANIM_DEFAULT_DURATION, "translationX",
+                                .createAnimator()
+                                .play(mPortraitMale, ANIM_DEFAULT_DURATION, "translationX",
                                         mPortraitMale.getTranslationX(), 0)
-                                .with(ANIM_DEFAULT_DURATION, "translationY",
+                                .with(mPortraitMale, ANIM_DEFAULT_DURATION, "translationY",
                                         mPortraitMale.getTranslationY(), 0)
                                 .with(mPortraitFemal, ANIM_DEFAULT_DURATION,
                                         "translationX",
                                         mPortraitFemal.getTranslationX(), 0)
                                 .with(mPortraitFemal, ANIM_DEFAULT_DURATION,
                                         "alpha", mPortraitFemal.getAlpha(), 1)
-                                .setListener(new AnimatorUtil.BaseAnimatorListener() {
+                                .setListener(new AnimatorListenerAdapter() {
                                     public void onAnimationEnd(
                                             Animator animation) {
                                         mScrollView.removeAllViews();
                                         mScrollView.setVisibility(View.GONE);
                                         mPortraitShield.setVisibility(View.GONE);
                                     }
-                                }).getAnimatorSet());
+                                }));
             }
             mHideListAnimMale.start();
         }
