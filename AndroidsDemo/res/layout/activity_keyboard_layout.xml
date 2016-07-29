@@ -43,7 +43,8 @@
             android:id="@+id/emoji"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="#000000"
+
+            android:background="@drawable/ic_emoij"
             android:visibility="gone" />
     </LinearLayout>
 </cn.forward.androids.views.KeyboardLayout>

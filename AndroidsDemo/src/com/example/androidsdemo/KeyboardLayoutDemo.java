@@ -44,6 +44,7 @@ public class KeyboardLayoutDemo extends Activity {
                 mKeyboardLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() { // 输入法弹出之后，重新调整
+                        mEmojiBtn.setSelected(false);
                         mEmojiView.setVisibility(View.GONE);
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     }

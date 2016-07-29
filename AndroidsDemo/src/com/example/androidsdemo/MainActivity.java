@@ -53,6 +53,9 @@ public class MainActivity extends ListActivity {
         } else if (position == 5) {
             startActivity(new Intent(getApplicationContext(),
                     KeyboardLayoutDemo.class));
+        } else if(position==6){
+            startActivity(new Intent(getApplicationContext(),
+                    OtherDemo.class));
         }
     }
 
@@ -64,6 +67,8 @@ public class MainActivity extends ListActivity {
         data.add(createItem("ScrollPickerView", "滚动选择器，可设置是否循环滚动，可见条目数"));
         data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         data.add(createItem("KeyboardLayout", "监听输入法键盘的弹起与隐藏"));
+        data.add(createItem("其他", ""));
+
         return data;
     }
 

@@ -61,4 +61,13 @@
         <attr name="disallow_intercept_touch" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RoundProgressBar">
+        <attr name="rpb_background" format="color" />
+        <attr name="rpb_background_width" format="dimension" />
+        <attr name="rpb_color" format="color" />
+        <attr name="rpb_width" format="dimension" />
+        <attr name="rpb_max_progress" format="float" />
+        <attr name="rpb_progress" format="float" />
+    </declare-styleable>
+
 </resources>
