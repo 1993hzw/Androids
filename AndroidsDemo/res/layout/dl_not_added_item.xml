@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:background="#454545"
+              android:gravity="center_vertical"
+              android:minHeight="40dp"
+              android:orientation="vertical"
+              android:paddingLeft="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="未添加"
+        android:textColor="#9d9ea2"
+        android:textSize="13dp"/>
+</LinearLayout>

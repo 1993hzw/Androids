@@ -3,4 +3,7 @@
 
     <color name="btn_normal">#bbbbbb</color>
     <color name="btn_active">#444444</color>
+
+    <color name="item_bg">#454545</color>
+    <color name="item_bg_pressed">#707070</color>
 </resources>

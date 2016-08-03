@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#454545"
+              android:orientation="vertical">
+
+    <cn.forward.androids.views.DragListView
+        android:id="@+id/draglist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0px"
+        android:listSelector="@android:color/transparent"/>
+</LinearLayout>

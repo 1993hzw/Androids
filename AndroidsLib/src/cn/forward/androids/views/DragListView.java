@@ -24,13 +24,17 @@ public class DragListView extends ListView {
 
     private int mLastY;
 
-    private int mDragViewOffset;
+    private int mDragViewOffset; // 触摸点在itemView中的高度
 
     private DragItemListener mDragItemListener;
 
     private boolean mHasStart = false;
 
-    private Bitmap mBitmap;
+    private Bitmap mBitmap; // 拖拽的itemView图像
+
+    private View mItemView;
+
+    private boolean mIsHideItemView = true; // 拖拽时是否隐藏itemView
 
     public DragListView(Context context) {
         this(context, null);
@@ -49,7 +53,6 @@ public class DragListView extends ListView {
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        // item的view不为空，且获取的dragPosition有效
         int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_UP:
@@ -94,7 +97,7 @@ public class DragListView extends ListView {
 
                 if (itemView != null && mDragItemListener != null && mDragItemListener.canDrag(itemView, x, y)) {
 
-                    // 触摸点在item项中的高度+ListView这个控件与屏幕最顶部的距离（一般为标题栏+状态栏）.
+                    // 触摸点在item项中的高度
                     mDragViewOffset = y - itemView.getTop();
 
                     mDragItemListener.beforeDrawingCache(itemView);
@@ -104,6 +107,10 @@ public class DragListView extends ListView {
                     mDragItemListener.afterDrawingCache(itemView);
                     mHasStart = false;
                     mLastY = y;
+
+                    if (mIsHideItemView) { // 隐藏itemView
+                        hideItemView();
+                    }
                     invalidate();
                     return true;
                 }
@@ -115,6 +122,7 @@ public class DragListView extends ListView {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
+        // 绘制拖拽的itemView
         if (mBitmap != null && !mBitmap.isRecycled()) {
             canvas.drawBitmap(mBitmap, 0, mLastY - mDragViewOffset, null);
         }
@@ -186,6 +194,39 @@ public class DragListView extends ListView {
                 mDragItemListener.onRelease(mCurrentPosition);
             }
         }
+        if (mItemView != null) {
+            mItemView.setVisibility(View.VISIBLE);
+            mItemView = null;
+        }
+    }
+
+    /***
+     * 拖动时时change
+     */
+    private void checkExchange(int y) {
+// 数据交换
+        if (mCurrentPosition != mLastPosition) {
+            if (mDragItemListener != null) {
+                if (mDragItemListener.onExchange(mLastPosition, mCurrentPosition)) { // 进行数据交换,true则表示交换成功
+                    mLastPosition = mCurrentPosition;
+
+                    if (mIsHideItemView) { // 隐藏实际的itemView
+                        hideItemView();
+                    }
+                }
+            }
+        }
+    }
+
+    // 隐藏实际的itemView
+    private void hideItemView() {
+        if (mItemView != null) {
+            mItemView.setVisibility(View.VISIBLE);
+        }
+        mItemView = getChildAt(mCurrentPosition - getFirstVisiblePosition()); // 隐藏实际的itemView
+        if (mItemView != null) {
+            mItemView.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void setDragItemListener(DragItemListener listener) {
@@ -196,22 +237,8 @@ public class DragListView extends ListView {
         return mDragItemListener;
     }
 
-    /***
-     * 拖动时时change
-     */
-    private void checkExchange(int y) {
-// 数据交换
-        if (mCurrentPosition != mLastPosition) {
-            if (mDragItemListener != null) {
-                if (mDragItemListener.onExchange(mLastPosition, mCurrentPosition)) {
-                    mLastPosition = mCurrentPosition;
-                }
-            }
-        }
-    }
-
     /**
-     *
+     * 　拖拽监听器
      */
     public interface DragItemListener {
 
