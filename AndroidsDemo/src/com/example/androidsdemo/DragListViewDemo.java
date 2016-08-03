@@ -32,19 +32,16 @@ public class DragListViewDemo extends Activity {
         mListView.setDragItemListener(new DragListView.DragItemListener() {
 
             private Rect mFrame = new Rect();
-            private View mView;
             private boolean mIsSelected;
 
             @Override
             public boolean onExchange(int srcPosition, int position) {
-
                 boolean result = mAdapter.exchange(srcPosition, position);
                 return result;
             }
 
             @Override
-            public void onRelease(int positon) { // 停止拖拽时，itemView恢复可见
-
+            public void onRelease(int positon) {
             }
 
             @Override
@@ -64,8 +61,7 @@ public class DragListViewDemo extends Activity {
             }
 
             @Override
-            public void startDrag(int position) { // 开始拖拽，隐藏实际的itemView
-
+            public void startDrag(int position) {
             }
 
             @Override

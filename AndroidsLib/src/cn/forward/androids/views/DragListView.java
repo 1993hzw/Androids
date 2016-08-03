@@ -99,7 +99,7 @@ public class DragListView extends ListView {
 
                     // 触摸点在item项中的高度
                     mDragViewOffset = y - itemView.getTop();
-
+                    setLayerType(View.LAYER_TYPE_SOFTWARE, null); // 关闭硬件加速
                     mDragItemListener.beforeDrawingCache(itemView);
                     itemView.setDrawingCacheEnabled(true); // 开启cache.
                     mBitmap = Bitmap.createBitmap(itemView.getDrawingCache()); // 根据cache创建一个新的bitmap对象.
