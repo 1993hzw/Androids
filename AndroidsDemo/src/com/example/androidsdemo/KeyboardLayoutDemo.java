@@ -48,7 +48,7 @@ public class KeyboardLayoutDemo extends Activity {
                         mEmojiView.setVisibility(View.GONE);
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     }
-                }, 250);
+                }, 250); // 延迟一段时间，等待输入法完全弹出
             }
         });
 
@@ -100,6 +100,7 @@ public class KeyboardLayoutDemo extends Activity {
         });
     }
 
+    // 设置表情栏的高度
     private void initEmojiView() {
         ViewGroup.LayoutParams layoutParams = mEmojiView.getLayoutParams();
         layoutParams.height = mKeyboardHeight;

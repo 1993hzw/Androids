@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 /**
+ * 监听输入法键盘的弹起与隐
  * Created by huangziwei on 16-6-27.
  */
 public class KeyboardLayout extends FrameLayout {
@@ -27,10 +28,11 @@ public class KeyboardLayout extends FrameLayout {
 
     public KeyboardLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        getViewTreeObserver().addOnGlobalLayoutListener(new KeyboradOnGlobalChangeListener());
+        // 监听布局变化
+        getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
     }
 
-    private class KeyboradOnGlobalChangeListener implements ViewTreeObserver.OnGlobalLayoutListener {
+    private class KeyboardOnGlobalChangeListener implements ViewTreeObserver.OnGlobalLayoutListener {
 
         int mScreenHeight = 0;
 
@@ -45,18 +47,19 @@ public class KeyboardLayout extends FrameLayout {
 
         @Override
         public void onGlobalLayout() {
-            Rect localObject = new Rect();
-            ((Activity) getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(localObject);
+            Rect rect = new Rect();
+            // 获取当前页面窗口的显示范围
+            ((Activity) getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
             int screenHeight = getScreenHeight();
-            int keyboardHeight = screenHeight - localObject.bottom; // 输入法的高度
-            boolean bool = false;
+            int keyboardHeight = screenHeight - rect.bottom; // 输入法的高度
+            boolean isActive = false;
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
-                bool = true; // 超过屏幕五分之一则表示弹出了输入法
+                isActive = true; // 超过屏幕五分之一则表示弹出了输入法
                 mKeyboardHeight = keyboardHeight;
             }
-            mIsKeyboardActive = bool;
+            mIsKeyboardActive = isActive;
             if (mListener != null) {
-                mListener.onKeyboardStateChanged(bool, keyboardHeight);
+                mListener.onKeyboardStateChanged(isActive, keyboardHeight);
             }
         }
     }
@@ -73,7 +76,19 @@ public class KeyboardLayout extends FrameLayout {
         return mIsKeyboardActive;
     }
 
+    /**
+     * 获取输入法高度
+     * @return
+     */
+    public int getKeyboardHeight() {
+        return mKeyboardHeight;
+    }
+
     public interface KeyboardLayoutListener {
+        /**
+         * @param isActive       输入法是否激活
+         * @param keyboardHeight 输入法面板高度
+         */
         void onKeyboardStateChanged(boolean isActive, int keyboardHeight);
     }
 
