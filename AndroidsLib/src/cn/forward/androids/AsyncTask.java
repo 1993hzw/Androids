@@ -8,15 +8,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /*
- * ×Ô¶¨ÒåµÄAsynTask£¬ÈÎÎñ¶ÓÁĞ²ÉÓÃºó½øÏÈ³öµÄ²ßÂÔ
+ * è‡ªå®šä¹‰çš„AsynTaskï¼Œä»»åŠ¡é˜Ÿåˆ—é‡‡ç”¨åè¿›å…ˆå‡ºçš„ç­–ç•¥
  */
 abstract public class AsyncTask<Params, Progress, Result> {
 
-    public static int POLICY_FIFO = 1; // ÏÈ½øÏÈ³ö
-    public static int POLICY_LIFO = 2; // ºó½øÏÈ³ö
+    public static int POLICY_FIFO = 1; // å…ˆè¿›å…ˆå‡º
+    public static int POLICY_LIFO = 2; // åè¿›å…ˆå‡º
     private static int sPolicy = POLICY_LIFO;
     /**
-     * ¶ÓÁĞµÄ×î´ó³¤¶È£¬Ö»¶Ôºó½øÏÈ³ö¶ÓÁĞÓĞĞ§£¬µ±³¬¹ıÕâ¸ö×î´óÖµÊ±£¬ĞÂ¼ÓÈëµÄÈÎÎñ»á°Ñ¶ÓÁĞÄ©Î²µÄÈÎÎñÌŞ³ı
+     * é˜Ÿåˆ—çš„æœ€å¤§é•¿åº¦ï¼Œåªå¯¹åè¿›å…ˆå‡ºé˜Ÿåˆ—æœ‰æ•ˆï¼Œå½“è¶…è¿‡è¿™ä¸ªæœ€å¤§å€¼æ—¶ï¼Œæ–°åŠ å…¥çš„ä»»åŠ¡ä¼šæŠŠé˜Ÿåˆ—æœ«å°¾çš„ä»»åŠ¡å‰”é™¤
      */
     private static int sMaxSizeLIFO = 128;
 
@@ -83,7 +83,7 @@ abstract public class AsyncTask<Params, Progress, Result> {
         });
     }
 
-    //Ä£ÄâÕ»µÄĞĞÎª£¬ºó½øÏÈ³ö
+    //æ¨¡æ‹Ÿæ ˆçš„è¡Œä¸ºï¼Œåè¿›å…ˆå‡º
     private static class LinkedBlockingStack<T> extends LinkedBlockingDeque<T> {
         @Override
         public boolean offer(T e) {
@@ -92,7 +92,7 @@ abstract public class AsyncTask<Params, Progress, Result> {
             } else {
                 offerFirst(e);
                 if (size() > sMaxSizeLIFO) {
-                    removeLast(); // ÒÆ³ıÄ©Î²µÄ¶ÓÁĞ
+                    removeLast(); // ç§»é™¤æœ«å°¾çš„é˜Ÿåˆ—
                 }
             }
 
