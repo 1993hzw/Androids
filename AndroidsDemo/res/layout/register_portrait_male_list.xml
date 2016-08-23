@@ -24,7 +24,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
     </LinearLayout>
 
     <!-- row 2 -->
@@ -68,7 +68,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -94,7 +94,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_male"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
     </LinearLayout>
 
     <!-- row 3 -->
@@ -112,7 +112,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_other"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -125,7 +125,7 @@
             android:layout_weight="1"
             android:scaleType="fitXY"
             android:src="@drawable/socially_portrait_other"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
 
         <FrameLayout
             android:layout_width="@dimen/socially_register_portrait_padding"
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/socially_portrait_other"
-            app:height_to_width_ratio="1" />
+            app:riv_height_to_width_ratio="1" />
     </LinearLayout>
 
 </LinearLayout>

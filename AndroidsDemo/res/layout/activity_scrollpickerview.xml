@@ -45,25 +45,25 @@
           android:layout_height="wrap_content">
     <cn.forward.androids.views.ScrollPickerView
             android:id="@+id/view_month"
-            app:min_text_size="24dp"
-            app:max_text_size="30dp"
-            app:visible_item_count="3"
+            app:spv_min_text_size="24dp"
+            app:spv_max_text_size="30dp"
+            app:spv_visible_item_count="3"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="120dp"/>
     <cn.forward.androids.views.ScrollPickerView
             android:id="@+id/view_day"
-            app:min_text_size="24dp"
-            app:max_text_size="30dp"
-            app:visible_item_count="3"
+            app:spv_min_text_size="24dp"
+            app:spv_max_text_size="30dp"
+            app:spv_visible_item_count="3"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="120dp"/>
     <cn.forward.androids.views.ScrollPickerView
             android:id="@+id/view_year"
-            app:min_text_size="24dp"
-            app:max_text_size="30dp"
-            app:visible_item_count="3"
+            app:spv_min_text_size="24dp"
+            app:spv_max_text_size="30dp"
+            app:spv_visible_item_count="3"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="120dp"/>
@@ -86,22 +86,22 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:background="#eeeeee"
-            app:is_circulation="false"
-            app:min_text_size="24dp"
-            app:max_text_size="30dp"
-            app:visible_item_count="5"
-            app:start_color="#ff0000"
+            app:spv_is_circulation="false"
+            app:spv_min_text_size="24dp"
+            app:spv_max_text_size="30dp"
+            app:spv_visible_item_count="5"
+            app:spv_start_color="#ff0000"
             android:layout_width="wrap_content"
             android:layout_height="220dp"/>
     <cn.forward.androids.views.ScrollPickerView
             android:layout_weight="1"
             android:background="#888888"
-            app:is_circulation="false"
-            app:min_text_size="24dp"
-            app:max_text_size="30dp"
-            app:visible_item_count="4"
-            app:start_color="#0000ff"
-            app:end_color="#ffffff"
+            app:spv_is_circulation="false"
+            app:spv_min_text_size="24dp"
+            app:spv_max_text_size="30dp"
+            app:spv_visible_item_count="4"
+            app:spv_start_color="#0000ff"
+            app:spv_end_color="#ffffff"
             android:layout_width="wrap_content"
             android:layout_height="220dp"/>
   </LinearLayout>

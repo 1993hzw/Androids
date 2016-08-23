@@ -48,10 +48,10 @@ public class MaskImageView extends ImageView {
                 R.styleable.MaskImageView);
 
 
-        mIsIgnoreAlpha = a.getBoolean(R.styleable.MaskImageView_is_ignore_alpha, mIsIgnoreAlpha);
-        mIsShowMaskOnClick = a.getBoolean(R.styleable.MaskImageView_is_show_mask_on_click, mIsShowMaskOnClick);
-        mShadeColor = a.getColor(R.styleable.MaskImageView_mask_color, mShadeColor);
-        mMaskLevel = a.getInt(R.styleable.MaskImageView_mask_level, mMaskLevel);
+        mIsIgnoreAlpha = a.getBoolean(R.styleable.MaskImageView_miv_is_ignore_alpha, mIsIgnoreAlpha);
+        mIsShowMaskOnClick = a.getBoolean(R.styleable.MaskImageView_miv_is_show_mask_on_click, mIsShowMaskOnClick);
+        mShadeColor = a.getColor(R.styleable.MaskImageView_miv_mask_color, mShadeColor);
+        mMaskLevel = a.getInt(R.styleable.MaskImageView_miv_mask_level, mMaskLevel);
 
         // 忽略透明度时的颜色矩阵
         float r = Color.alpha(mShadeColor) / 255f;

@@ -9,10 +9,8 @@ import com.example.androidsdemo.adapter.PluginListAdapter;
 
 import java.util.ArrayList;
 
-import cn.forward.androids.AsyncTask;
 import cn.forward.androids.utils.ViewUtil;
 import cn.forward.androids.views.DragListView;
-import cn.forward.androids.views.RoundProgressBar;
 
 /**
  * 可拖拽的ListView
@@ -29,20 +27,10 @@ public class DragListViewDemo extends Activity {
         setContentView(R.layout.activity_drag_listview);
         init();
 
-        mListView.setDragItemListener(new DragListView.DragItemListener() {
+        mListView.setDragItemListener(new DragListView.SimpleAnimationDragItemListener() {
 
             private Rect mFrame = new Rect();
             private boolean mIsSelected;
-
-            @Override
-            public boolean onExchange(int srcPosition, int position) {
-                boolean result = mAdapter.exchange(srcPosition, position);
-                return result;
-            }
-
-            @Override
-            public void onRelease(int positon) {
-            }
 
             @Override
             public boolean canDrag(View dragView, int x, int y) {
@@ -60,9 +48,6 @@ public class DragListViewDemo extends Activity {
                 return false;
             }
 
-            @Override
-            public void startDrag(int position) {
-            }
 
             @Override
             public void beforeDrawingCache(View dragView) {
@@ -81,6 +66,12 @@ public class DragListViewDemo extends Activity {
                 if (drag != null) {
                     drag.setSelected(false);
                 }
+            }
+
+            @Override
+            public boolean canExchange(int srcPosition, int position) {
+                boolean result = mAdapter.exchange(srcPosition, position);
+                return result;
             }
         });
 

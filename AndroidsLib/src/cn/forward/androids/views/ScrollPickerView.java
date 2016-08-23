@@ -88,18 +88,18 @@ public class ScrollPickerView extends View {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
                     R.styleable.ScrollPickerView);
             mMinTextSize = typedArray.getDimensionPixelSize(
-                    R.styleable.ScrollPickerView_min_text_size, mMinTextSize);
+                    R.styleable.ScrollPickerView_spv_min_text_size, mMinTextSize);
             mMaxTextSize = typedArray.getDimensionPixelSize(
-                    R.styleable.ScrollPickerView_max_text_size, mMaxTextSize);
+                    R.styleable.ScrollPickerView_spv_max_text_size, mMaxTextSize);
             mStartColor = typedArray.getColor(
-                    R.styleable.ScrollPickerView_start_color, mStartColor);
+                    R.styleable.ScrollPickerView_spv_start_color, mStartColor);
             mEndColor = typedArray.getColor(
-                    R.styleable.ScrollPickerView_end_color, mEndColor);
+                    R.styleable.ScrollPickerView_spv_end_color, mEndColor);
             mVisibleItemCount = typedArray.getInt(
-                    R.styleable.ScrollPickerView_visible_item_count,
+                    R.styleable.ScrollPickerView_spv_visible_item_count,
                     mVisibleItemCount);
-            mIsCirculation = typedArray.getBoolean(R.styleable.ScrollPickerView_is_circulation, mIsCirculation);
-            mDisallowInterceptTouch = typedArray.getBoolean(R.styleable.ScrollPickerView_disallow_intercept_touch, mDisallowInterceptTouch);
+            mIsCirculation = typedArray.getBoolean(R.styleable.ScrollPickerView_spv_is_circulation, mIsCirculation);
+            mDisallowInterceptTouch = typedArray.getBoolean(R.styleable.ScrollPickerView_spv_disallow_intercept_touch, mDisallowInterceptTouch);
 
             typedArray.recycle();
         }

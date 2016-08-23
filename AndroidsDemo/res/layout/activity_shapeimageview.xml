@@ -19,24 +19,24 @@
                 <cn.forward.androids.views.ShapeImageView
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        app:shape="circle"
+                        app:siv_shape="circle"
                         android:src="@drawable/world_map"/>
                 <cn.forward.androids.views.ShapeImageView
                         android:layout_marginLeft="5dp"
                         android:layout_width="110dp"
                         android:layout_height="110dp"
-                        app:shape="rect"
-                        app:round_radius="25dp"
+                        app:siv_shape="rect"
+                        app:siv_round_radius="25dp"
                         android:src="@drawable/world_map"/>
 
                 <cn.forward.androids.views.ShapeImageView
                         android:layout_marginLeft="5dp"
                         android:layout_width="80dp"
                         android:layout_height="110dp"
-                        app:shape="oval"
-                        app:round_radius="15dp"
-                        app:border_size="0dp"
-                        app:border_color="#ffffff"
+                        app:siv_shape="oval"
+                        app:siv_round_radius="15dp"
+                        app:siv_border_size="0dp"
+                        app:siv_border_color="#ffffff"
                         android:src="@drawable/world_map"/>
             </LinearLayout>
 
@@ -46,10 +46,10 @@
                     android:layout_marginLeft="5dp"
                     android:layout_width="220dp"
                     android:layout_height="110dp"
-                    app:shape="circle"
-                    app:round_radius="15dp"
-                    app:border_size="2dp"
-                    app:border_color="#ffffff"
+                    app:siv_shape="circle"
+                    app:siv_round_radius="15dp"
+                    app:siv_border_size="2dp"
+                    app:siv_border_color="#ffffff"
                     android:src="@drawable/world_map"/>
 
             <cn.forward.androids.views.ShapeImageView
@@ -58,20 +58,20 @@
                     android:layout_marginLeft="5dp"
                     android:layout_width="220dp"
                     android:layout_height="110dp"
-                    app:shape="rect"
-                    app:round_radius="15dp"
-                    app:border_size="3dp"
-                    app:border_color="#00ff00"
+                    app:siv_shape="rect"
+                    app:siv_round_radius="15dp"
+                    app:siv_border_size="3dp"
+                    app:siv_border_color="#00ff00"
                     android:src="@drawable/world_map"/>
             <cn.forward.androids.views.ShapeImageView
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="5dp"
                     android:layout_width="220dp"
                     android:layout_height="110dp"
-                    app:shape="oval"
-                    app:round_radius="15dp"
-                    app:border_size="5dp"
-                    app:border_color="#ff0000"
+                    app:siv_shape="oval"
+                    app:siv_round_radius="15dp"
+                    app:siv_border_size="5dp"
+                    app:siv_border_color="#ff0000"
                     android:src="@drawable/world_map"/>
         </LinearLayout>
     </ScrollView>

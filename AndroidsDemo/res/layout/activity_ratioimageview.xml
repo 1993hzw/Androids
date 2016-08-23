@@ -28,7 +28,7 @@
                 android:scaleType="fitXY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:is_height_fix_drawable_size_ratio="true"
+                app:riv_is_height_fix_drawable_size_ratio="true"
                 android:background="#aaaaaa"
                 android:src="@drawable/ic_launcher"/>
         <FrameLayout android:layout_width="12dp"
@@ -38,7 +38,7 @@
                 android:scaleType="fitXY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:is_height_fix_drawable_size_ratio="true"
+                app:riv_is_height_fix_drawable_size_ratio="true"
                 android:background="#aaaaaa"
                 android:src="@drawable/ic_launcher"/>
         <FrameLayout android:layout_width="12dp" android:layout_height="1dp"/>
@@ -47,7 +47,7 @@
                 android:scaleType="fitXY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:is_height_fix_drawable_size_ratio="true"
+                app:riv_is_height_fix_drawable_size_ratio="true"
                 android:background="#aaaaaa"
                 android:src="@drawable/ic_launcher"/>
 
@@ -62,7 +62,7 @@
         <cn.forward.androids.views.RatioImageView
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                app:is_height_fix_drawable_size_ratio="true"
+                app:riv_is_height_fix_drawable_size_ratio="true"
                 android:src="@drawable/world_map"/>
         <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
         <cn.forward.androids.views.RatioImageView
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                app:is_width_fix_drawable_size_ratio="true"
+                app:riv_is_width_fix_drawable_size_ratio="true"
                 android:src="@drawable/world_map"/>
         <TextView
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
         <cn.forward.androids.views.RatioImageView
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                app:width_to_height_ratio="1.8"
+                app:riv_width_to_height_ratio="1.8"
                 android:scaleType="fitXY"
                 android:src="@drawable/world_map"/>
         <TextView
@@ -135,7 +135,7 @@
         <cn.forward.androids.views.RatioImageView
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                app:height_to_width_ratio="1.8"
+                app:riv_height_to_width_ratio="1.8"
                 android:scaleType="fitXY"
                 android:src="@drawable/world_map"/>
         <TextView

@@ -20,8 +20,6 @@ import java.util.Collections;
  */
 public class PluginListAdapter extends BaseAdapter {
 
-    private static final int KEY_DOWNLOAD_PROGRESS = -1345199321;
-
     public static final int TYPE_TAG_ADDED = 0;
     public static final int TYPE_TAG_NOT_ADDED = 1;
     public static final int TYPE_PLUGIN_ADDED = 2;

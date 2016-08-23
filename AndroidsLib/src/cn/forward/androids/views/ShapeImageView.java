@@ -75,10 +75,10 @@ public class ShapeImageView extends ImageView {
 
         TypedArray a = getContext().obtainStyledAttributes(attrs,
                 R.styleable.ShapeImageView);
-        mShape = a.getInt(R.styleable.ShapeImageView_shape, mShape);
-        mRoundRadius = a.getDimension(R.styleable.ShapeImageView_round_radius, mRoundRadius);
-        mBorderSize = a.getDimension(R.styleable.ShapeImageView_border_size, mBorderSize);
-        mBorderColor = a.getColor(R.styleable.ShapeImageView_border_color, mBorderColor);
+        mShape = a.getInt(R.styleable.ShapeImageView_siv_shape, mShape);
+        mRoundRadius = a.getDimension(R.styleable.ShapeImageView_siv_round_radius, mRoundRadius);
+        mBorderSize = a.getDimension(R.styleable.ShapeImageView_siv_border_size, mBorderSize);
+        mBorderColor = a.getColor(R.styleable.ShapeImageView_siv_border_color, mBorderColor);
         a.recycle();
     }
 

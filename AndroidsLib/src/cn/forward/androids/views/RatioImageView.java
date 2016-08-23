@@ -61,20 +61,20 @@ public class RatioImageView extends ImageView {
 
         TypedArray a = getContext().obtainStyledAttributes(attrs,
                 R.styleable.RatioImageView);
-        mIsWidthFitDrawableSizeRatio = a.getBoolean(R.styleable.RatioImageView_is_width_fix_drawable_size_ratio,
+        mIsWidthFitDrawableSizeRatio = a.getBoolean(R.styleable.RatioImageView_riv_is_width_fix_drawable_size_ratio,
                 mIsWidthFitDrawableSizeRatio);
-        mIsHeightFitDrawableSizeRatio = a.getBoolean(R.styleable.RatioImageView_is_height_fix_drawable_size_ratio,
+        mIsHeightFitDrawableSizeRatio = a.getBoolean(R.styleable.RatioImageView_riv_is_height_fix_drawable_size_ratio,
                 mIsHeightFitDrawableSizeRatio);
-        mMaxWidthWhenWidthFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_max_width_when_width_fix_drawable,
+        mMaxWidthWhenWidthFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_riv_max_width_when_width_fix_drawable,
                 mMaxWidthWhenWidthFixDrawable);
-        mMaxHeightWhenHeightFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_max_height_when_height_fix_drawable,
+        mMaxHeightWhenHeightFixDrawable = a.getDimensionPixelOffset(R.styleable.RatioImageView_riv_max_height_when_height_fix_drawable,
                 mMaxHeightWhenHeightFixDrawable);
         mHeightRatio = a.getFloat(
-                R.styleable.RatioImageView_height_to_width_ratio, mHeightRatio);
+                R.styleable.RatioImageView_riv_height_to_width_ratio, mHeightRatio);
         mWidthRatio = a.getFloat(
-                R.styleable.RatioImageView_width_to_height_ratio, mWidthRatio);
-        mDesiredWidth = a.getDimensionPixelOffset(R.styleable.RatioImageView_width, mDesiredWidth);
-        mDesiredHeight = a.getDimensionPixelOffset(R.styleable.RatioImageView_height, mDesiredHeight);
+                R.styleable.RatioImageView_riv_width_to_height_ratio, mWidthRatio);
+        mDesiredWidth = a.getDimensionPixelOffset(R.styleable.RatioImageView_riv_width, mDesiredWidth);
+        mDesiredHeight = a.getDimensionPixelOffset(R.styleable.RatioImageView_riv_height, mDesiredHeight);
 
         a.recycle();
     }
