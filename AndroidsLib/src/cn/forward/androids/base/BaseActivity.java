@@ -27,7 +27,7 @@ import cn.forward.androids.R;
  */
 public class BaseActivity extends FragmentActivity implements View.OnClickListener {
 
-    public static final String SHAREDPREFERENCES_NAME = "sharedpreferences_name";
+    public static final String SHAREDPREFERENCES_NAME = "sharedpreferences_BaseActivity";
 
     private static final String[] sClassPrefixList = {
             "android.widget.",
@@ -35,6 +35,7 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
             "android.support.v4.view.",
             "android.webkit.",
             "android.app.",
+            "android.support.v7.view.",
     };
 
     protected SharedPreferences mPrefer;
@@ -46,6 +47,9 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (BaseApplication.sContext == null) {
+            BaseApplication.init(getApplicationContext());
+        }
         mPrefer = getSharedPreferences(SHAREDPREFERENCES_NAME, Activity.MODE_PRIVATE);
     }
 
@@ -85,16 +89,22 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        View view = super.onCreateView(parent, name, context, attrs);
+        if (context == null) {
+            context = this;
+        }
+        View view = super.onCreateView(parent, name, context, attrs); // 内部会调用onCreateView(name, context, attrs)
         if (view != null) {
             return view;
         } else {
-            return onCreateView(name, context, attrs);
+            throw new RuntimeException("view is null");
         }
     }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
+        if (context == null) {
+            context = this;
+        }
         View view = super.onCreateView(name, context, attrs);
         if (view == null) {
             try {

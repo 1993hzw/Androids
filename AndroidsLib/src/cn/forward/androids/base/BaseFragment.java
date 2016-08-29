@@ -20,6 +20,9 @@ public class BaseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPrefer = getActivity().getSharedPreferences(BaseActivity.SHAREDPREFERENCES_NAME, Activity.MODE_PRIVATE);
+        if (BaseApplication.sContext == null) {
+            BaseApplication.init(getContext());
+        }
     }
 
     public void onClick(View v) {
