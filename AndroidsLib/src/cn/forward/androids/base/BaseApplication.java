@@ -76,21 +76,4 @@ public class BaseApplication extends Application {
                     }
                 }));
     }
-
-    @Override
-    public Object getSystemService(String name) {
-        Object object = super.getSystemService(name);
-        if (object instanceof LayoutInflater) {
-            if (mLayoutInflater == null) {
-//                注意不同android版本兼容
-                mLayoutInflater = ((LayoutInflater) object).cloneInContext(this);
-                InflaterFactory factory = new InflaterFactory(mLayoutInflater.getFactory(), getClassLoader());
-                mLayoutInflater.setFactory(factory);
-                //解决toast找不到
-                mLayoutInflater = new MapleLayoutInflater((LayoutInflater) object, mLayoutInflater, this);
-            }
-            return mLayoutInflater;
-        }
-        return object;
-    }
 }

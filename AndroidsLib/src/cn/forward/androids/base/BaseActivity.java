@@ -89,22 +89,12 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (context == null) {
-            context = this;
-        }
         View view = super.onCreateView(parent, name, context, attrs); // 内部会调用onCreateView(name, context, attrs)
-        if (view != null) {
-            return view;
-        } else {
-            throw new RuntimeException("view is null");
-        }
+        return view;
     }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (context == null) {
-            context = this;
-        }
         View view = super.onCreateView(name, context, attrs);
         if (view == null) {
             try {
@@ -116,10 +106,16 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
                                 break;
                             }
                         } catch (ClassNotFoundException cnfe) {
+                        } catch (Exception e) { // 渲染主题样式时可能会报context为空指针
+                            return null;
                         }
                     }
                 } else {
-                    view = LayoutInflater.from(context).createView(name, null, attrs);
+                    try {
+                        view = LayoutInflater.from(context).createView(name, null, attrs);
+                    } catch (Exception e) {
+                        return null;
+                    }
                 }
 
                 if (view == null) {
