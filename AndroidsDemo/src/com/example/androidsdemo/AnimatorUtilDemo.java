@@ -2,7 +2,9 @@ package com.example.androidsdemo;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,7 +13,7 @@ import android.widget.ScrollView;
 import cn.forward.androids.utils.AnimatorUtil;
 import cn.forward.androids.utils.Util;
 
-
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AnimatorUtilDemo extends Activity {
 
     public static enum Sex {

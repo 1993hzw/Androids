@@ -2,13 +2,21 @@ package cn.forward.androids.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
 import cn.forward.androids.R;
-import cn.forward.androids.utils.Util;
+import cn.forward.androids.utils.ImageUtils;
 
 /**
  * 可设置形状的ImageView，抗边缘锯齿
@@ -53,14 +61,14 @@ public class ShapeImageView extends ImageView {
     @Override
     public void setImageResource(int resId) {
         super.setImageResource(resId);
-        mBitmap = Util.getBitmapFromDrawable(getDrawable());
+        mBitmap = ImageUtils.getBitmapFromDrawable(getDrawable());
         setupBitmapShader();
     }
 
     @Override
     public void setImageDrawable(Drawable drawable) {
         super.setImageDrawable(drawable);
-        mBitmap = Util.getBitmapFromDrawable(drawable);
+        mBitmap = ImageUtils.getBitmapFromDrawable(drawable);
         setupBitmapShader();
     }
 
