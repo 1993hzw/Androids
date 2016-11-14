@@ -29,7 +29,8 @@ public class BaseApplication extends Application {
         if (context == null) {
             return;
         }
-        sContext = context.getApplicationContext();
+        context = context.getApplicationContext();
+        sContext = context;
         sToast = Toast.makeText(sContext, "", Toast.LENGTH_SHORT);
         try {
             PackageManager manager = sContext.getPackageManager();
@@ -62,18 +63,4 @@ public class BaseApplication extends Application {
         showToast(getStringById(id));
     }
 
-    public void handleGlobalException() {
-        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler(
-                new UncaughtExceptionHandler.HandlerListener() {
-                    @Override
-                    public void onHandleException(Throwable throwable) {
-                        ThreadUtil.getInstance().runOnMainThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showToast("程序发生异常");
-                            }
-                        });
-                    }
-                }));
-    }
 }

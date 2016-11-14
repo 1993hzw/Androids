@@ -1,41 +1,44 @@
 package cn.forward.androids.base;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Toast;
 
 
 /**
  * @author hzw
  * @date 2016/2/27.
  */
-public class BaseFragment extends Fragment {
+public class BaseFragment extends Fragment implements View.OnClickListener {
 
     protected SharedPreferences mPrefer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPrefer = getActivity().getSharedPreferences(BaseActivity.SHAREDPREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if (BaseApplication.sContext == null) {
-            BaseApplication.init(getContext());
-        }
     }
 
     public void onClick(View v) {
 
     }
 
+    public void setSharedPreferences(SharedPreferences sharedPreferences) {
+        mPrefer = sharedPreferences;
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return mPrefer;
+    }
 
     public void showToast(String msg) {
-        BaseApplication.showToast(msg);
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     public void showToast(int id) {
-        BaseApplication.showToast(id);
+        Toast.makeText(getContext(), id, Toast.LENGTH_SHORT).show();
     }
 
     public void saveBoolean(String key, boolean b) {

@@ -17,9 +17,9 @@ public class StatusBarUtil {
      *
      * @param win
      * @param translucent
-     * @param isStatusBarDarMode 状态栏文字是否为黑色
+     * @param darkMode 状态栏文字是否为黑色
      */
-    public static void setStatusBarTranslucent(Window win, boolean translucent, boolean isStatusBarDarMode) {
+    public static void setStatusBarTranslucent(Window win, boolean translucent, boolean darkMode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WindowManager.LayoutParams winParams = win.getAttributes();
             if (translucent) {
@@ -29,14 +29,17 @@ public class StatusBarUtil {
             }
             win.setAttributes(winParams);
 
-            if (!setStatusBarDarkModeMEIZU(win, isStatusBarDarMode)) {
-                setStatusBarDarkModeXIAOMI(win, isStatusBarDarMode);
+            if (!setStatusBarDarkModeMEIZU(win, darkMode)) {
+                setStatusBarDarkModeXIAOMI(win, darkMode);
             }
         }
     }
 
-    public static void setStatusBarTranslucent(Activity activity, boolean translucent, boolean isStatusBarDarMode) {
-        setStatusBarTranslucent(activity.getWindow(), translucent, isStatusBarDarMode);
+    /**
+     * @see StatusBarUtil#setStatusBarTranslucent(Window, boolean, boolean)
+     */
+    public static void setStatusBarTranslucent(Activity activity, boolean translucent, boolean darkMode) {
+        setStatusBarTranslucent(activity.getWindow(), translucent, darkMode);
     }
 
     /**

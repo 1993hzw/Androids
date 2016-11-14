@@ -150,8 +150,12 @@ public class DateUtil {
     }
 
     public static String getDate(String format) {
+        return getDate(new java.util.Date().getTime(), format);
+    }
+
+    public static String getDate(long time, String format) {
         SimpleDateFormat sDateFormat = new SimpleDateFormat(format);
-        String date = sDateFormat.format(new java.util.Date());
+        String date = sDateFormat.format(time);
         return date;
     }
 }
