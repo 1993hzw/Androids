@@ -1,6 +1,7 @@
 package cn.forward.androids.base;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -10,6 +11,9 @@ import android.view.ViewGroup;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.util.WeakHashMap;
+
+import cn.forward.androids.R;
+import cn.forward.androids.annotation.ViewInjectProcessor;
 
 /**
  * Created by huangziwei on 16-11-4.
@@ -86,6 +90,7 @@ public class InjectionLayoutInflater extends LayoutInflater implements LayoutInf
         mOnViewCreatedListener = null;
         return view;
     }
+
 /*
      @Override
     public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) {
@@ -182,5 +187,51 @@ public class InjectionLayoutInflater extends LayoutInflater implements LayoutInf
     public interface OnViewCreatedListener {
         View onViewCreated(Context context, View parent, View view, AttributeSet attrs);
     }
+
+    public static OnViewCreatedListener getViewOnClickListenerInjector(final View.OnClickListener clickListener) {
+        if (clickListener == null) {
+            return null;
+        }
+        return new OnViewCreatedListener() {
+            @Override
+            public View onViewCreated(Context context, View parent, View view, AttributeSet attrs) {
+                TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View);
+                if (a.getBoolean(R.styleable.View_injectListener, false)) {
+                    view.setOnClickListener(clickListener);
+                }
+                a.recycle();
+                return view;
+            }
+        };
+    }
+
+    public static OnViewCreatedListener getViewInjector(final Object object) {
+        if (object == null) {
+            return null;
+        }
+        return new OnViewCreatedListener() {
+            @Override
+            public View onViewCreated(Context context, View parent, View view, AttributeSet attrs) {
+                ViewInjectProcessor.process(object, view);
+                return view;
+            }
+        };
+    }
+
+    public static OnViewCreatedListener merge(final OnViewCreatedListener... listeners) {
+        if (listeners == null) {
+            return null;
+        }
+        return new OnViewCreatedListener() {
+            @Override
+            public View onViewCreated(Context context, View parent, View view, AttributeSet attrs) {
+                for (OnViewCreatedListener listener : listeners) {
+                    view = listener.onViewCreated(context, parent, view, attrs);
+                }
+                return view;
+            }
+        };
+    }
+
 }
 

@@ -3,17 +3,13 @@ package cn.forward.androids.base;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import cn.forward.androids.R;
 
 /**
  * @author hzw
@@ -23,7 +19,7 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
 
     protected SharedPreferences mPrefer;
     private boolean mCanViewInjected = true;
-    private LayoutInflater mLayoutInflater;
+    private InjectionLayoutInflater.OnViewCreatedListener mViewClickListenerInjector;
 
 
     @Override
@@ -65,6 +61,9 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
 
     @Override
     public void setContentView(int layoutResID) {
+        if (mViewClickListenerInjector == null) {
+            mViewClickListenerInjector = InjectionLayoutInflater.getViewOnClickListenerInjector(this);
+        }
         View view = InjectionLayoutInflater.from(this).inflate(layoutResID, null, this);
         super.setContentView(view);
     }
@@ -74,16 +73,7 @@ public class BaseActivity extends FragmentActivity implements View.OnClickListen
         if (!mCanViewInjected) {
             return view;
         }
-        return onInjectView(context, view, attrs);
-    }
-
-    public View onInjectView(Context context, View view, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View);
-        if (a.getBoolean(R.styleable.View_injectListener, false)) {
-            view.setOnClickListener(BaseActivity.this);
-        }
-        a.recycle();
-        return view;
+        return mViewClickListenerInjector.onViewCreated(context, parent, view, attrs);
     }
 
     public void setCanViewInjected(boolean canViewInjected) {
