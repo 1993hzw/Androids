@@ -257,6 +257,7 @@ public class ScrollPickerView extends View {
                 moveToCenter();
             } else if (mIsMovingCenter) {
                 mIsMovingCenter = false;
+                mLastScrollY = 0;
                 notifySelected();
             }
         }
@@ -271,11 +272,15 @@ public class ScrollPickerView extends View {
     // 循环滚动
     private void checkCirculation() {
         if (mMoveLength >= mItemHeight) { // 向下滑动,最后一个元素放在头部
-            mSelected--;
+//            mSelected--;
+            int span = (int) (mMoveLength / mItemHeight);
+            mSelected -= span;
             if (mSelected < 0) {  // 滚动顶部，判断是否循环滚动
                 if (mIsCirculation) {
-                    mSelected = mData.size() - 1;
-                    mMoveLength = 0;
+                    do {
+                        mSelected = mData.size() + mSelected;
+                    } while (mSelected < 0);
+                    mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
                 } else { // 非循环滚动
                     mSelected = 0;
                     mMoveLength = mItemHeight;
@@ -287,15 +292,19 @@ public class ScrollPickerView extends View {
                     }
                 }
             } else {
-                mMoveLength = 0;
+                mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
             }
 
         } else if (mMoveLength <= -mItemHeight) { // 向上滑动，第一个元素放在尾部
-            mSelected++;
+//            mSelected++;
+            int span = (int) (-mMoveLength / mItemHeight);
+            mSelected += span;
             if (mSelected >= mData.size()) { // 滚动末尾，判断是否循环滚动
                 if (mIsCirculation) {
-                    mSelected = 0;
-                    mMoveLength = 0;
+                    do {
+                        mSelected = mSelected - mData.size();
+                    } while (mSelected >= mData.size());
+                    mMoveLength = (mMoveLength + mItemHeight) % mItemHeight;
                 } else { // 非循环滚动
                     mSelected = mData.size() - 1;
                     mMoveLength = -mItemHeight;
@@ -307,7 +316,7 @@ public class ScrollPickerView extends View {
                     }
                 }
             } else {
-                mMoveLength = 0;
+                mMoveLength = (mMoveLength + mItemHeight) % mItemHeight;
             }
         }
     }
