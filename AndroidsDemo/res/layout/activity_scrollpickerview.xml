@@ -1,108 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ffffff"
-              android:padding="5dp"
-              android:orientation="vertical">
-  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="18dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="老虎机"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="play"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <cn.forward.androids.views.BitmapScrollPicker
+                android:id="@+id/bitmap_picker01"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                />
+
+            <cn.forward.androids.views.BitmapScrollPicker
+                android:id="@+id/bitmap_picker02"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                />
+
+            <cn.forward.androids.views.BitmapScrollPicker
+                android:id="@+id/bitmap_picker03"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
             android:text="循环滚动"
-          />
-  <LinearLayout
-          android:background="#aaaaaa"
-          android:orientation="horizontal"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textSize="16sp"
-              android:gravity="center"
-              android:layout_weight="1"
-              android:textColor="#000000"
-              android:text="月"/>
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textSize="16sp"
-              android:gravity="center"
-              android:layout_weight="1"
-              android:textColor="#000000"
-              android:text="日"/>
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textSize="16sp"
-              android:gravity="center"
-              android:layout_weight="1"
-              android:textColor="#000000"
-              android:text="年"/>
-  </LinearLayout>
-  <LinearLayout
-          android:layout_marginTop="5dp"
-          android:orientation="horizontal"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-    <cn.forward.androids.views.ScrollPickerView
-            android:id="@+id/view_month"
-            app:spv_min_text_size="24dp"
-            app:spv_max_text_size="30dp"
-            app:spv_visible_item_count="3"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"/>
-    <cn.forward.androids.views.ScrollPickerView
-            android:id="@+id/view_day"
-            app:spv_min_text_size="24dp"
-            app:spv_max_text_size="30dp"
-            app:spv_visible_item_count="3"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"/>
-    <cn.forward.androids.views.ScrollPickerView
-            android:id="@+id/view_year"
-            app:spv_min_text_size="24dp"
-            app:spv_max_text_size="30dp"
-            app:spv_visible_item_count="3"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"/>
-
-  </LinearLayout>
-
-  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textColor="#000000"
             android:textSize="18dp"
-            android:text="非循环滚动"
-            android:layout_marginTop="20dp"
-          />
+            />
 
-  <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          >
-    <cn.forward.androids.views.ScrollPickerView
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:background="#eeeeee"
-            app:spv_is_circulation="false"
-            app:spv_min_text_size="24dp"
-            app:spv_max_text_size="30dp"
-            app:spv_visible_item_count="5"
-            app:spv_start_color="#ff0000"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#aaaaaa"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="月"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="日"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="年"
+                android:textColor="#000000"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <cn.forward.androids.views.StringScrollPicker
+                android:id="@+id/view_month"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                app:spv_max_text_size="30dp"
+                app:spv_min_text_size="24dp"
+                app:spv_visible_item_count="3"/>
+
+            <cn.forward.androids.views.StringScrollPicker
+                android:id="@+id/view_day"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                app:spv_max_text_size="30dp"
+                app:spv_min_text_size="24dp"
+                app:spv_visible_item_count="3"/>
+
+            <cn.forward.androids.views.StringScrollPicker
+                android:id="@+id/view_year"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                app:spv_max_text_size="30dp"
+                app:spv_min_text_size="24dp"
+                app:spv_visible_item_count="3"/>
+
+        </LinearLayout>
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="220dp"/>
-    <cn.forward.androids.views.ScrollPickerView
-            android:layout_weight="1"
-            android:background="#888888"
-            app:spv_is_circulation="false"
-            app:spv_min_text_size="24dp"
-            app:spv_max_text_size="30dp"
-            app:spv_visible_item_count="4"
-            app:spv_start_color="#0000ff"
-            app:spv_end_color="#ffffff"
-            android:layout_width="wrap_content"
-            android:layout_height="220dp"/>
-  </LinearLayout>
-</LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:text="非循环滚动"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <cn.forward.androids.views.StringScrollPicker
+                android:id="@+id/picker_01"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="#eeeeee"
+                app:spv_is_circulation="false"
+                app:spv_max_text_size="36dp"
+                app:spv_min_text_size="21dp"
+                app:spv_start_color="#ff0000"
+                app:spv_visible_item_count="5"/>
+
+            <cn.forward.androids.views.BitmapScrollPicker
+                android:id="@+id/picker_02"
+                android:layout_width="wrap_content"
+                android:layout_height="220dp"
+                android:layout_weight="1"
+                android:background="#888888"
+                app:spv_end_color="#ffffff"
+                app:spv_is_circulation="false"
+                app:spv_max_text_size="36dp"
+                app:spv_min_text_size="24dp"
+                app:spv_start_color="#0000ff"
+                app:spv_visible_item_count="4"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
+
