@@ -13,8 +13,11 @@ import android.view.ViewParent;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.forward.androids.utils.Util;
 
 /**
  * 滚动选择器,带惯性滑动
@@ -65,12 +68,12 @@ public abstract class ScrollPickerView<T> extends View {
         mGestureDetector = new GestureDetectorCompat(getContext(),
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
+        mAutoScrollAnimator = ValueAnimator.ofInt(0, 0);
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
-        mHasComputedScroll = false;
 
         if (mData == null || mData.size() <= 0) {
             return;
@@ -173,28 +176,40 @@ public abstract class ScrollPickerView<T> extends View {
      * @param endY
      */
     private void computeScroll(int currY, int endY) {
-        if (mHasComputedScroll) {
-            return;
-        }
         if (currY != endY) { // 正在滚动
-            mHasComputedScroll = true;
             // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
             mMoveLength = mMoveLength + currY - mLastScrollY;
             mLastScrollY = currY;
             checkCirculation();
             invalidate();
         } else { // 滚动完毕
-            moveToCenter();
+            mIsMovingCenter = false;
+            mLastScrollY = 0;
+
+            // 居中
+            if (mMoveLength > 0) { //// 向下滑动
+                if (mMoveLength < mItemHeight / 2) {
+                    mMoveLength = 0;
+                } else {
+                    mMoveLength = mItemHeight;
+                }
+            } else {
+                if (-mMoveLength < mItemHeight / 2) {
+                    mMoveLength = 0;
+                } else {
+                    mMoveLength = -mItemHeight;
+                }
+            }
+            checkCirculation();
+            notifySelected();
+            invalidate();
+//            moveToCenter();
         }
 
     }
 
     @Override
     public void computeScroll() {
-        if (mHasComputedScroll) {
-            return;
-        }
-        mHasComputedScroll = true;
         if (mScroller.computeScrollOffset()) { // 正在滚动
             // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
             mMoveLength = mMoveLength + mScroller.getCurrY() - mLastScrollY;
@@ -330,7 +345,6 @@ public abstract class ScrollPickerView<T> extends View {
 
     private boolean mIsAutoScrolling = false;
     private ValueAnimator mAutoScrollAnimator;
-    private boolean mHasComputedScroll = false; // 为了互斥，在一次页面刷新的过程中，两个computeScroll方法只能执行一个
     private final static SlotInterpolator sAutoScrollInterpolator = new SlotInterpolator();
 
     /**
@@ -344,16 +358,20 @@ public abstract class ScrollPickerView<T> extends View {
         if (mIsAutoScrolling) {
             return;
         }
+        cancelScroll();
         mIsAutoScrolling = true;
+
 
         int length = (int) (speed * duration);
         int circle = (int) (length * 1f / (mData.size() * mItemHeight) + 0.5f); // 圈数
         circle = circle <= 0 ? 1 : circle;
 
         final int endY = circle * (mData.size()) * mItemHeight + (mSelected - position) * mItemHeight;
-        mAutoScrollAnimator = ValueAnimator.ofInt(0, endY);
+        mAutoScrollAnimator.cancel();
+        mAutoScrollAnimator.setIntValues(0, endY);
         mAutoScrollAnimator.setInterpolator(interpolator);
         mAutoScrollAnimator.setDuration(duration);
+        mAutoScrollAnimator.removeAllUpdateListeners();
         mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -378,7 +396,8 @@ public abstract class ScrollPickerView<T> extends View {
      * @see ScrollPickerView#autoScroll(int, long, float, Interpolator)
      */
     public void autoScroll(final int position, long duration) {
-        autoScroll(position, duration, 1.5f, sAutoScrollInterpolator);
+        float speed = Util.dp2px(getContext(),0.45f);
+        autoScroll(position, duration, speed, sAutoScrollInterpolator);
     }
 
     /**
@@ -391,14 +410,48 @@ public abstract class ScrollPickerView<T> extends View {
     }
 
     /**
+     * 滚动到指定位置
+     * @param toPosition　需要滚动到的位置
+     * @param duration　滚动时间
+     * @param interpolator
+     */
+    public void autoScrollTo(int toPosition, long duration, final Interpolator interpolator) {
+        if (mIsAutoScrolling) {
+            return;
+        }
+        mIsAutoScrolling = true;
+        toPosition = toPosition % mData.size();
+        final int endY = (mSelected - toPosition) * mItemHeight;
+        mAutoScrollAnimator.cancel();
+        mAutoScrollAnimator.setIntValues(0, endY);
+        mAutoScrollAnimator.setInterpolator(interpolator);
+        mAutoScrollAnimator.setDuration(duration);
+        mAutoScrollAnimator.removeAllUpdateListeners();
+        mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                computeScroll((int) animation.getAnimatedValue(), endY);
+                float rate = 0;
+                if (Build.VERSION.SDK_INT >= 12) {
+                    rate = animation.getAnimatedFraction();
+                } else {
+                    rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
+                }
+                if (rate >= 1) {
+                    mIsAutoScrolling = false;
+                }
+            }
+        });
+        mAutoScrollAnimator.start();
+    }
+
+
+    /**
      * 停止自动滚动
      */
     public void stopAutoScroll() {
         mIsAutoScrolling = false;
-        if (mAutoScrollAnimator != null) {
-            mAutoScrollAnimator.cancel();
-            mAutoScrollAnimator = null;
-        }
+        mAutoScrollAnimator.cancel();
     }
 
     private static class SlotInterpolator implements Interpolator {

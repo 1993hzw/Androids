@@ -56,6 +56,7 @@ public class ScrollPickerViewDemo extends Activity {
     private ScrollPickerView mPicker02;
 
     private Button mBtnPlay;
+    boolean mIsPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class ScrollPickerViewDemo extends Activity {
         mPicker01 = (ScrollPickerView) findViewById(R.id.picker_01);
         mPicker02 = (ScrollPickerView) findViewById(R.id.picker_02);
 
-        // 不允许父元素拦截事件
+        // 不允许父元素拦截事件，设置后可以保证在ScrollView下正常滚动
         mYearView.setDisallowInterceptTouch(true);
         mMonthView.setDisallowInterceptTouch(true);
         mDayView.setDisallowInterceptTouch(true);
@@ -131,6 +132,7 @@ public class ScrollPickerViewDemo extends Activity {
         });
 
 
+        // 老虎机
         final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_01));
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_02));
@@ -149,12 +151,16 @@ public class ScrollPickerViewDemo extends Activity {
         mPicker02.setData(bitmaps);
         mPicker02.setIsCirculation(false); // 设置非循环滚动
 
+
         ScrollPickerView.OnSelectedListener listener = new ScrollPickerView.OnSelectedListener() {
             int[] selectedList = new int[3];
             int counter = 0;
 
             @Override
             public void onSelected(ScrollPickerView scrollPickerView, int position) {
+                if (!mIsPlaying) {
+                    return;
+                }
                 if (scrollPickerView == mBitmapPicker01) {
                     selectedList[0] = position;
                 } else if (scrollPickerView == mBitmapPicker02) {
@@ -165,6 +171,7 @@ public class ScrollPickerViewDemo extends Activity {
                 counter++;
                 if (counter >= 3) { // 当老虎机中三个都滚动完毕则提示结果
                     counter = 0;
+                    mIsPlaying = false;
                     Toast.makeText(getApplicationContext(), Arrays.toString(selectedList), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -179,6 +186,10 @@ public class ScrollPickerViewDemo extends Activity {
 
             @Override
             public void onClick(View v) {
+                if (mIsPlaying) {
+                    return;
+                }
+                mIsPlaying = true;
                 mBitmapPicker01.autoScroll(mRandom.nextInt(bitmaps.size()), 5000);
                 mBitmapPicker02.autoScroll(mRandom.nextInt(bitmaps.size()), 5500);
                 mBitmapPicker03.autoScroll(mRandom.nextInt(bitmaps.size()), 6000);
