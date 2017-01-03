@@ -64,9 +64,15 @@ public class StringScrollPicker extends ScrollPickerView<String> {
                     R.styleable.ScrollPickerView_spv_start_color, mStartColor);
             mEndColor = typedArray.getColor(
                     R.styleable.ScrollPickerView_spv_end_color, mEndColor);
+            setCenterItemBackground(typedArray.getColor(
+                    R.styleable.ScrollPickerView_spv_center_item_background,
+                    getCenterItemBackground()));
             setVisibleItemCount(typedArray.getInt(
                     R.styleable.ScrollPickerView_spv_visible_item_count,
                     getVisibleItemCount()));
+            setCenterPosition(typedArray.getInt(
+                    R.styleable.ScrollPickerView_spv_center_item_position,
+                    getCenterPosition()));
             setIsCirculation(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_is_circulation, isIsCirculation()));
             setDisallowInterceptTouch(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_disallow_intercept_touch, isDisallowInterceptTouch()));
 
@@ -104,24 +110,24 @@ public class StringScrollPicker extends ScrollPickerView<String> {
     @Override
     public void drawItem(Canvas canvas, List<String> data, int position, int relative, float moveLength, float top) {
         String text = data.get(position);
-        int mItemHeight = getItemHeight();
+        int itemHeight = getItemHeight();
         float x = 0;
         if (relative == -1) { // 上一个
             if (moveLength < 0) { // 向上滑动
                 mPaint.setTextSize(mMinTextSize);
             } else { // 向下滑动
                 mPaint.setTextSize(mMinTextSize + (mMaxTextSize - mMinTextSize)
-                        * moveLength / mItemHeight);
+                        * moveLength / itemHeight);
             }
         } else if (relative == 0) { // 中间item,当前选中
             mPaint.setTextSize(mMinTextSize + (mMaxTextSize - mMinTextSize)
-                    * (mItemHeight - Math.abs(moveLength)) / mItemHeight);
+                    * (itemHeight - Math.abs(moveLength)) / itemHeight);
         } else if (relative == 1) { // 下一个
             if (moveLength > 0) { // 向下滑动
                 mPaint.setTextSize(mMinTextSize);
             } else { // 向上滑动
                 mPaint.setTextSize(mMinTextSize + (mMaxTextSize - mMinTextSize)
-                        * -moveLength / mItemHeight);
+                        * -moveLength / itemHeight);
             }
         } else { // 其他
             mPaint.setTextSize(mMinTextSize);
@@ -130,9 +136,9 @@ public class StringScrollPicker extends ScrollPickerView<String> {
 
         Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
         // 绘制文字时，文字的baseline是对齐ｙ坐标的，下面换算使其垂直居中。fmi.top值是相对baseline的，为负值
-        float y = top + mItemHeight / 2
+        float y = top + itemHeight / 2
                 - fmi.descent + (fmi.bottom - fmi.top) / 2;
-        computeColor(relative, mItemHeight, moveLength);
+        computeColor(relative, itemHeight, moveLength);
         canvas.drawText(text, x, y, mPaint);
     }
 

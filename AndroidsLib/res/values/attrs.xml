@@ -54,7 +54,10 @@
         <attr name="spv_max_text_size" format="dimension" />
         <attr name="spv_start_color" format="color" />
         <attr name="spv_end_color" format="color" />
+        <attr name="spv_center_item_background" format="color"/>
         <attr name="spv_visible_item_count" format="integer" />
+        <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
+        <attr name="spv_center_item_position" format="integer" />
         <!-- 是否循环滚动，默认为true，开启-->
         <attr name="spv_is_circulation" format="boolean" />
         <!-- 不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效 -->

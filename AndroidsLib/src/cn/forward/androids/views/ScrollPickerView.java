@@ -3,6 +3,8 @@ package cn.forward.androids.views;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
@@ -42,7 +44,8 @@ public abstract class ScrollPickerView<T> extends View {
     private int mSelected; // 当前选中的item下标
     private List<T> mData;
     private int mItemHeight = 0; // 每个条目的高度=mMeasureHeight／mVisibleItemCount
-    private int mCenterY; // 中间item的起始坐标y
+    private int mCenterPosition = -1; // 中间item的位置，mCenterPosition＜＝mVisibleItemCount，默认为 mVisibleItemCount / 2
+    private int mCenterY; // 中间item的起始坐标y = mCenterPosition*mItemHeight
     private float mLastMoveY; // 触摸的坐标y
 
     private float mMoveLength = 0; // item移动长度，负数表示向上移动，正数表示向下移动
@@ -58,6 +61,9 @@ public abstract class ScrollPickerView<T> extends View {
 
     private boolean mDisallowTouch = false; // 不允许触摸
 
+    private Paint mPaint; //
+    private int mCenterItemBackground = Color.TRANSPARENT; // 中间选中item的背景色
+
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -69,6 +75,9 @@ public abstract class ScrollPickerView<T> extends View {
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
         mAutoScrollAnimator = ValueAnimator.ofInt(0, 0);
+
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setStyle(Paint.Style.FILL);
     }
 
 
@@ -79,28 +88,35 @@ public abstract class ScrollPickerView<T> extends View {
             return;
         }
         // 中间item
+        mPaint.setColor(mCenterItemBackground);
+        float y = mCenterY;
+        canvas.drawRect(0, y, getWidth(), y + mItemHeight, mPaint);
         drawItem(canvas, mData, mSelected, 0, mMoveLength, mCenterY + mMoveLength);
-        int length = mVisibleItemCount / 2 + 1;
+
+        int length = Math.max(mCenterPosition, mVisibleItemCount - mCenterPosition);
         int positon;
         // 上下两边
-        for (int i = 1; i <= length && i <= mData.size() / 2; i++) {
+        for (int i = 1; i <= length && i <= mData.size(); i++) {
 
-            // 上面的items
-            positon = mSelected - i < 0 ? mData.size() + mSelected - i
-                    : mSelected - i;
-            if (mIsCirculation) {
-                drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
-            } else if (mSelected - i >= 0) { // 非循环滚动
-                drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
+            if (i <= mCenterPosition + 1) {
+                // 上面的items
+                positon = mSelected - i < 0 ? mData.size() + mSelected - i
+                        : mSelected - i;
+                if (mIsCirculation) {
+                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
+                } else if (mSelected - i >= 0) { // 非循环滚动
+                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
+                }
             }
-
-            // 下面的items
-            positon = mSelected + i >= mData.size() ? mSelected + i
-                    - mData.size() : mSelected + i;
-            if (mIsCirculation) {
-                drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
-            } else if (mSelected + i < mData.size()) { // 非循环滚动
-                drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
+            if (i <= mVisibleItemCount - mCenterPosition) {
+                // 下面的items
+                positon = mSelected + i >= mData.size() ? mSelected + i
+                        - mData.size() : mSelected + i;
+                if (mIsCirculation) {
+                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
+                } else if (mSelected + i < mData.size()) { // 非循环滚动
+                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
+                }
             }
         }
     }
@@ -130,7 +146,10 @@ public abstract class ScrollPickerView<T> extends View {
 
     private void reset() {
         mItemHeight = getMeasuredHeight() / mVisibleItemCount;
-        mCenterY = mVisibleItemCount / 2 * mItemHeight;
+        if (mCenterPosition < 0) {
+            mCenterPosition = mVisibleItemCount / 2;
+        }
+        mCenterY = mCenterPosition * mItemHeight;
     }
 
     @Override
@@ -396,7 +415,7 @@ public abstract class ScrollPickerView<T> extends View {
      * @see ScrollPickerView#autoScroll(int, long, float, Interpolator)
      */
     public void autoScroll(final int position, long duration) {
-        float speed = Util.dp2px(getContext(),0.45f);
+        float speed = Util.dp2px(getContext(), 0.45f);
         autoScroll(position, duration, speed, sAutoScrollInterpolator);
     }
 
@@ -411,8 +430,9 @@ public abstract class ScrollPickerView<T> extends View {
 
     /**
      * 滚动到指定位置
-     * @param toPosition　需要滚动到的位置
-     * @param duration　滚动时间
+     *
+     * @param toPosition   　需要滚动到的位置
+     * @param duration     　滚动时间
      * @param interpolator
      */
     public void autoScrollTo(int toPosition, long duration, final Interpolator interpolator) {
@@ -493,7 +513,7 @@ public abstract class ScrollPickerView<T> extends View {
         if (data == null) {
             mData = new ArrayList<T>();
         } else {
-            this.mData = new ArrayList<T>(data);
+            this.mData = data;
         }
         mSelected = mData.size() / 2;
         invalidate();
@@ -568,6 +588,41 @@ public abstract class ScrollPickerView<T> extends View {
 
     public void setDisallowTouch(boolean disallowTouch) {
         mDisallowTouch = disallowTouch;
+    }
+
+    /**
+     * 中间item的位置，0 <= centerPosition <= mVisibleItemCount
+     *
+     * @param centerPosition
+     */
+    public void setCenterPosition(int centerPosition) {
+        if (mCenterPosition < 0) {
+            mCenterPosition = 0;
+        } else if (mCenterPosition > mVisibleItemCount) {
+            mCenterPosition = mVisibleItemCount;
+        } else {
+            mCenterPosition = centerPosition;
+        }
+        mCenterY = mCenterPosition * mItemHeight;
+        invalidate();
+    }
+
+    /**
+     * 中间item的位置,默认为 mVisibleItemCount / 2
+     *
+     * @return
+     */
+    public int getCenterPosition() {
+        return mCenterPosition;
+    }
+
+    public void setCenterItemBackground(int centerItemBackground) {
+        mCenterItemBackground = centerItemBackground;
+        invalidate();
+    }
+
+    public int getCenterItemBackground() {
+        return mCenterItemBackground;
     }
 
     /**

@@ -127,6 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_weight="1"
+                app:spv_center_item_background="#22888888"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -136,6 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_weight="1"
+                app:spv_center_item_background="#22888888"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -145,6 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_weight="1"
+                app:spv_center_item_background="#22888888"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -175,6 +178,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="#eeeeee"
+                app:spv_center_item_position="0"
                 app:spv_is_circulation="false"
                 app:spv_max_text_size="36dp"
                 app:spv_min_text_size="21dp"
