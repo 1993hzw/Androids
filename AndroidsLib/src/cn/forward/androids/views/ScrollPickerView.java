@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,11 +16,8 @@ import android.view.ViewParent;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.forward.androids.utils.Util;
 
 /**
  * 滚动选择器,带惯性滑动
@@ -28,7 +26,6 @@ import cn.forward.androids.utils.Util;
  * @date 2016.1.11
  */
 public abstract class ScrollPickerView<T> extends View {
-
 
     private int mVisibleItemCount = 3; // 可见的item数量
 
@@ -64,6 +61,10 @@ public abstract class ScrollPickerView<T> extends View {
     private Paint mPaint; //
     private int mCenterItemBackground = Color.TRANSPARENT; // 中间选中item的背景色
 
+    private long mTouchDownTime;
+
+    private boolean mCanTap = true; // 单击切换选项或触发点击监听器
+
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -71,13 +72,14 @@ public abstract class ScrollPickerView<T> extends View {
     public ScrollPickerView(Context context, AttributeSet attrs,
                             int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mGestureDetector = new GestureDetectorCompat(getContext(),
+        mGestureDetector = new android.support.v4.view.GestureDetectorCompat(getContext(),
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
         mAutoScrollAnimator = ValueAnimator.ofInt(0, 0);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
+
     }
 
 
@@ -158,20 +160,15 @@ public abstract class ScrollPickerView<T> extends View {
             return true;
         }
 
-        mGestureDetector.onTouchEvent(event);
+        if (mGestureDetector.onTouchEvent(event)) {
+            return true;
+        }
 
         switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                if (mDisallowInterceptTouch) {  // 不允许父组件拦截事件
-                    ViewParent parent = getParent();
-                    if (parent != null) {
-                        parent.requestDisallowInterceptTouchEvent(true);
-                    }
-                }
-                // 点击时取消所有滚动效果
-                cancelScroll();
-                mLastMoveY = event.getY();
-                break;
+            // ACTION_DOWN交给mGestureDetector处理
+           /* case MotionEvent.ACTION_DOWN:
+
+                break;*/
             case MotionEvent.ACTION_MOVE:
                 if (Math.abs(event.getY() - mLastMoveY) < 0.1f) {
                     return true;
@@ -205,7 +202,7 @@ public abstract class ScrollPickerView<T> extends View {
             mIsMovingCenter = false;
             mLastScrollY = 0;
 
-            // 居中
+            // 直接居中，不通过动画
             if (mMoveLength > 0) { //// 向下滑动
                 if (mMoveLength < mItemHeight / 2) {
                     mMoveLength = 0;
@@ -220,6 +217,9 @@ public abstract class ScrollPickerView<T> extends View {
                 }
             }
             checkCirculation();
+//            scroll(mMoveLength, 0);
+            mMoveLength = 0;
+            mLastScrollY = 0;
             notifySelected();
             invalidate();
 //            moveToCenter();
@@ -240,6 +240,7 @@ public abstract class ScrollPickerView<T> extends View {
                 mIsFling = false;
                 moveToCenter();
             } else if (mIsMovingCenter) {
+                mMoveLength = 0;
                 mIsMovingCenter = false;
                 mLastScrollY = 0;
                 notifySelected();
@@ -249,6 +250,7 @@ public abstract class ScrollPickerView<T> extends View {
     }
 
     public void cancelScroll() {
+        mLastScrollY = 0;
         mIsFling = mIsMovingCenter = false;
         mScroller.abortAnimation();
         stopAutoScroll();
@@ -367,14 +369,14 @@ public abstract class ScrollPickerView<T> extends View {
     private final static SlotInterpolator sAutoScrollInterpolator = new SlotInterpolator();
 
     /**
-     * 自动滚动
+     * 自动滚动(必须设置为可循环滚动)
      *
      * @param position
      * @param duration
      * @param speed    每毫秒移动的像素点
      */
-    public void autoScroll(final int position, long duration, float speed, final Interpolator interpolator) {
-        if (mIsAutoScrolling) {
+    public void autoScrollFast(final int position, long duration, float speed, final Interpolator interpolator) {
+        if (mIsAutoScrolling || !mIsCirculation) {
             return;
         }
         cancelScroll();
@@ -385,7 +387,11 @@ public abstract class ScrollPickerView<T> extends View {
         int circle = (int) (length * 1f / (mData.size() * mItemHeight) + 0.5f); // 圈数
         circle = circle <= 0 ? 1 : circle;
 
-        final int endY = circle * (mData.size()) * mItemHeight + (mSelected - position) * mItemHeight;
+        int aPlan = circle * (mData.size()) * mItemHeight + (mSelected - position) * mItemHeight;
+        int bPlan = aPlan + (mData.size()) * mItemHeight; // 多一圈
+        // 让其尽量接近length
+        final int endY = Math.abs(length - aPlan) < Math.abs(length - bPlan) ? aPlan : bPlan;
+
         mAutoScrollAnimator.cancel();
         mAutoScrollAnimator.setIntValues(0, endY);
         mAutoScrollAnimator.setInterpolator(interpolator);
@@ -412,20 +418,20 @@ public abstract class ScrollPickerView<T> extends View {
     /**
      * 自动滚动，默认速度为 1.5 pixel/ms
      *
-     * @see ScrollPickerView#autoScroll(int, long, float, Interpolator)
+     * @see ScrollPickerView#autoScrollFast(int, long, float, Interpolator)
      */
-    public void autoScroll(final int position, long duration) {
-        float speed = Util.dp2px(getContext(), 0.45f);
-        autoScroll(position, duration, speed, sAutoScrollInterpolator);
+    public void autoScrollFast(final int position, long duration) {
+        float speed = dip2px(0.40f);
+        autoScrollFast(position, duration, speed, sAutoScrollInterpolator);
     }
 
     /**
      * 自动滚动
      *
-     * @see ScrollPickerView#autoScroll(int, long, float, Interpolator)
+     * @see ScrollPickerView#autoScrollFast(int, long, float, Interpolator)
      */
-    public void autoScroll(final int position, long duration, float speed) {
-        autoScroll(position, duration, speed, sAutoScrollInterpolator);
+    public void autoScrollFast(final int position, long duration, float speed) {
+        autoScrollFast(position, duration, speed, sAutoScrollInterpolator);
     }
 
     /**
@@ -435,13 +441,25 @@ public abstract class ScrollPickerView<T> extends View {
      * @param duration     　滚动时间
      * @param interpolator
      */
-    public void autoScrollTo(int toPosition, long duration, final Interpolator interpolator) {
+    public void autoScrollToPosition(int toPosition, long duration, final Interpolator interpolator) {
+        toPosition = toPosition % mData.size();
+        final int endY = (mSelected - toPosition) * mItemHeight;
+        autoScrollTo(endY, duration, interpolator, false);
+    }
+
+    /**
+     * @param endY         　需要滚动到的位置
+     * @param duration     　滚动时间
+     * @param interpolator
+     * @param canIntercept 能否终止滚动，比如触摸屏幕终止滚动
+     */
+    public void autoScrollTo(final int endY, long duration, final Interpolator interpolator, boolean canIntercept) {
         if (mIsAutoScrolling) {
             return;
         }
+        final boolean temp = mDisallowTouch;
+        mDisallowTouch = !canIntercept;
         mIsAutoScrolling = true;
-        toPosition = toPosition % mData.size();
-        final int endY = (mSelected - toPosition) * mItemHeight;
         mAutoScrollAnimator.cancel();
         mAutoScrollAnimator.setIntValues(0, endY);
         mAutoScrollAnimator.setInterpolator(interpolator);
@@ -459,6 +477,7 @@ public abstract class ScrollPickerView<T> extends View {
                 }
                 if (rate >= 1) {
                     mIsAutoScrolling = false;
+                    mDisallowTouch = temp;
                 }
             }
         });
@@ -490,6 +509,16 @@ public abstract class ScrollPickerView<T> extends View {
     private class FlingOnGestureListener extends SimpleOnGestureListener {
 
         public boolean onDown(MotionEvent e) {
+            mTouchDownTime = System.currentTimeMillis();
+            if (mDisallowInterceptTouch) {  // 不允许父组件拦截事件
+                ViewParent parent = getParent();
+                if (parent != null) {
+                    parent.requestDisallowInterceptTouchEvent(true);
+                }
+            }
+            // 点击时取消所有滚动效果
+            cancelScroll();
+            mLastMoveY = e.getY();
             return true;
         }
 
@@ -500,6 +529,27 @@ public abstract class ScrollPickerView<T> extends View {
             if (mIsInertiaScroll) {
                 cancelScroll();
                 fling(mMoveLength, velocityY);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) { // 单击时切换选项
+            // 滚动过程中单击，不切换选项
+            if (!mCanTap || mMoveLength != 0 || mLastScrollY != 0) {
+                return false;
+            }
+            mLastMoveY = e.getY();
+            if (mLastMoveY >= mCenterY && mLastMoveY <= mCenterY + mItemHeight) {
+                performClick();
+            } else if (mLastMoveY < mCenterY) {
+                int moveY = mItemHeight;
+                autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+            } else if (mLastMoveY > mCenterY + mItemHeight) {
+                int moveY = -mItemHeight;
+                autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+            } else {
+                moveToCenter();
             }
             return true;
         }
@@ -625,11 +675,29 @@ public abstract class ScrollPickerView<T> extends View {
         return mCenterItemBackground;
     }
 
+    public boolean isCanTap() {
+        return mCanTap;
+    }
+
+    /**
+     * 设置 单击切换选项或触发点击监听器
+     * @param canTap
+     */
+    public void setCanTap(boolean canTap) {
+        mCanTap = canTap;
+    }
+
     /**
      * @author huangziwei
      */
     public interface OnSelectedListener {
         void onSelected(ScrollPickerView scrollPickerView, int position);
+    }
+
+    public int dip2px(float dipVlue) {
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        float sDensity = metrics.density;
+        return (int) (dipVlue * sDensity + 0.5F);
     }
 
 }

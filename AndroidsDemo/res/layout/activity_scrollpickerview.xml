@@ -191,12 +191,7 @@
                 android:layout_height="220dp"
                 android:layout_weight="1"
                 android:background="#888888"
-                app:spv_end_color="#ffffff"
-                app:spv_is_circulation="false"
-                app:spv_max_text_size="36dp"
-                app:spv_min_text_size="24dp"
-                app:spv_start_color="#0000ff"
-                app:spv_visible_item_count="4"/>
+              />
         </LinearLayout>
     </LinearLayout>
 

@@ -22,10 +22,14 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
      * 图片绘制模式：居中
      */
     public final static int DRAW_MODE_CENTER = 2; //
+    /**
+     * 图片绘制模式：指定大小
+     */
+    public final static int DRAW_MODE_SPECIFIED_SIZE = 3; //
 
     private int mMeasureWidth;
     private int mMeasureHeight;
-    private Rect mRect1, mRect2;
+    private Rect mRect1, mRect2, mSpecifiedSizeRect;
     private int mDrawMode = DRAW_MODE_CENTER;
 
 
@@ -38,6 +42,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         super(context, attrs, defStyleAttr);
         mRect1 = new Rect();
         mRect2 = new Rect();
+        mSpecifiedSizeRect = new Rect();
     }
 
     @Override
@@ -54,6 +59,12 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         if (mDrawMode == DRAW_MODE_FULL) {
             mRect2.left = 0;
             mRect2.right = mMeasureWidth;
+        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
+            if (mSpecifiedSizeWidth == -1) {
+                mSpecifiedSizeWidth = mMeasureWidth;
+                mSpecifiedSizeHeight = mMeasureHeight;
+            }
+            setDrawModeSpecifiedSize(mSpecifiedSizeWidth, mSpecifiedSizeHeight);
         } else {
             mRect2.left = mMeasureWidth / 2 - size / 2;
             mRect2.right = mMeasureWidth / 2 + size / 2;
@@ -68,11 +79,29 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         mRect1.right = bitmap.getWidth();
         mRect1.bottom = bitmap.getHeight();
 
+        int span = 0;
 
-        mRect2.top = (int) top;
-        mRect2.bottom = (int) (top + itemHeight);
+        if (mDrawMode == DRAW_MODE_FULL) {
+            span = 0;
+            mRect2.top = (int) top + span;
+            mRect2.bottom = (int) (top + itemHeight - span);
+            canvas.drawBitmap(bitmap, mRect1, mRect2, null);
+        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
+            span = (itemHeight - mSpecifiedSizeHeight) / 2;
+            mSpecifiedSizeRect.top = (int) top + span;
+            mSpecifiedSizeRect.bottom = (int) top + span + mSpecifiedSizeHeight;
+            canvas.drawBitmap(bitmap, mRect1, mSpecifiedSizeRect, null);
+        } else {
+            span = (itemHeight - bitmap.getHeight()) / 2;
+            if (span < 0) {
+                span = 0;
+            }
+            mRect2.top = (int) top + span;
+            mRect2.bottom = (int) (top + itemHeight - span);
+            canvas.drawBitmap(bitmap, mRect1, mRect2, null);
+        }
 
-        canvas.drawBitmap(bitmap, mRect1, mRect2, null);
+
     }
 
     /**
@@ -81,7 +110,30 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
      * @param mode
      */
     public void setDrawMode(int mode) {
+        int size = Math.min(mMeasureWidth, getItemHeight());
         mDrawMode = mode;
+        if (mDrawMode == DRAW_MODE_FULL) {
+            mRect2.left = 0;
+            mRect2.right = mMeasureWidth;
+        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
+
+        } else {
+            mRect2.left = mMeasureWidth / 2 - size / 2;
+            mRect2.right = mMeasureWidth / 2 + size / 2;
+        }
+        invalidate();
+    }
+
+    private int mSpecifiedSizeWidth = -1;
+    private int mSpecifiedSizeHeight = -1;
+
+    public void setDrawModeSpecifiedSize(int width, int height) {
+        mSpecifiedSizeRect.left = (mMeasureWidth - width) / 2;
+        mSpecifiedSizeRect.right = (mMeasureWidth - width) / 2 + width;
+        mSpecifiedSizeWidth = width;
+        mSpecifiedSizeHeight = height;
+
+
     }
 
     /**
@@ -90,11 +142,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
      * @return
      */
     public int getDrawMode() {
-        if (mDrawMode == DRAW_MODE_FULL) {
-            return DRAW_MODE_FULL;
-        } else {
-            return DRAW_MODE_CENTER;
-        }
+        return mDrawMode;
     }
 
 }

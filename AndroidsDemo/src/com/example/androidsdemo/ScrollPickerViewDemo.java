@@ -53,7 +53,7 @@ public class ScrollPickerViewDemo extends Activity {
     private BitmapScrollPicker mBitmapPicker03;
 
     private ScrollPickerView mPicker01;
-    private ScrollPickerView mPicker02;
+    private BitmapScrollPicker mPicker02;
 
     private Button mBtnPlay;
     boolean mIsPlaying = false;
@@ -74,7 +74,7 @@ public class ScrollPickerViewDemo extends Activity {
         mBitmapPicker03 = (BitmapScrollPicker) this.findViewById(R.id.bitmap_picker03);
 
         mPicker01 = (ScrollPickerView) findViewById(R.id.picker_01);
-        mPicker02 = (ScrollPickerView) findViewById(R.id.picker_02);
+        mPicker02 = (BitmapScrollPicker) findViewById(R.id.picker_02);
 
         // 不允许父元素拦截事件，设置后可以保证在ScrollView下正常滚动
         mYearView.setDisallowInterceptTouch(true);
@@ -147,9 +147,16 @@ public class ScrollPickerViewDemo extends Activity {
         mBitmapPicker01.setDisallowTouch(true); // 不允许触摸
         mBitmapPicker02.setDisallowTouch(true); // 不允许触摸
         mBitmapPicker03.setDisallowTouch(true); // 不允许触摸
+        mBitmapPicker01.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
+        mBitmapPicker01.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
+        mBitmapPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
+        mBitmapPicker02.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
+        mBitmapPicker03.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
+        mBitmapPicker03.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
 
         mPicker02.setData(bitmaps);
         mPicker02.setIsCirculation(false); // 设置非循环滚动
+        mPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_FULL);
 
 
         ScrollPickerView.OnSelectedListener listener = new ScrollPickerView.OnSelectedListener() {
@@ -190,9 +197,9 @@ public class ScrollPickerViewDemo extends Activity {
                     return;
                 }
                 mIsPlaying = true;
-                mBitmapPicker01.autoScroll(mRandom.nextInt(bitmaps.size()), 5000);
-                mBitmapPicker02.autoScroll(mRandom.nextInt(bitmaps.size()), 5500);
-                mBitmapPicker03.autoScroll(mRandom.nextInt(bitmaps.size()), 6000);
+                mBitmapPicker01.autoScrollFast(mRandom.nextInt(bitmaps.size()), 5000);
+                mBitmapPicker02.autoScrollFast(mRandom.nextInt(bitmaps.size()), 6000);
+                mBitmapPicker03.autoScrollFast(mRandom.nextInt(bitmaps.size()), 7000);
             }
         });
     }
