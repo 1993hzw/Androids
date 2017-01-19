@@ -45,6 +45,10 @@
             <enum name="oval" value="3"/>
         </attr>
         <attr name="siv_round_radius" format="dimension"/>
+        <attr name="siv_round_radius_leftTop" format="dimension"/>
+        <attr name="siv_round_radius_leftBottom" format="dimension"/>
+        <attr name="siv_round_radius_rightTop" format="dimension"/>
+        <attr name="siv_round_radius_rightBottom" format="dimension"/>
         <attr name="siv_border_size" format="dimension"/>
         <attr name="siv_border_color" format="color"/>
     </declare-styleable>

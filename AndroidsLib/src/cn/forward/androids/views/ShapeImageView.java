@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
@@ -33,6 +34,7 @@ public class ShapeImageView extends ImageView {
     private int mBorderColor = Color.WHITE; // 边框颜色，默认为白色
     private int mShape = SHAPE_REC; // 形状，默认为直接矩形
     private float mRoundRadius = 0; // 矩形的圆角半径,默认为０，即直角矩形
+    private float mRoundRadiusLeftTop, mRoundRadiusLeftBottom, mRoundRadiusRightTop, mRoundRadiusRightBottom;
     private Paint mBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private RectF mViewRect = new RectF(); // imageview的矩形区域
     private RectF mBorderRect = new RectF(); // 边框的矩形区域
@@ -41,6 +43,7 @@ public class ShapeImageView extends ImageView {
     private Paint mBitmapPaint = new Paint();
     private BitmapShader mBitmapShader;
     private Bitmap mBitmap;
+    private Path mPath = new Path();
 
     public ShapeImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -87,12 +90,18 @@ public class ShapeImageView extends ImageView {
         mRoundRadius = a.getDimension(R.styleable.ShapeImageView_siv_round_radius, mRoundRadius);
         mBorderSize = a.getDimension(R.styleable.ShapeImageView_siv_border_size, mBorderSize);
         mBorderColor = a.getColor(R.styleable.ShapeImageView_siv_border_color, mBorderColor);
+
+        mRoundRadiusLeftBottom = a.getDimension(R.styleable.ShapeImageView_siv_round_radius_leftBottom, mRoundRadius);
+        mRoundRadiusLeftTop = a.getDimension(R.styleable.ShapeImageView_siv_round_radius_leftTop, mRoundRadius);
+        mRoundRadiusRightBottom = a.getDimension(R.styleable.ShapeImageView_siv_round_radius_rightBottom, mRoundRadius);
+        mRoundRadiusRightTop = a.getDimension(R.styleable.ShapeImageView_siv_round_radius_rightTop, mRoundRadius);
+
         a.recycle();
     }
 
     /**
      * 对于普通的view,在执行到onDraw()时，背景图已绘制完成
-     * <p/>
+     * <p>
      * 对于ViewGroup,当它没有背景时直接调用的是dispatchDraw()方法, 而绕过了draw()方法，
      * 当它有背景的时候就调用draw()方法，而draw()方法里包含了dispatchDraw()方法的调用，
      */
@@ -106,7 +115,16 @@ public class ShapeImageView extends ImageView {
             } else if (mShape == SHAPE_OVAL) {
                 canvas.drawOval(mViewRect, mBitmapPaint);
             } else {
-                canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+//                canvas.drawRoundRect(mViewRect, mRoundRadius, mRoundRadius, mBitmapPaint);
+                mPath.reset();
+                mPath.addRoundRect(mViewRect, new float[]{
+                        mRoundRadiusLeftTop, mRoundRadiusLeftTop,
+                        mRoundRadiusRightTop, mRoundRadiusRightTop,
+                        mRoundRadiusRightBottom, mRoundRadiusRightBottom,
+                        mRoundRadiusLeftBottom, mRoundRadiusLeftBottom,
+                }, Path.Direction.CW);
+                canvas.drawPath(mPath, mBitmapPaint);
+
             }
         }
 
@@ -117,7 +135,15 @@ public class ShapeImageView extends ImageView {
             } else if (mShape == SHAPE_OVAL) {
                 canvas.drawOval(mBorderRect, mBorderPaint);
             } else {
-                canvas.drawRoundRect(mBorderRect, mRoundRadius, mRoundRadius, mBorderPaint);
+//                canvas.drawRoundRect(mBorderRect, mRoundRadius, mRoundRadius, mBorderPaint);
+                mPath.reset();
+                mPath.addRoundRect(mBorderRect, new float[]{
+                        mRoundRadiusLeftTop, mRoundRadiusLeftTop,
+                        mRoundRadiusRightTop, mRoundRadiusRightTop,
+                        mRoundRadiusRightBottom, mRoundRadiusRightBottom,
+                        mRoundRadiusLeftBottom, mRoundRadiusLeftBottom,
+                }, Path.Direction.CW);
+                canvas.drawPath(mPath, mBorderPaint);
             }
         }
     }
@@ -215,4 +241,17 @@ public class ShapeImageView extends ImageView {
         this.mRoundRadius = mRoundRadius;
         invalidate();
     }
+
+    public void setRoundRadiis(float roundRadiusLeftBottom, float roundRadiusLeftTop, float roundRadiusRightBottom, float roundRadiusRightTop) {
+        mRoundRadiusLeftBottom = roundRadiusLeftBottom;
+        mRoundRadiusLeftTop = roundRadiusLeftTop;
+        mRoundRadiusRightBottom = roundRadiusRightBottom;
+        mRoundRadiusRightTop = roundRadiusRightTop;
+        invalidate();
+    }
+
+    public float[] getRoundRadiis() {
+        return new float[]{mRoundRadiusLeftBottom, mRoundRadiusLeftTop, mRoundRadiusRightBottom, mRoundRadiusRightTop};
+    }
+
 }
