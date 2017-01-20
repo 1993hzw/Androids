@@ -41,11 +41,11 @@ public class PluginListAdapter extends BaseAdapter {
     }
 
     private PluginItem getPlugin(int position) {
-        if (position == 0) {
+        if (position == 0) { // 跳过条目名称（已添加）
             return null;
         } else if (position < mAddedPlugins.size() + 1) {
             return mAddedPlugins.get(position - 1);
-        } else if (position == mAddedPlugins.size() + 1) {
+        } else if (position == mAddedPlugins.size() + 1) { // 跳过条目名称（未添加）
             return null;
         } else {
             return mNotAddedPlugins.get(position - mAddedPlugins.size() - 2);
@@ -56,17 +56,57 @@ public class PluginListAdapter extends BaseAdapter {
         return mAddedPlugins.contains(item);
     }
 
+    /**
+     * 交换数据的位置
+     * @param src
+     * @param dst
+     * @return
+     */
     public boolean exchange(int src, int dst) {
+        boolean success = false;
         PluginItem srcItem = getPlugin(src);
         PluginItem dstItem = getPlugin(dst);
         int srcIndex = mAddedPlugins.indexOf(srcItem);
         int dstIndex = mAddedPlugins.indexOf(dstItem);
         if (srcIndex != -1 && dstIndex != -1) {
             Collections.swap(mAddedPlugins, srcIndex, dstIndex);
-            notifyDataSetChanged();
-            return true;
+            success = true;
         }
-        return false;
+        // 处理处理的数据在两个不同的集合内的情况
+        if (!success) {
+            if (srcIndex == -1 && dstIndex != -1) {
+                srcIndex = mNotAddedPlugins.indexOf(srcItem);
+                if (srcIndex != -1 && dstIndex != -1) {
+                    mNotAddedPlugins.remove(srcIndex);
+                    mNotAddedPlugins.add(srcIndex, dstItem);
+
+                    mAddedPlugins.remove(dstIndex);
+                    mAddedPlugins.add(dstIndex, srcItem);
+                    success = true;
+                }
+            } else if (srcIndex != -1 && dstIndex == -1) {
+                dstIndex = mNotAddedPlugins.indexOf(dstItem);
+                if (srcIndex != -1 && dstIndex != -1) {
+                    mNotAddedPlugins.remove(dstIndex);
+                    mNotAddedPlugins.add(dstIndex, srcItem);
+
+                    mAddedPlugins.remove(srcIndex);
+                    mAddedPlugins.add(srcIndex, dstItem);
+                    success = true;
+                }
+            } else {
+                srcIndex = mNotAddedPlugins.indexOf(srcItem);
+                dstIndex = mNotAddedPlugins.indexOf(dstItem);
+                if (srcIndex != -1 && dstIndex != -1) {
+                    Collections.swap(mNotAddedPlugins, srcIndex, dstIndex);
+                    success = true;
+                }
+            }
+        }
+        if (success) {
+            notifyDataSetChanged();
+        }
+        return success;
     }
 
     public void addItem(PluginItem item) {

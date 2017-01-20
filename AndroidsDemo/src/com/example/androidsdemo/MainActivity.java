@@ -70,7 +70,7 @@ public class MainActivity extends ListActivity {
         data.add(createItem("ScrollPickerView", "滚动选择器，可设置是否循环滚动，可见条目数;可实现老虎机效果"));
         data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         data.add(createItem("KeyboardLayout", "监听输入法键盘的弹起与隐藏"));
-        data.add(createItem("DragListView", "可拖拽的ListView"));
+        data.add(createItem("DragListView", "可拖拽的ListView,进行拖拽排序"));
         data.add(createItem("其他", ""));
 
         return data;

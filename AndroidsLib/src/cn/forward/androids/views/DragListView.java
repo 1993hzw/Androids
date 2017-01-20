@@ -365,7 +365,7 @@ public class DragListView extends ListView {
             if (srcItemView != null) {
                 int height = srcPosition > position ? -srcItemView.getHeight() : srcItemView.getHeight();
                 TranslateAnimation animation = new TranslateAnimation(0, 0, height, 0);
-                animation.setDuration(300);
+                animation.setDuration(200);
                 srcItemView.clearAnimation();
                 srcItemView.startAnimation(animation);
                 srcItemView.setVisibility(View.VISIBLE);
