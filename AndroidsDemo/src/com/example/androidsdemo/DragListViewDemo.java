@@ -1,6 +1,7 @@
 package com.example.androidsdemo;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
@@ -60,12 +61,13 @@ public class DragListViewDemo extends Activity {
             }
 
             @Override
-            public void afterDrawingCache(View dragView) {
+            public Bitmap afterDrawingCache(View dragView, Bitmap bitmap) {
                 dragView.setSelected(mIsSelected);
                 View drag = dragView.findViewById(R.id.dl_plugin_move);
                 if (drag != null) {
                     drag.setSelected(false);
                 }
+                return bitmap;
             }
 
             @Override
@@ -79,10 +81,10 @@ public class DragListViewDemo extends Activity {
         ArrayList<PluginItem> addedItem = new ArrayList<PluginItem>();
         ArrayList<PluginItem> notAddedItem = new ArrayList<PluginItem>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 20; i++) {
             addedItem.add(new PluginItem("item:" + i));
         }
-        for (int i = 10; i < 20; i++) {
+        for (int i = 20; i < 30; i++) {
             notAddedItem.add(new PluginItem("item:" + i));
         }
 
