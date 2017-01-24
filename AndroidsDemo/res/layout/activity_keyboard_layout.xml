@@ -20,7 +20,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#888888"/>
+            android:background="#888888">
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="效果:\n当输入法和表情栏互相切换时，过度自然，而且表情栏高度刚好跟输入法一样"
+                android:textColor="#ffffff"
+                android:textSize="16dp"
+                />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +50,7 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:background="@drawable/btn_selector"
-                android:text="emoji"
+                android:text="表情"
                 android:textColor="#000000"/>
         </LinearLayout>
 
@@ -48,7 +58,6 @@
             android:id="@+id/emoji"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-
             android:background="@drawable/ic_emoij"
             android:visibility="gone"/>
     </LinearLayout>

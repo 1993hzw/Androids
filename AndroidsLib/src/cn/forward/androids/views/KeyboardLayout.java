@@ -35,6 +35,7 @@ public class KeyboardLayout extends FrameLayout {
     private class KeyboardOnGlobalChangeListener implements ViewTreeObserver.OnGlobalLayoutListener {
 
         int mScreenHeight = 0;
+        Rect mRect = new Rect();
 
         private int getScreenHeight() {
             if (mScreenHeight > 0) {
@@ -47,11 +48,11 @@ public class KeyboardLayout extends FrameLayout {
 
         @Override
         public void onGlobalLayout() {
-            Rect rect = new Rect();
-            // 获取当前页面窗口的显示范围
-            ((Activity) getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+//            // 获取当前页面窗口的显示范围
+            getWindowVisibleDisplayFrame(mRect);
+
             int screenHeight = getScreenHeight();
-            int keyboardHeight = screenHeight - rect.bottom; // 输入法的高度
+            int keyboardHeight = screenHeight - mRect.bottom; // 输入法的高度
             boolean isActive = false;
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 isActive = true; // 超过屏幕五分之一则表示弹出了输入法
@@ -78,6 +79,7 @@ public class KeyboardLayout extends FrameLayout {
 
     /**
      * 获取输入法高度
+     *
      * @return
      */
     public int getKeyboardHeight() {
