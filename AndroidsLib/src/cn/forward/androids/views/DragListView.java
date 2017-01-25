@@ -42,18 +42,7 @@ public class DragListView extends ListView {
     private int mTouchSlop;
     private long mLastScrollTime;
     private boolean mScrolling = false;
-    private Runnable mScrollRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            mScrolling = false;
-            if (mBitmap != null) {
-                onMove((int) mMoveY);
-                mLastScrollTime = System.currentTimeMillis();
-                invalidate();
-            }
-        }
-    };
+    private Runnable mScrollRunnable;
 
     public DragListView(Context context) {
         this(context, null);
@@ -69,6 +58,18 @@ public class DragListView extends ListView {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null); // 关闭硬件加速
         }
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
+        mScrollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mScrolling = false;
+                if (mBitmap != null) {
+                    mLastScrollTime = System.currentTimeMillis();
+                    onMove((int) mMoveY);
+                    invalidate();
+                }
+            }
+        };
     }
 
     /**
@@ -198,26 +199,26 @@ public class DragListView extends ListView {
     }
 
     /***
-     * ListView的移动.
-     * 要明白移动原理：当我移动到下端的时候，ListView向上滑动，当我移动到上端的时候，ListView要向下滑动。正好和实际的相反.
+     * 移动到底部或顶部时自动滚动列表
+     * 当移动到底部时，ListView向上滑动，当移动到顶部时，ListView要向下滑动
      */
-
     public void checkScroller(final int y) {
 
         int offset = 0;
-        if (y < mAutoScrollUpY) { // ListView需要下滑
+        if (y < mAutoScrollUpY) { // 拖动到顶部，ListView需要下滑
             if (y <= mDownY - mTouchSlop) {
-                offset = dp2px(getContext(), 6); // 时时步伐
+                offset = dp2px(getContext(), 6); // 滑动的距离
             }
-        } else if (y > mAutoScrollDownY) { // ListView需要上滑
+        } else if (y > mAutoScrollDownY) { // 拖动到底部，ListView需要上滑
             if (y >= mDownY + mTouchSlop) {
-                offset = -dp2px(getContext(), 6); // 时时步伐
+                offset = -dp2px(getContext(), 6); // 滑动的距离
             }
         }
 
         if (offset != 0) {
             View view = getChildAt(mCurrentPosition - getFirstVisiblePosition());
             if (view != null) {
+                // 滚动列表
                 setSelectionFromTop(mCurrentPosition, view.getTop() + offset);
                 if (!mScrolling) {
                     mScrolling = true;
@@ -250,15 +251,13 @@ public class DragListView extends ListView {
      * 拖动时时change
      */
     private void checkExchange(int y) {
-// 数据交换
-        if (mCurrentPosition != mLastPosition) {
+        if (mCurrentPosition != mLastPosition) { // // 数据交换
             if (mDragItemListener != null) {
                 if (mDragItemListener.canExchange(mLastPosition, mCurrentPosition)) { // 进行数据交换,true则表示交换成功
-
                     View lastView = mItemView;
                     mItemView = getChildAt(mCurrentPosition - getFirstVisiblePosition());
+                    // 通知交换数据成功，可在此时设置交换的动画效果
                     mDragItemListener.onExchange(mLastPosition, mCurrentPosition, lastView, mItemView);
-
                     mLastPosition = mCurrentPosition;
                 }
             }
@@ -283,7 +282,7 @@ public class DragListView extends ListView {
          * 是否进行数据交换
          *
          * @param srcPosition
-         * @param position
+         * @param position 当前拖拽的view的索引
          * @return 返回true，则确认数据交换;返回false则表示放弃
          */
         boolean canExchange(int srcPosition, int position);
@@ -292,7 +291,9 @@ public class DragListView extends ListView {
          * 当完成数据交换时回调
          *
          * @param srcPosition
-         * @param position
+         * @param position    当前拖拽的view的索引
+         * @param srcItemView
+         * @param itemView 当前拖拽的view
          */
         void onExchange(int srcPosition, int position, View srcItemView, View itemView);
 
@@ -360,6 +361,9 @@ public class DragListView extends ListView {
             }
         }
 
+        /**
+         * 设置交换换动画
+         */
         @Override
         public void onExchange(int srcPosition, int position, View srcItemView, View itemView) {
             if (srcItemView != null) {
