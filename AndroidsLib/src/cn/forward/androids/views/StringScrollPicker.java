@@ -15,7 +15,7 @@ import cn.forward.androids.R;
 import cn.forward.androids.utils.ColorUtil;
 
 /**
- * 文字滚动选择器
+ * 字符串滚动选择器
  * Created by huangziwei on 16-12-6.
  */
 public class StringScrollPicker extends ScrollPickerView<String> {

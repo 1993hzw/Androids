@@ -100,20 +100,20 @@ public abstract class ScrollPickerView<T> extends View {
         // 上下两边
         for (int i = 1; i <= length && i <= mData.size(); i++) {
 
-            if (i <= mCenterPosition + 1) {
-                // 上面的items
+            if (i <= mCenterPosition + 1) {  // 上面的items,相对位置为 -i
                 positon = mSelected - i < 0 ? mData.size() + mSelected - i
                         : mSelected - i;
+                // 传入位置信息，绘制item
                 if (mIsCirculation) {
                     drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
                 } else if (mSelected - i >= 0) { // 非循环滚动
                     drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
                 }
             }
-            if (i <= mVisibleItemCount - mCenterPosition) {
-                // 下面的items
+            if (i <= mVisibleItemCount - mCenterPosition) {  // 下面的items,相对位置为 i
                 positon = mSelected + i >= mData.size() ? mSelected + i
                         - mData.size() : mSelected + i;
+                // 传入位置信息，绘制item
                 if (mIsCirculation) {
                     drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
                 } else if (mSelected + i < mData.size()) { // 非循环滚动
@@ -233,20 +233,19 @@ public abstract class ScrollPickerView<T> extends View {
             // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
             mMoveLength = mMoveLength + mScroller.getCurrY() - mLastScrollY;
             mLastScrollY = mScroller.getCurrY();
-            checkCirculation();
+            checkCirculation(); //　检测当前选中的item
             invalidate();
         } else { // 滚动完毕
             if (mIsFling) {
                 mIsFling = false;
-                moveToCenter();
-            } else if (mIsMovingCenter) {
+                moveToCenter(); // 滚动到中间位置
+            } else if (mIsMovingCenter) { // 选择完成，回调给监听器
                 mMoveLength = 0;
                 mIsMovingCenter = false;
                 mLastScrollY = 0;
                 notifySelected();
             }
         }
-
     }
 
     public void cancelScroll() {
@@ -256,17 +255,17 @@ public abstract class ScrollPickerView<T> extends View {
         stopAutoScroll();
     }
 
-    // 循环滚动
+    // 检测当前选择的item位置
     private void checkCirculation() {
-        if (mMoveLength >= mItemHeight) { // 向下滑动,最后一个元素放在头部
-//            mSelected--;
+        if (mMoveLength >= mItemHeight) { // 向下滑动
+            // 该次滚动距离中越过的item数量
             int span = (int) (mMoveLength / mItemHeight);
             mSelected -= span;
             if (mSelected < 0) {  // 滚动顶部，判断是否循环滚动
                 if (mIsCirculation) {
                     do {
                         mSelected = mData.size() + mSelected;
-                    } while (mSelected < 0);
+                    } while (mSelected < 0); // 当越过的item数量超过一圈时
                     mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
                 } else { // 非循环滚动
                     mSelected = 0;
@@ -282,15 +281,15 @@ public abstract class ScrollPickerView<T> extends View {
                 mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
             }
 
-        } else if (mMoveLength <= -mItemHeight) { // 向上滑动，第一个元素放在尾部
-//            mSelected++;
+        } else if (mMoveLength <= -mItemHeight) { // 向上滑动
+            // 该次滚动距离中越过的item数量
             int span = (int) (-mMoveLength / mItemHeight);
             mSelected += span;
             if (mSelected >= mData.size()) { // 滚动末尾，判断是否循环滚动
                 if (mIsCirculation) {
                     do {
                         mSelected = mSelected - mData.size();
-                    } while (mSelected >= mData.size());
+                    } while (mSelected >= mData.size()); // 当越过的item数量超过一圈时
                     mMoveLength = (mMoveLength + mItemHeight) % mItemHeight;
                 } else { // 非循环滚动
                     mSelected = mData.size() - 1;
