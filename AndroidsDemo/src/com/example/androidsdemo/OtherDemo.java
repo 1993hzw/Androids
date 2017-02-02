@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.forward.androids.AsyncTask;
+import cn.forward.androids.SimpleAsyncTask;
 import cn.forward.androids.annotation.ViewInject;
 import cn.forward.androids.annotation.ViewInjectProcessor;
 import cn.forward.androids.base.BaseActivity;
@@ -26,7 +26,7 @@ public class OtherDemo extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
 
-        new AsyncTask<Void, Integer, Void>() {
+        new SimpleAsyncTask<Void, Integer, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
