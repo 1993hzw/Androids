@@ -1,6 +1,5 @@
 package com.example.androidsdemo;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -26,7 +25,6 @@ public class OtherDemo extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other);
-//        mProgress = (RoundProgressBar) findViewById(R.id.plugin_download_progress);
 
         new AsyncTask<Void, Integer, Void>() {
 
@@ -55,12 +53,6 @@ public class OtherDemo extends BaseActivity {
             }
         }.execute();
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-        dialog.setTitle("hello");
-        dialog.setMessage("hello world!");
-
-        dialog.show();
     }
 
     @Override
