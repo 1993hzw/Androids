@@ -37,3 +37,6 @@ dependencies {
     //    compile fileTree(include: ['*.jar'], dir: 'libs')
     provided files('libs/android-support-v4.jar')
 }
+if (isForUpload2Maven()) {
+    apply from: "https://raw.githubusercontent.com/1993hzw/common/master/bintrayUpload.gradle"
+}
