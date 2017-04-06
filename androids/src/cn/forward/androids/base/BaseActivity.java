@@ -1,10 +1,10 @@
 package cn.forward.androids.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,7 @@ import android.widget.Toast;
  * @author hzw
  * @date 2016/1/28.
  */
-public class BaseActivity extends FragmentActivity implements View.OnClickListener, InjectionLayoutInflater.OnViewCreatedListener {
+public class BaseActivity extends Activity implements View.OnClickListener, InjectionLayoutInflater.OnViewCreatedListener {
 
     protected SharedPreferences mPrefer;
     private boolean mCanViewInjected = true;

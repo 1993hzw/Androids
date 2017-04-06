@@ -38,7 +38,7 @@ public class OtherDemo extends BaseActivity {
                     }
                     publishProgress(i);
                 }
-                return super.doInBackground(params);
+                return null;
             }
 
             @Override

@@ -20,7 +20,10 @@ import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.provider.MediaStore.Video.Thumbnails;
 import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,7 +132,7 @@ public class ImageUtils {
      * 获取图片的Exif方向
      */
     public static int getBitmapExifRotate(String path) {
-        int digree = 0;
+        int degree = 0;
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(path);
@@ -144,20 +147,20 @@ public class ImageUtils {
             // 计算旋转角度
             switch (ori) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
-                    digree = 90;
+                    degree = 90;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_180:
-                    digree = 180;
+                    degree = 180;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    digree = 270;
+                    degree = 270;
                     break;
                 default:
-                    digree = 0;
+                    degree = 0;
                     break;
             }
         }
-        return digree;
+        return degree;
     }
 
     /*
@@ -309,6 +312,61 @@ public class ImageUtils {
             return null;
         }
     }
+
+    public static int[] optimizeMaxSizeByView(View view, int maxImageWidth, int maxImageHeight) {
+        int width = maxImageWidth;
+        int height = maxImageHeight;
+
+        if (width > 0 && height > 0) {
+            return new int[]{width, height};
+        }
+
+        final ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params != null) {
+            if (params.width > 0) {
+                width = params.width;
+            } else if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                width = view.getWidth();
+            }
+
+            if (params.height > 0) {
+                height = params.height;
+            } else if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                height = view.getHeight();
+            }
+        }
+
+        if (view instanceof ImageView) {
+            if (width <= 0) {
+                Object obj = ReflectUtil.getValue(view, "mMaxWidth");
+                if (obj != null) {
+                    int tempWidth = (int) obj;
+                    if (tempWidth > 0 && tempWidth < Integer.MAX_VALUE) {
+                        width = tempWidth;
+                    }
+                }
+            }
+            if (height <= 0) {
+                Object obj = ReflectUtil.getValue(view, "mMaxHeight");
+                if (obj != null) {
+                    int tempHeight = (int) obj;
+                    if (tempHeight > 0 && tempHeight < Integer.MAX_VALUE) {
+                        height = tempHeight;
+                    }
+                }
+            }
+        }
+
+        if (width <= 0) {
+            width = Util.getScreenWidth(view.getContext());
+        }
+        if (height <= 0) {
+            height = Util.getScreenHeight(view.getContext());
+        }
+
+        return new int[]{width, height};
+    }
+
 
 }
 

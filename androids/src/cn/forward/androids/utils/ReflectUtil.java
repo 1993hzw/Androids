@@ -9,59 +9,44 @@ import java.lang.reflect.Method;
  */
 public class ReflectUtil {
     /**
-     * 获取对象里指定变量的值
-     *
-     * @param instance
-     * @param fieldName
-     * @return
-     * @throws IllegalAccessException
-     * @throws NoSuchFieldException
-     */
-    public static Object getValue(Object instance, String fieldName)
-            throws IllegalAccessException, NoSuchFieldException {
-        Field field = getField(instance.getClass(), fieldName);
-        // 参数值为true，禁用访问控制检查
-        field.setAccessible(true);
-        return field.get(instance);
-    }
-
-    /**
-     * 获取类里指定变量的field
+     * 获取类里指定的变量
      *
      * @param thisClass
      * @param fieldName
      * @return
-     * @throws NoSuchFieldException
      */
-    public static Field getField(Class<?> thisClass, String fieldName)
-            throws NoSuchFieldException {
+    public static Field getField(Class<?> thisClass, String fieldName) {
         if (thisClass == null) {
-            throw new NoSuchFieldException("Error field !");
+            return null;
         }
 
         try {
             return thisClass.getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            return getField(thisClass.getSuperclass(), fieldName);
+        } catch (Throwable e) {
+            return null;
         }
     }
 
+
     /**
-     * 获取对象里的方法
+     * 获取对象里变量的值
      *
      * @param instance
-     * @param methodName
-     * @param parameterTypes
-     * @return
-     * @throws NoSuchMethodException
+     * @param fieldName
+     * @return 返回空则可能值不存在，或变量不存在
      */
-    public static Method getMethod(Object instance, String methodName, Class<?>[] parameterTypes)
-            throws NoSuchMethodException {
-        Method accessMethod = getMethod(instance.getClass(), methodName, parameterTypes);
-        //参数值为true，禁用访问控制检查
-        accessMethod.setAccessible(true);
-
-        return accessMethod;
+    public static Object getValue(Object instance, String fieldName) {
+        Field field = getField(instance.getClass(), fieldName);
+        if (field == null) {
+            return null;
+        }
+        // 参数值为true，禁用访问控制检查
+        field.setAccessible(true);
+        try {
+            return field.get(instance);
+        } catch (Throwable e) {
+            return null;
+        }
     }
 
     /**
@@ -73,33 +58,33 @@ public class ReflectUtil {
      * @return
      * @throws NoSuchMethodException
      */
-    private static Method getMethod(Class<?> thisClass, String methodName, Class<?>[] parameterTypes)
-            throws NoSuchMethodException {
+    private static Method getMethod(Class<?> thisClass, String methodName, Class<?>[] parameterTypes) {
         if (thisClass == null) {
-            throw new NoSuchMethodException("Error method !");
+            return null;
         }
 
         try {
-            return thisClass.getDeclaredMethod(methodName, parameterTypes);
-        } catch (NoSuchMethodException e) {
-            return getMethod(thisClass.getSuperclass(), methodName, parameterTypes);
+            Method method = thisClass.getDeclaredMethod(methodName, parameterTypes);
+            if (method == null) {
+                return null;
+            }
+            method.setAccessible(true);
+            return method;
+        } catch (Throwable e) {
+            return null;
         }
     }
 
     /**
-     * 调用含多个参数的方法
+     * 执行对象里的方法
      *
      * @param instance
      * @param methodName
-     * @param args
-     * @return
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @param args       方法参数
+     * @return 返回值
+     * @throws Throwable 方法不存在或者执行失败跑出异常
      */
-    public static Object invokeMethod(Object instance, String methodName, Object... args)
-            throws NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
+    public static Object invokeMethod(Object instance, String methodName, Object... args) throws Throwable {
         Class<?>[] parameterTypes = null;
         if (args != null) {
             parameterTypes = new Class[args.length];
@@ -109,6 +94,7 @@ public class ReflectUtil {
                 }
             }
         }
-        return getMethod(instance, methodName, parameterTypes).invoke(instance, args);
+        Method method = getMethod(instance.getClass(), methodName, parameterTypes);
+        return method.invoke(instance, args);
     }
 }

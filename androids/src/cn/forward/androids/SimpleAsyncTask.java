@@ -1,130 +1,65 @@
 package cn.forward.androids;
 
+import android.os.Binder;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import cn.forward.androids.utils.ThreadUtil;
+import cn.forward.androids.utils.LogUtil;
 
-/*
- * 自定义的AsyncTask，任务队列采用后进先出的策略
+/**
+ * Created by huangziwei on 2017/3/29.
  */
-abstract public class SimpleAsyncTask<Params, Progress, Result> {
 
-    private static int sMaxSizeLIFO = 128;
-
-    public static int getMaxSizeLIFO() {
-        return sMaxSizeLIFO;
-    }
-
-    /**
-     * 队列的最大长度，只对后进先出队列有效，当超过这个最大值时，新加入的任务会把队列末尾的任务剔除
-     */
-    public static void setMaxSizeLIFO(int max) {
-        sMaxSizeLIFO = max;
-    }
-
+public abstract class SimpleAsyncTask<Params, Progress, Result> {
+    private static final String LOG_TAG = "SimpleAsyncTask";
 
     private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
     private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
-    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT + 1;
+    private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
     private static final int KEEP_ALIVE = 1;
 
-    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE, TimeUnit.MILLISECONDS,
-            new LinkedBlockingStack<Runnable>(LinkedBlockingStack.POLICY_FIFO));
+    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+        private final AtomicInteger mCount = new AtomicInteger(1);
 
-    private static final ThreadPoolExecutor executorLIFO = new ThreadPoolExecutor(
-            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE, TimeUnit.MILLISECONDS,
-            new LinkedBlockingStack<Runnable>(LinkedBlockingStack.POLICY_LIFO));
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "SimpleAsyncTask #" + mCount.getAndIncrement());
+        }
+    };
 
-    private ThreadUtil mThreadUtil = ThreadUtil.getInstance();
+    private static int sMaxSizeLIFO = 128;
 
-    public SimpleAsyncTask() {
-    }
-
-    protected Result doInBackground(Params... params) {
-        return null;
-    }
-
-    protected void onProgressUpdate(Progress... progress) {
-    }
-
-    abstract protected void onPostExecute(Result result);
-
-    protected void publishProgress(final Progress... progress) {
-        mThreadUtil.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                onProgressUpdate(progress);
-            }
-        });
-    }
-
-    public void execute(final Params... params) {
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                final Result result = doInBackground(params);
-                mThreadUtil.runOnMainThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onPostExecute(result);
-                    }
-                });
-            }
-        });
-    }
-
-    public void executeLIFO(final Params... params) {
-        executorLIFO.execute(new Runnable() {
-            @Override
-            public void run() {
-                final Result result = doInBackground(params);
-                mThreadUtil.runOnMainThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onPostExecute(result);
-                    }
-                });
-            }
-        });
-    }
-
-    public void clearAll() {
-        executor.getQueue().clear();
-    }
-
-    public boolean remove(Runnable runnable) {
-        return executor.remove(runnable);
-    }
-
-    public void clearAllLIFO() {
-        executorLIFO.getQueue().clear();
-    }
-
-    public boolean removeLIFO(Runnable runnable) {
-        return executorLIFO.remove(runnable);
+    public enum Policy {
+        FIFO, LIFO
     }
 
     //模拟栈的行为，后进先出
-    private static class LinkedBlockingStack<T> extends LinkedBlockingDeque<T> {
+    public static class LinkedBlockingStack<T> extends LinkedBlockingDeque<T> {
+        private static Policy sPolicy = Policy.FIFO;
 
-        public static final int POLICY_FIFO = 1; // 先进先出
-        public static final int POLICY_LIFO = 2; // 后进先出
-        private static int sPolicy = POLICY_FIFO;
-
-        private LinkedBlockingStack(int policy) {
+        private LinkedBlockingStack(Policy policy) {
             sPolicy = policy;
         }
 
         @Override
         public boolean offer(T e) {
-
             switch (sPolicy) {
-                case POLICY_LIFO:
+                case LIFO:
                     offerFirst(e);
                     if (size() > sMaxSizeLIFO) {
                         removeLast(); // 移除末尾的队列
@@ -137,4 +72,272 @@ abstract public class SimpleAsyncTask<Params, Progress, Result> {
             }
         }
     }
+
+    private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
+            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+            KEEP_ALIVE, TimeUnit.MILLISECONDS,
+            new LinkedBlockingStack<Runnable>(Policy.FIFO));
+
+    private static final ThreadPoolExecutor EXECUTOR_LIFO = new ThreadPoolExecutor(
+            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+            KEEP_ALIVE, TimeUnit.MILLISECONDS,
+            new LinkedBlockingStack<Runnable>(Policy.LIFO));
+
+    // 按照优先级执行
+    private static final ThreadPoolExecutor EXECUTOR_PRIORITY = new ThreadPoolExecutor(
+            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+            KEEP_ALIVE, TimeUnit.MILLISECONDS,
+            new PriorityBlockingQueue<Runnable>());
+
+    private static final int MESSAGE_POST_RESULT = 0x1;
+    private static final int MESSAGE_POST_PROGRESS = 0x2;
+
+    private static volatile Executor sDefaultExecutor = EXECUTOR;
+    private static InternalHandler sHandler;
+
+    private final WorkerRunnable<Params, Result> mWorker;
+    private final FutureTask<Result> mFuture;
+
+    private volatile Status mStatus = Status.PENDING;
+
+    private final AtomicBoolean mCancelled = new AtomicBoolean();
+    private final AtomicBoolean mTaskInvoked = new AtomicBoolean();
+
+    public enum Status {
+        PENDING,
+        RUNNING,
+        FINISHED,
+    }
+
+    private static Handler getHandler() {
+        synchronized (SimpleAsyncTask.class) {
+            if (sHandler == null) {
+                sHandler = new InternalHandler();
+            }
+            return sHandler;
+        }
+    }
+
+    public static void setDefaultExecutor(Executor exec) {
+        sDefaultExecutor = exec;
+    }
+
+    public SimpleAsyncTask() {
+        mWorker = new WorkerRunnable<Params, Result>() {
+            public Result call() throws Exception {
+                mTaskInvoked.set(true);
+
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                //noinspection unchecked
+                Result result = doInBackground(mParams);
+                Binder.flushPendingCommands();
+                return postResult(result);
+            }
+        };
+
+        mFuture = new FutureTask<Result>(mWorker) {
+            @Override
+            protected void done() {
+                try {
+                    postResultIfNotInvoked(get());
+                } catch (InterruptedException e) {
+                    LogUtil.w(LOG_TAG, e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException("An error occurred while executing doInBackground()",
+                            e.getCause());
+                } catch (CancellationException e) {
+                    postResultIfNotInvoked(null);
+                }
+            }
+        };
+    }
+
+    /**
+     * 重置任务，如果任务正在运行则抛出异常
+     */
+    public boolean reset() {
+        if (Status.RUNNING == mStatus) {
+            return false;
+        } else {
+            mStatus = Status.PENDING;
+            mCancelled.set(false);
+            mTaskInvoked.set(false);
+            return true;
+        }
+    }
+
+    private void postResultIfNotInvoked(Result result) {
+        final boolean wasTaskInvoked = mTaskInvoked.get();
+        if (!wasTaskInvoked) {
+            postResult(result);
+        }
+    }
+
+    private Result postResult(Result result) {
+        @SuppressWarnings("unchecked")
+        Message message = getHandler().obtainMessage(MESSAGE_POST_RESULT,
+                new AsyncTaskResult<Result>(this, result));
+        message.sendToTarget();
+        return result;
+    }
+
+    public final Status getStatus() {
+        return mStatus;
+    }
+
+
+    protected abstract Result doInBackground(Params... params);
+
+
+    protected void onPreExecute() {
+    }
+
+
+    protected void onPostExecute(Result result) {
+    }
+
+    protected void onProgressUpdate(Progress... values) {
+    }
+
+
+    protected void onCancelled(Result result) {
+        onCancelled();
+    }
+
+    protected void onCancelled() {
+    }
+
+
+    public final boolean isCancelled() {
+        return mCancelled.get();
+    }
+
+
+    public final boolean cancel(boolean mayInterruptIfRunning) {
+        mCancelled.set(true);
+        return mFuture.cancel(mayInterruptIfRunning);
+    }
+
+
+    public final Result get() throws InterruptedException, ExecutionException {
+        return mFuture.get();
+    }
+
+
+    public final Result get(long timeout, TimeUnit unit) throws InterruptedException,
+            ExecutionException, TimeoutException {
+        return mFuture.get(timeout, unit);
+    }
+
+    public final SimpleAsyncTask<Params, Progress, Result> execute(Params... params) {
+        return executeOnExecutor(sDefaultExecutor, params);
+    }
+
+    public final SimpleAsyncTask<Params, Progress, Result> executeLIFO(Params... params) {
+        return executeOnExecutor(EXECUTOR_LIFO, params);
+    }
+
+    /**
+     * 按照优先级执行
+     * @param priority 优先级，如果优先级相等，则按照后进先出的原则执行
+     * @param params
+     * @return
+     */
+    public final SimpleAsyncTask<Params, Progress, Result> executePriority(Priority priority, Params... params) {
+        if (priority == null) {
+            throw new RuntimeException("priority is null!");
+        }
+        return executeOnExecutor(EXECUTOR_PRIORITY, priority, params);
+    }
+
+    public final SimpleAsyncTask<Params, Progress, Result> executeOnExecutor(Executor exec, Params... params) {
+        return executeOnExecutor(exec, null, params);
+    }
+
+    private final SimpleAsyncTask<Params, Progress, Result> executeOnExecutor(Executor exec, Priority priority,
+                                                                              Params... params) {
+        if (mStatus != Status.PENDING) {
+            switch (mStatus) {
+                case RUNNING:
+                    throw new IllegalStateException("Cannot execute task:"
+                            + " the task is already running.");
+                case FINISHED:
+                    throw new IllegalStateException("Cannot execute task:"
+                            + " the task has already been executed "
+                            + "(a task can be executed only once)");
+            }
+        }
+
+        mStatus = Status.RUNNING;
+
+        onPreExecute();
+
+        mWorker.mParams = params;
+
+        if (priority != null) {
+            exec.execute(new PriorityRunnable(priority, mFuture));
+        } else {
+            exec.execute(mFuture);
+        }
+
+        return this;
+    }
+
+
+    public static void execute(Runnable runnable) {
+        sDefaultExecutor.execute(runnable);
+    }
+
+
+    protected final void publishProgress(Progress... values) {
+        if (!isCancelled()) {
+            getHandler().obtainMessage(MESSAGE_POST_PROGRESS,
+                    new AsyncTaskResult<Progress>(this, values)).sendToTarget();
+        }
+    }
+
+    private void finish(Result result) {
+        if (isCancelled()) {
+            onCancelled(result);
+        } else {
+            onPostExecute(result);
+        }
+        mStatus = Status.FINISHED;
+    }
+
+    private static class InternalHandler extends Handler {
+        public InternalHandler() {
+            super(Looper.getMainLooper());
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            AsyncTaskResult<?> result = (AsyncTaskResult<?>) msg.obj;
+            switch (msg.what) {
+                case MESSAGE_POST_RESULT:
+                    // There is only one result
+                    result.mTask.finish(result.mData[0]);
+                    break;
+                case MESSAGE_POST_PROGRESS:
+                    result.mTask.onProgressUpdate(result.mData);
+                    break;
+            }
+        }
+    }
+
+    private static abstract class WorkerRunnable<Params, Result> implements Callable<Result> {
+        Params[] mParams;
+    }
+
+    private static class AsyncTaskResult<Data> {
+        final SimpleAsyncTask mTask;
+        final Data[] mData;
+
+        AsyncTaskResult(SimpleAsyncTask task, Data... data) {
+            mTask = task;
+            mData = data;
+        }
+    }
+
 }
+

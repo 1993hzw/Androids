@@ -3,6 +3,8 @@ package cn.forward.androids.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.Closeable;
+
 /**
  * Created by huangziwei on 16-3-8.
  */
@@ -42,5 +44,16 @@ public class Util {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+    }
+
+    public static void closeQuietly(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (RuntimeException rethrown) {
+                throw rethrown;
+            } catch (Exception ignored) {
+            }
+        }
     }
 }

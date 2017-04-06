@@ -6,9 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +47,7 @@ public abstract class ScrollPickerView<T> extends View {
 
     private float mMoveLength = 0; // item移动长度，负数表示向上移动，正数表示向下移动
 
-    private GestureDetectorCompat mGestureDetector;
+    private GestureDetector mGestureDetector;
     private OnSelectedListener mListener;
 
     private Scroller mScroller;
@@ -72,7 +72,7 @@ public abstract class ScrollPickerView<T> extends View {
     public ScrollPickerView(Context context, AttributeSet attrs,
                             int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mGestureDetector = new android.support.v4.view.GestureDetectorCompat(getContext(),
+        mGestureDetector = new GestureDetector(getContext(),
                 new FlingOnGestureListener());
         mScroller = new Scroller(getContext());
         mAutoScrollAnimator = ValueAnimator.ofInt(0, 0);

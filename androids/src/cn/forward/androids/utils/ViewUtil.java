@@ -1,7 +1,6 @@
 package cn.forward.androids.utils;
 
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
@@ -127,7 +126,7 @@ public class ViewUtil {
                 return view.getScrollY() > 0;
             }
         } else {
-            return ViewCompat.canScrollVertically(view, -1);
+            return view.canScrollVertically(-1);
         }
     }
 }
