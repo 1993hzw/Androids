@@ -9,6 +9,7 @@ import android.util.LruCache;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import cn.forward.androids.base.BaseApplication;
 import cn.forward.androids.utils.LogUtil;
@@ -130,7 +131,7 @@ public class ImageCache {
      * @param key
      * @return
      */
-    public Bitmap getBimapMemoryCache(String key) {
+    public Bitmap getBitmapMemoryCache(String key) {
         //从内存中获取
         if (memoryLruCache != null) {
             return memoryLruCache.get(key);
@@ -224,7 +225,7 @@ public class ImageCache {
      * @return
      */
     public Bitmap getBitmap(String key) {
-        Bitmap bitmap = getBimapMemoryCache(key);
+        Bitmap bitmap = getBitmapMemoryCache(key);
         if (bitmap == null) {
             bitmap = getBitmapDiskCache(key);
             if (bitmap != null) {
@@ -288,6 +289,13 @@ public class ImageCache {
 
     public File getDiskCacheDir() {
         return mDiskCacheDir;
+    }
+
+    public Map<String, Bitmap> getSnapshotMemoryCache() {
+        if (memoryLruCache == null) {
+            return null;
+        }
+        return memoryLruCache.snapshot();
     }
 
     public static String getDiskCacheDir(Context context, String dirName) {

@@ -8,11 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 
-import java.io.BufferedInputStream;
-import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
 import cn.forward.androids.SimpleAsyncTask;
@@ -46,11 +43,12 @@ public class LocalImagerLoader implements ImageLoader {
         int[] size = ImageUtils.optimizeMaxSizeByView(view, config.getMaxWidth(), config.getMaxHeight());
         final int width = size[0];
         final int height = size[1];
-        final String key = "" + path + "=" + width + "_" + height;
+        final String key = config.isLoadOriginal() ? path + "_" + config.isAutoRotate()
+                : "" + path + "=" + width + "_" + height + "_" + config.isAutoRotate();
 
         if (config.isNeedCache()) {
             // 从内存中获取
-            Bitmap bitmap = config.getImageCache().getBimapMemoryCache(key);
+            Bitmap bitmap = config.getImageCache().getBitmapMemoryCache(key);
             if (bitmap != null) {
                 config.getImageSetter().setImage(view, bitmap);
                 return true;
@@ -86,7 +84,7 @@ public class LocalImagerLoader implements ImageLoader {
             BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
             int h = options.outHeight;
             int w = options.outWidth;
-            options.inSampleSize = computeBitmapSimple(w * h, maxWidth * maxHeight);
+            options.inSampleSize = computeBitmapSimple(w * h, maxWidth * maxHeight * 2);
             options.inPreferredConfig = Bitmap.Config.RGB_565;
             options.inInputShareable = true;
             options.inPurgeable = true;
@@ -148,7 +146,9 @@ public class LocalImagerLoader implements ImageLoader {
                         AssetFileDescriptor assetFileDescriptor = view.getContext().getAssets().openFd(mPath.substring(7, mPath.length()));
                         fileInputStream = assetFileDescriptor.createInputStream();
                     }
-                    Bitmap bm = getBitmapFromDisk(fileInputStream.getFD(), mMaxWidth, mMaxHeight, mConfig.isNeedCache() ? mConfig.getImageCache() : null, mKey,
+                    Bitmap bm = getBitmapFromDisk(fileInputStream.getFD(),
+                            mConfig.isLoadOriginal() ? 0 : mMaxWidth, mConfig.isLoadOriginal() ? 0 : mMaxHeight,
+                            mConfig.isNeedCache() ? mConfig.getImageCache() : null, mKey,
                             mPath.toLowerCase().endsWith(".png") ?
                                     Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG);
 

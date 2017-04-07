@@ -37,7 +37,7 @@ public class ImageUtils {
     //系统数据库存放图片的路径
     private static final Uri STORAGE_URI = Images.Media.EXTERNAL_CONTENT_URI;
 
-    /*
+    /**
      * 添加图片到系统数据库
      */
     public static Uri addImage(final ContentResolver cr, final String path) {
@@ -52,6 +52,10 @@ public class ImageUtils {
                 filename, degree);
     }
 
+
+    /**
+     * 添加图片到系统数据库
+     */
     private static Uri addImage(ContentResolver cr, String title,
                                 long dateTaken, Location location, String directory,
                                 String filename, int[] degree) {
@@ -75,7 +79,7 @@ public class ImageUtils {
         return cr.insert(STORAGE_URI, values);
     }
 
-    /*
+    /**
      * 添加视频到系统数据库
      */
     public static Uri addVideo(ContentResolver cr, String title,
@@ -112,7 +116,7 @@ public class ImageUtils {
     /**
      * 旋转图片
      */
-    public static Bitmap rotate(Context context, Bitmap bitmap,
+    public static Bitmap rotate(Bitmap bitmap,
                                 int degree, boolean isRecycle) {
         Matrix m = new Matrix();
         m.setRotate(degree, (float) bitmap.getWidth() / 2,
@@ -170,7 +174,7 @@ public class ImageUtils {
         int digree = getBitmapExifRotate(path);
         if (digree != 0) {
             // 旋转图片
-            bitmap = ImageUtils.rotate(null, bitmap, digree, isRecycle);
+            bitmap = ImageUtils.rotate(bitmap, digree, isRecycle);
         }
         return bitmap;
     }
@@ -185,19 +189,19 @@ public class ImageUtils {
         Display display = manager.getDefaultDisplay();
         int screenW = display.getWidth();
         int screenH = display.getHeight();
-        return createBitmapFromPath(path, context, screenW, screenH);
+        return createBitmapFromPath(path, screenW, screenH);
     }
 
     /**
      * 获取一定尺寸范围内的的图片，防止oom。参考系统自带相机的图片获取方法
      *
-     * @param path           路径
-     * @param maxResolutionX 图片的最大宽
-     * @param maxResolutionY 图片的最大高
+     * @param path      路径
+     * @param maxWidth  图片的最大宽
+     * @param maxHeight 图片的最大高
      * @return 经过按比例缩放的图片
      * @throws IOException
      */
-    public static final Bitmap createBitmapFromPath(String path, Context context, int maxResolutionX, int maxResolutionY) {
+    public static final Bitmap createBitmapFromPath(String path, int maxWidth, int maxHeight) {
         Bitmap bitmap = null;
         Options options = null;
         if (path.endsWith(".3gp")) {
@@ -209,7 +213,7 @@ public class ImageUtils {
                 BitmapFactory.decodeFile(path, options);
                 int width = options.outWidth;
                 int height = options.outHeight;
-                options.inSampleSize = computeBitmapSimple(width * height, maxResolutionX * maxResolutionY);
+                options.inSampleSize = computeBitmapSimple(width * height, maxWidth * maxHeight * 2);
                 options.inPurgeable = true;
                 options.inPreferredConfig = Config.RGB_565;
                 options.inDither = false;
@@ -228,23 +232,17 @@ public class ImageUtils {
     }
 
 
-    public static final Bitmap createBitmapFromPath(byte[] data, Context context) {
+    public static final Bitmap createBitmapFromPath(byte[] data, int maxWidth, int maxHeight) {
         Bitmap bitmap = null;
         Options options = null;
         try {
-            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Display display = manager.getDefaultDisplay();
-            int screenW = display.getWidth();
-            int screenH = display.getHeight();
 
             options = new Options();
             options.inJustDecodeBounds = true;
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
             int width = options.outWidth;
             int height = options.outHeight;
-            int maxResolutionX = screenW * 2;
-            int maxResolutionY = screenH * 2;
-            options.inSampleSize = computeBitmapSimple(width * height, maxResolutionX * maxResolutionY);
+            options.inSampleSize = computeBitmapSimple(width * height, maxWidth * maxHeight * 2);
             options.inPurgeable = true;
             options.inPreferredConfig = Config.RGB_565;
             options.inDither = false;
@@ -269,6 +267,9 @@ public class ImageUtils {
      * @return simple值
      */
     public static int computeBitmapSimple(int realPixels, int maxPixels) {
+        if (maxPixels <= 0) {
+            return 1;
+        }
         try {
             if (realPixels <= maxPixels) {//如果图片尺寸小于最大尺寸，则直接读取
                 return 1;
