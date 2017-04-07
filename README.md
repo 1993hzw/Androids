@@ -1,9 +1,16 @@
 Androids
 ======
 
+### 使用
+```
+dependencies {
+    compile 'com.forward.androids:androids:1.1'
+}
+```
+
 ### --AndroidsDemo　使用例子
 
-### --AndroidsLib 库工程
+### --androids 库工程
   
   * #### ShapeImageView
   可设置形状(圆形、圆角矩形)的ImageView
