@@ -20,13 +20,12 @@ public class ImageLoaderGroup implements ImageLoader {
     }
 
     public ImageLoaderGroup(Context context, int memoryMaxSize, long diskMaxSize) {
-        this(context, memoryMaxSize, diskMaxSize, null);
+        this(context, null);
+        mImageCache = new ImageCache(context, memoryMaxSize, diskMaxSize);
         mImageLoaderConfig = new ImageLoaderConfig(mImageCache);
     }
 
-    public ImageLoaderGroup(Context context, int memoryMaxSize, long diskMaxSize, ImageLoaderConfig config) {
-        context = context.getApplicationContext();
-        mImageCache = new ImageCache(context, memoryMaxSize, diskMaxSize);
+    public ImageLoaderGroup(Context context, ImageLoaderConfig config) {
         mImageLoaders = new CopyOnWriteArrayList<>();
         mImageLoaderConfig = config;
     }

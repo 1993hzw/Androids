@@ -43,8 +43,8 @@ public class LocalImagerLoader implements ImageLoader {
         int[] size = ImageUtils.optimizeMaxSizeByView(view, config.getMaxWidth(), config.getMaxHeight());
         final int width = size[0];
         final int height = size[1];
-        final String key = config.isLoadOriginal() ? path + "_" + config.isAutoRotate()
-                : "" + path + "=" + width + "_" + height + "_" + config.isAutoRotate();
+        final String key = config.isNeedCache() ?
+                config.getImageCache().generateCacheKey(size, path, config) : null;
 
         if (config.isNeedCache()) {
             // 从内存中获取
