@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import cn.forward.androids.utils.LogUtil;
 
@@ -85,9 +86,51 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
 
     // 按照优先级执行
     private static final ThreadPoolExecutor EXECUTOR_PRIORITY = new ThreadPoolExecutor(
-            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE, TimeUnit.MILLISECONDS,
-            new PriorityBlockingQueue<Runnable>());
+            1, 1,
+            1, TimeUnit.MILLISECONDS,
+            new PriorityBlockingQueue<Runnable>() {
+                @Override
+                public boolean offer(Runnable runnable) {
+                    return super.offer(new CompareRunnableFIFOWrapper((CompareRunnable) runnable));
+                }
+            });
+
+    /**
+     * 当优先级队列中的元素的优先级相等时,按照先进先出（FIFO）原则排序
+     */
+    private static class CompareRunnableFIFOWrapper implements CompareRunnable<CompareRunnableFIFOWrapper> {
+        private static AtomicLong mCount = new AtomicLong(0);
+
+        private final long mSecondPriority;
+        private CompareRunnable mRunnable;
+
+        private CompareRunnableFIFOWrapper(CompareRunnable runnable) {
+            mRunnable = runnable;
+            mSecondPriority = mCount.incrementAndGet();
+        }
+
+        public CompareRunnable getRunnable() {
+            return mRunnable;
+        }
+
+        public long getSecondPriority() {
+            return mSecondPriority;
+        }
+
+        @Override
+        public void run() {
+            mRunnable.run();
+        }
+
+        @Override
+        public int compareTo(CompareRunnableFIFOWrapper another) {
+            int res = mRunnable.compareTo(another.getRunnable());
+            if (res == 0) {
+                return mSecondPriority < another.getSecondPriority() ? -1 : 1;
+            }
+            return res;
+        }
+    }
 
     private static final int MESSAGE_POST_RESULT = 0x1;
     private static final int MESSAGE_POST_PROGRESS = 0x2;
@@ -239,7 +282,8 @@ public abstract class SimpleAsyncTask<Params, Progress, Result> {
 
     /**
      * 按照优先级执行
-     * @param priority 优先级，如果优先级相等，则按照后进先出的原则执行
+     *
+     * @param priority 优先级
      * @param params
      * @return
      */

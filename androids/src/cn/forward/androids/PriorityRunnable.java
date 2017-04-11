@@ -1,11 +1,10 @@
 package cn.forward.androids;
 
 /**
- *
  * Created by huangziwei on 2017/3/30.
  */
 
-public class PriorityRunnable implements Runnable, Comparable<PriorityRunnable> {
+public class PriorityRunnable implements CompareRunnable<PriorityRunnable> {
     private final Priority mPriority;
     private final Runnable mRunnable;
 
@@ -20,9 +19,13 @@ public class PriorityRunnable implements Runnable, Comparable<PriorityRunnable> 
 
     @Override
     public int compareTo(PriorityRunnable another) {
-        // 如果优先级相等，则按照后进先出的原则排序
-        return this.mPriority.ordinal() <= another.mPriority.ordinal()
-                ? -1 : 1;
+        if (this.mPriority.ordinal() < another.mPriority.ordinal()) {
+            return -1;
+        } else if (this.mPriority.ordinal() > another.mPriority.ordinal()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     @Override

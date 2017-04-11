@@ -17,6 +17,7 @@ public class ImageLoaderConfig {
 
     private static ImageLoaderConfig sDefaultConfig = new ImageLoaderConfig(null);
     private static ImageSetter sDefaultImageSetter = new ImageSetter();
+    private static final ImageCacheKeyGenerator DEFAULT_KEY_GENERATOR = new ImageCacheKeyGenerator();
 
     private ImageCache mImageCache;
     private int mMaxWidth;
@@ -35,6 +36,8 @@ public class ImageLoaderConfig {
     private ImageSetter mImageSetter = sDefaultImageSetter;
 
     private Priority mPriority = Priority.DEFAULT;
+
+    private ImageCacheKeyGenerator mCacheKeyGenerator = DEFAULT_KEY_GENERATOR;
 
     public static ImageSetter getDefaultImageSetter() {
         return sDefaultImageSetter;
@@ -210,6 +213,17 @@ public class ImageLoaderConfig {
         config.setMaxWidth(getMaxWidth());
         config.setPriority(getPriority());
         config.setNeedCache(isNeedCache());
+        config.setImageCache(getImageCache());
+        config.setCacheKeyGenerator(getCacheKeyGenerator());
         return config;
     }
+
+    public void setCacheKeyGenerator(ImageCacheKeyGenerator keyGenerator) {
+        mCacheKeyGenerator = keyGenerator;
+    }
+
+    public ImageCacheKeyGenerator getCacheKeyGenerator() {
+        return mCacheKeyGenerator;
+    }
+
 }

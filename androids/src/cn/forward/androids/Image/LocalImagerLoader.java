@@ -44,7 +44,7 @@ public class LocalImagerLoader implements ImageLoader {
         final int width = size[0];
         final int height = size[1];
         final String key = config.isNeedCache() ?
-                config.getImageCache().generateCacheKey(size, path, config) : null;
+                config.getCacheKeyGenerator().generateCacheKey(size, path, config) : null;
 
         if (config.isNeedCache()) {
             // 从内存中获取
@@ -124,6 +124,12 @@ public class LocalImagerLoader implements ImageLoader {
             if (mViewRef.get() == null || isCancelled()) {
                 return true;
             }
+
+            final ImageLoadTask oldLoadTask = getLoadTaskFromContainer(mViewRef.get(), mConfig.getImageSetter());
+            if (this != oldLoadTask) { // 被其他任务替换
+                return true;
+            }
+
             return false;
         }
 
@@ -181,11 +187,16 @@ public class LocalImagerLoader implements ImageLoader {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+            if (abort()) {
+                return;
+            }
             View view = mViewRef.get();
-            if (view != null && bitmap != null) {
-                mConfig.getImageSetter().setImage(view, bitmap);
-            } else {
-                mConfig.getImageSetter().setImage(view, mConfig.getLoadFailedDrawable());
+            if (view != null) {
+                if (bitmap != null) {
+                    mConfig.getImageSetter().setImage(view, bitmap);
+                } else {
+                    mConfig.getImageSetter().setImage(view, mConfig.getLoadFailedDrawable());
+                }
             }
         }
 
