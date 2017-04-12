@@ -15,6 +15,7 @@ import java.lang.ref.WeakReference;
 import cn.forward.androids.SimpleAsyncTask;
 import cn.forward.androids.utils.ImageUtils;
 import cn.forward.androids.utils.LogUtil;
+import cn.forward.androids.utils.ThreadUtil;
 import cn.forward.androids.utils.Util;
 
 import static cn.forward.androids.utils.ImageUtils.computeBitmapSimple;
@@ -31,7 +32,7 @@ public class LocalImagerLoader implements ImageLoader {
     }
 
     @Override
-    public boolean load(final View view, final String path, ImageLoaderConfig config) {
+    public boolean load(final View view, final String path, ImageLoaderConfig config, ImageLoaderListener loaderListener) {
         if (config == null) {
             throw new RuntimeException("ImageLoaderConfig is null!");
         }
@@ -50,18 +51,43 @@ public class LocalImagerLoader implements ImageLoader {
             // 从内存中获取
             Bitmap bitmap = config.getImageCache().getBitmapMemoryCache(key);
             if (bitmap != null) {
-                config.getImageSetter().setImage(view, bitmap);
+                if (loaderListener != null) {
+                    loaderListener.onLoadStarted(path, config);
+                }
+
+                if (view != null) {
+                    config.getImageSetter().setImage(view, bitmap);
+                }
+
+                if (loaderListener != null) {
+                    loaderListener.onLoadCompleted(path, config, bitmap);
+                }
                 return true;
             }
         }
 
-        if (cancelUselessImageLoadTask(view, path, config) == null) {
-            ImageLoadTask task = new ImageLoadTask(view, path, width, height, config, key);
-            config.getImageSetter().setImage(view, new AsyncDrawable(config.getLoadingDrawable(), task));
+        if (view != null) {
+            // 绑定view的时候需要取消相同的任务
+            if (cancelUselessImageLoadTask(view, path, config) == null) {
+                ImageLoadTask task = new ImageLoadTask(mContext, view, path, width, height, config, key, loaderListener);
+                config.getImageSetter().setImage(view, new AsyncDrawable(config.getLoadingDrawable(), task));
+                task.executePriority(config.getPriority());
+            } else {
+                if (loaderListener != null) {
+                    loaderListener.onLoadFailed(path, config, ImageLoaderListener.FAILED_TASK_EXISTS);
+                }
+            }
+        } else {
+            ImageLoadTask task = new ImageLoadTask(mContext, null, path, width, height, config, key, loaderListener);
             task.executePriority(config.getPriority());
         }
 
         return true;
+    }
+
+    @Override
+    public boolean load(String path, ImageLoaderConfig config, ImageLoaderListener loaderListener) {
+        return load(null, path, config, loaderListener);
     }
 
     public static Bitmap getBitmapFromDisk(FileDescriptor fileDescriptor, int maxWidth, int maxHeight, ImageCache imageCache, String key, Bitmap.CompressFormat format) {
@@ -103,31 +129,44 @@ public class LocalImagerLoader implements ImageLoader {
         return bitmap;
     }
 
-    private static class ImageLoadTask extends SimpleAsyncTask<String, Integer, Bitmap> {
+    private static class ImageLoadTask extends SimpleAsyncTask<String, Object, Bitmap> {
 
+        private static final int PROGRESS_LOAD_STARTED = 0;
+        private static final int PROGRESS_LOADING = 1;
+
+        private Context mContext;
         private WeakReference<View> mViewRef;
         private String mPath;
         private int mMaxWidth, mMaxHeight;
         private ImageLoaderConfig mConfig;
         private String mKey;
+        private ImageLoaderListener mLoaderListener;
 
-        public ImageLoadTask(View view, String path, int maxWidth, int maxHeight, ImageLoaderConfig config, String key) {
-            mViewRef = new WeakReference<View>(view);
+        public ImageLoadTask(Context context, View view, String path, int maxWidth, int maxHeight, ImageLoaderConfig config, String key, ImageLoaderListener loaderListener) {
+            mContext = context.getApplicationContext();
+            mViewRef = view == null ? null : new WeakReference<View>(view); // 为空表示不用绑定View
             mPath = path;
             mMaxWidth = maxWidth;
             mMaxHeight = maxHeight;
             mConfig = config;
             mKey = key;
+            mLoaderListener = loaderListener;
         }
 
         private boolean abort() {
-            if (mViewRef.get() == null || isCancelled()) {
-                return true;
-            }
+            if (mViewRef != null) {
+                if (mViewRef.get() == null || isCancelled()) {
+                    return true;
+                }
 
-            final ImageLoadTask oldLoadTask = getLoadTaskFromContainer(mViewRef.get(), mConfig.getImageSetter());
-            if (this != oldLoadTask) { // 被其他任务替换
-                return true;
+                final ImageLoadTask oldLoadTask = getLoadTaskFromContainer(mViewRef.get(), mConfig.getImageSetter());
+                if (this != oldLoadTask) { // 被其他任务替换
+                    return true;
+                }
+            } else {
+                if (isCancelled()) {
+                    return true;
+                }
             }
 
             return false;
@@ -139,17 +178,14 @@ public class LocalImagerLoader implements ImageLoader {
                 return null;
             }
             try {
-                View view = mViewRef.get();
-                if (view == null) {
-                    return null;
-                }
+                start();
 
                 FileInputStream fileInputStream = null;
                 try {
                     if (mPath.startsWith("/")) {
                         fileInputStream = new FileInputStream(mPath);
                     } else if (mPath.startsWith("assets/")) {
-                        AssetFileDescriptor assetFileDescriptor = view.getContext().getAssets().openFd(mPath.substring(7, mPath.length()));
+                        AssetFileDescriptor assetFileDescriptor = mContext.getAssets().openFd(mPath.substring(7, mPath.length()));
                         fileInputStream = assetFileDescriptor.createInputStream();
                     }
                     Bitmap bm = getBitmapFromDisk(fileInputStream.getFD(),
@@ -188,17 +224,70 @@ public class LocalImagerLoader implements ImageLoader {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (abort()) {
+                if (mLoaderListener != null) {
+                    mLoaderListener.onLoadFailed(mPath, mConfig, ImageLoaderListener.FAILED_TASK_CANCELLED);
+                }
                 return;
             }
-            View view = mViewRef.get();
-            if (view != null) {
-                if (bitmap != null) {
-                    mConfig.getImageSetter().setImage(view, bitmap);
+            if (mViewRef != null) {
+                View view = mViewRef.get();
+                if (view != null) {
+                    if (bitmap != null) {
+                        mConfig.getImageSetter().setImage(view, bitmap);
+                        if (mLoaderListener != null) {
+                            mLoaderListener.onLoadCompleted(mPath, mConfig, bitmap);
+                        }
+                    } else {
+                        mConfig.getImageSetter().setImage(view, mConfig.getLoadFailedDrawable());
+                        if (mLoaderListener != null) {
+                            mLoaderListener.onLoadFailed(mPath, mConfig, ImageLoaderListener.FAILED_BITMAP_ERROR);
+                        }
+                    }
                 } else {
-                    mConfig.getImageSetter().setImage(view, mConfig.getLoadFailedDrawable());
+                    if (mLoaderListener != null) {
+                        mLoaderListener.onLoadFailed(mPath, mConfig, ImageLoaderListener.FAILED_TASK_CANCELLED);
+                    }
+                }
+            } else {
+                if (bitmap != null) {
+                    if (mLoaderListener != null) {
+                        mLoaderListener.onLoadCompleted(mPath, mConfig, bitmap);
+                    }
+                } else {
+                    if (mLoaderListener != null) {
+                        mLoaderListener.onLoadFailed(mPath, mConfig, ImageLoaderListener.FAILED_BITMAP_ERROR);
+                    }
                 }
             }
         }
+
+        private void start() {
+            this.publishProgress(PROGRESS_LOAD_STARTED);
+        }
+
+        public void updateProgress(long total, long current) {
+            this.publishProgress(PROGRESS_LOADING, total, current);
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+            if (mLoaderListener == null) {
+                return;
+            }
+            switch ((Integer) values[0]) {
+                case PROGRESS_LOAD_STARTED:
+                    mLoaderListener.onLoadStarted(mPath, mConfig);
+                    break;
+                case PROGRESS_LOADING:
+                    if (values.length != 3) return;
+                    mLoaderListener.onLoading(mPath, mConfig, (Long) values[1], (Long) values[2]);
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
         public View getView() {
             return mViewRef.get();

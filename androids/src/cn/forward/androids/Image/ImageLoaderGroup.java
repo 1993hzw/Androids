@@ -38,13 +38,29 @@ public class ImageLoaderGroup implements ImageLoader {
         return mImageLoaderConfig;
     }
 
-    public boolean load(final View view, String path, ImageLoaderConfig config) {
+    @Override
+    public boolean load(final View view, String path, ImageLoaderConfig config, ImageLoaderListener loaderListener) {
         if (view == null || TextUtils.isEmpty(path)) {
             return false;
         }
         boolean accept = false;
         for (ImageLoader loader : mImageLoaders) {
-            if (loader.load(view, path, config)) {
+            if (loader.load(view, path, config, loaderListener)) {
+                accept = true;
+                break;
+            }
+        }
+        return accept;
+    }
+
+    @Override
+    public boolean load(String path, ImageLoaderConfig config, ImageLoaderListener loaderListener) {
+        if (TextUtils.isEmpty(path)) {
+            return false;
+        }
+        boolean accept = false;
+        for (ImageLoader loader : mImageLoaders) {
+            if (loader.load(path, config, loaderListener)) {
                 accept = true;
                 break;
             }
@@ -53,7 +69,11 @@ public class ImageLoaderGroup implements ImageLoader {
     }
 
     public boolean load(final View view, String path) {
-        return load(view, path, mImageLoaderConfig);
+        return load(view, path, mImageLoaderConfig, null);
+    }
+
+    public boolean load(String path, ImageLoaderListener loaderListener) {
+        return load(path, mImageLoaderConfig, loaderListener);
     }
 
     public void addImageLoader(ImageLoader loader) {

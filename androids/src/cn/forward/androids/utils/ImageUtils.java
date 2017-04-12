@@ -322,37 +322,39 @@ public class ImageUtils {
             return new int[]{width, height};
         }
 
-        final ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params != null) {
-            if (params.width > 0) {
-                width = params.width;
-            } else if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
-                width = view.getWidth();
-            }
+        if (view != null) {
+            final ViewGroup.LayoutParams params = view.getLayoutParams();
+            if (params != null) {
+                if (params.width > 0) {
+                    width = params.width;
+                } else if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    width = view.getWidth();
+                }
 
-            if (params.height > 0) {
-                height = params.height;
-            } else if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
-                height = view.getHeight();
-            }
-        }
-
-        if (view instanceof ImageView) {
-            if (width <= 0) {
-                Object obj = ReflectUtil.getValue(view, "mMaxWidth");
-                if (obj != null) {
-                    int tempWidth = (int) obj;
-                    if (tempWidth > 0 && tempWidth < Integer.MAX_VALUE) {
-                        width = tempWidth;
-                    }
+                if (params.height > 0) {
+                    height = params.height;
+                } else if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    height = view.getHeight();
                 }
             }
-            if (height <= 0) {
-                Object obj = ReflectUtil.getValue(view, "mMaxHeight");
-                if (obj != null) {
-                    int tempHeight = (int) obj;
-                    if (tempHeight > 0 && tempHeight < Integer.MAX_VALUE) {
-                        height = tempHeight;
+
+            if (view instanceof ImageView) {
+                if (width <= 0) {
+                    Object obj = ReflectUtil.getValue(view, "mMaxWidth");
+                    if (obj != null) {
+                        int tempWidth = (int) obj;
+                        if (tempWidth > 0 && tempWidth < Integer.MAX_VALUE) {
+                            width = tempWidth;
+                        }
+                    }
+                }
+                if (height <= 0) {
+                    Object obj = ReflectUtil.getValue(view, "mMaxHeight");
+                    if (obj != null) {
+                        int tempHeight = (int) obj;
+                        if (tempHeight > 0 && tempHeight < Integer.MAX_VALUE) {
+                            height = tempHeight;
+                        }
                     }
                 }
             }
