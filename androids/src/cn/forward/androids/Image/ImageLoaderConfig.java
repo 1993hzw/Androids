@@ -37,6 +37,11 @@ public class ImageLoaderConfig {
 
     private Priority mPriority = Priority.DEFAULT;
 
+    /**
+     * 是否裁剪缩列图
+     */
+    private boolean mExtractThumbnail = false;
+
     private ImageCacheKeyGenerator mCacheKeyGenerator = DEFAULT_KEY_GENERATOR;
 
     public static ImageSetter getDefaultImageSetter() {
@@ -165,6 +170,14 @@ public class ImageLoaderConfig {
         mPriority = priority;
     }
 
+    public boolean isExtractThumbnail() {
+        return mExtractThumbnail;
+    }
+
+    public void setExtractThumbnail(boolean extractThumbnail) {
+        mExtractThumbnail = extractThumbnail;
+    }
+
     public static class ImageSetter {
         public void setImage(View view, Bitmap bitmap) {
             if (view == null) {
@@ -215,6 +228,7 @@ public class ImageLoaderConfig {
         config.setNeedCache(isNeedCache());
         config.setImageCache(getImageCache());
         config.setCacheKeyGenerator(getCacheKeyGenerator());
+        config.setExtractThumbnail(isExtractThumbnail());
         return config;
     }
 

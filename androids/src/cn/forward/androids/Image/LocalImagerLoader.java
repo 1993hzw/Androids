@@ -5,6 +5,7 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -199,6 +200,19 @@ public class LocalImagerLoader implements ImageLoader {
                     }
 
                     if (bm != null) {
+                        if (mConfig.isExtractThumbnail()) {
+                            float scale;
+                            if (bm.getWidth() < bm.getHeight()) {
+                                scale = mMaxWidth / (float) bm.getWidth();
+                            } else {
+                                scale = mMaxHeight / (float) bm.getHeight();
+                            }
+                            if (scale <= 1) { // 缩小图片才需要裁剪
+                                bm = ThumbnailUtils.extractThumbnail(bm, mMaxWidth, mMaxHeight,
+                                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                            }
+                        }
+
                         if (mConfig.isAutoRotate()) {
                             //旋转图片
                             bm = ImageUtils.rotateBitmapByExif(bm, mPath, true);

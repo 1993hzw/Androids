@@ -16,8 +16,8 @@ public class ImageCacheKeyGenerator {
     public String generateCacheKey(int[] size, final String path, ImageLoaderConfig config) {
         final int width = size[0];
         final int height = size[1];
-        final String key = config.isLoadOriginal() ? path + "_" + config.isAutoRotate()
-                : "" + path + "=" + width + "_" + height + "_" + config.isAutoRotate();
+        final String key = config.isLoadOriginal() ? path + "_" + config.isAutoRotate() + "_" + config.isExtractThumbnail()
+                : "" + path + "=" + width + "_" + height + "_" + config.isAutoRotate() + "_" + config.isExtractThumbnail();
         return key;
     }
 }
