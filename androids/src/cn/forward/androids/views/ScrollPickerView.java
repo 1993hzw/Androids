@@ -415,12 +415,12 @@ public abstract class ScrollPickerView<T> extends View {
     }
 
     /**
-     * 自动滚动，默认速度为 1.5 pixel/ms
+     * 自动滚动，默认速度为 0.5dp/ms
      *
      * @see ScrollPickerView#autoScrollFast(int, long, float, Interpolator)
      */
     public void autoScrollFast(final int position, long duration) {
-        float speed = dip2px(0.40f);
+        float speed = dip2px(0.50f);
         autoScrollFast(position, duration, speed, sAutoScrollInterpolator);
     }
 
@@ -571,6 +571,10 @@ public abstract class ScrollPickerView<T> extends View {
 
     public T getSelectedItem() {
         return mData.get(mSelected);
+    }
+
+    public int getSelectedPosition() {
+        return mSelected;
     }
 
     public void setSelectedPosition(int position) {

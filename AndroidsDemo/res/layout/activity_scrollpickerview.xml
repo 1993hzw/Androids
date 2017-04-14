@@ -44,33 +44,10 @@
         </LinearLayout>
 
 
-        <LinearLayout
+        <com.example.androidsdemo.view.SlotMachine
+            android:id="@+id/slotmachine"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <cn.forward.androids.views.BitmapScrollPicker
-                android:id="@+id/bitmap_picker01"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                />
-
-            <cn.forward.androids.views.BitmapScrollPicker
-                android:id="@+id/bitmap_picker02"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                />
-
-            <cn.forward.androids.views.BitmapScrollPicker
-                android:id="@+id/bitmap_picker03"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                />
-        </LinearLayout>
+            android:layout_height="wrap_content"></com.example.androidsdemo.view.SlotMachine>
 
         <TextView
             android:layout_width="wrap_content"

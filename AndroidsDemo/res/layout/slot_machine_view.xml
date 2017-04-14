@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="250dp"
+             android:layout_gravity="center_horizontal"
+             android:padding="24dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="288dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="6dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <cn.forward.androids.views.BitmapScrollPicker
+            android:id="@+id/slot_view_01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <FrameLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="#bfbfbf"/>
+
+
+        <cn.forward.androids.views.BitmapScrollPicker
+            android:id="@+id/slot_view_02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <FrameLayout
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="#bfbfbf"/>
+
+        <cn.forward.androids.views.BitmapScrollPicker
+            android:id="@+id/slot_view_03"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_slot_machine_border"
+        />
+</FrameLayout>

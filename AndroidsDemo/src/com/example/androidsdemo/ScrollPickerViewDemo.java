@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.androidsdemo.view.SlotMachine;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.forward.androids.utils.DateUtil;
 import cn.forward.androids.utils.LogUtil;
@@ -47,16 +50,12 @@ public class ScrollPickerViewDemo extends Activity {
     private StringScrollPicker mMonthView;
     private StringScrollPicker mDayView;
 
-    // 模拟老虎机
-    private BitmapScrollPicker mBitmapPicker01;
-    private BitmapScrollPicker mBitmapPicker02;
-    private BitmapScrollPicker mBitmapPicker03;
-
     private ScrollPickerView mPicker01;
     private BitmapScrollPicker mPicker02;
 
     private Button mBtnPlay;
     boolean mIsPlaying = false;
+    private SlotMachine mSlotMachine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +68,6 @@ public class ScrollPickerViewDemo extends Activity {
         mMonthView = (StringScrollPicker) this.findViewById(R.id.view_month);
         mDayView = (StringScrollPicker) this.findViewById(R.id.view_day);
 
-        mBitmapPicker01 = (BitmapScrollPicker) this.findViewById(R.id.bitmap_picker01);
-        mBitmapPicker02 = (BitmapScrollPicker) this.findViewById(R.id.bitmap_picker02);
-        mBitmapPicker03 = (BitmapScrollPicker) this.findViewById(R.id.bitmap_picker03);
 
         mPicker01 = (ScrollPickerView) findViewById(R.id.picker_01);
         mPicker02 = (BitmapScrollPicker) findViewById(R.id.picker_02);
@@ -80,9 +76,6 @@ public class ScrollPickerViewDemo extends Activity {
         mYearView.setDisallowInterceptTouch(true);
         mMonthView.setDisallowInterceptTouch(true);
         mDayView.setDisallowInterceptTouch(true);
-        mBitmapPicker01.setDisallowInterceptTouch(true);
-        mBitmapPicker02.setDisallowInterceptTouch(true);
-        mBitmapPicker03.setDisallowInterceptTouch(true);
         mPicker01.setDisallowInterceptTouch(true);
         mPicker02.setDisallowInterceptTouch(true);
 
@@ -131,9 +124,10 @@ public class ScrollPickerViewDemo extends Activity {
             }
         });
 
-
         // 老虎机
-        final ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
+        mSlotMachine = (SlotMachine) findViewById(R.id.slotmachine);
+
+        final CopyOnWriteArrayList<Bitmap> bitmaps = new CopyOnWriteArrayList<Bitmap>();
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_01));
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_02));
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_03));
@@ -141,52 +135,21 @@ public class ScrollPickerViewDemo extends Activity {
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_05));
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_06));
         bitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.slot_07));
-        mBitmapPicker01.setData(bitmaps);
-        mBitmapPicker02.setData(bitmaps);
-        mBitmapPicker03.setData(bitmaps);
-        mBitmapPicker01.setDisallowTouch(true); // 不允许触摸
-        mBitmapPicker02.setDisallowTouch(true); // 不允许触摸
-        mBitmapPicker03.setDisallowTouch(true); // 不允许触摸
-        mBitmapPicker01.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
-        mBitmapPicker01.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
-        mBitmapPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
-        mBitmapPicker02.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
-        mBitmapPicker03.setDrawMode(BitmapScrollPicker.DRAW_MODE_SPECIFIED_SIZE);
-        mBitmapPicker03.setDrawModeSpecifiedSize(mBitmapPicker01.dip2px(35), mBitmapPicker01.dip2px(35));
 
-        mPicker02.setData(bitmaps);
-        mPicker02.setIsCirculation(false); // 设置非循环滚动
-        mPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_FULL);
-
-
-        ScrollPickerView.OnSelectedListener listener = new ScrollPickerView.OnSelectedListener() {
-            int[] selectedList = new int[3];
-            int counter = 0;
+        mSlotMachine.setData(bitmaps);
+        mSlotMachine.setSlotMachineListener(new SlotMachine.SlotMachineListener() {
+            @Override
+            public void onFinish(int pos01, int pos02, int pos03) {
+                mIsPlaying = false;
+                Toast.makeText(getApplicationContext(), pos01 + "," + pos02 + "," + pos03, Toast.LENGTH_SHORT).show();
+            }
 
             @Override
-            public void onSelected(ScrollPickerView scrollPickerView, int position) {
-                if (!mIsPlaying) {
-                    return;
-                }
-                if (scrollPickerView == mBitmapPicker01) {
-                    selectedList[0] = position;
-                } else if (scrollPickerView == mBitmapPicker02) {
-                    selectedList[1] = position;
-                } else if (scrollPickerView == mBitmapPicker03) {
-                    selectedList[2] = position;
-                }
-                counter++;
-                if (counter >= 3) { // 当老虎机中三个都滚动完毕则提示结果
-                    counter = 0;
-                    mIsPlaying = false;
-                    Toast.makeText(getApplicationContext(), Arrays.toString(selectedList), Toast.LENGTH_SHORT).show();
-                }
+            public boolean acceptWinResult(int position) {
+                return true;
             }
-        };
+        });
 
-        mBitmapPicker01.setOnSelectedListener(listener);
-        mBitmapPicker02.setOnSelectedListener(listener);
-        mBitmapPicker03.setOnSelectedListener(listener);
 
         mBtnPlay.setOnClickListener(new View.OnClickListener() {
             Random mRandom = new Random();
@@ -197,11 +160,19 @@ public class ScrollPickerViewDemo extends Activity {
                     return;
                 }
                 mIsPlaying = true;
-                mBitmapPicker01.autoScrollFast(mRandom.nextInt(bitmaps.size()), 5000);
-                mBitmapPicker02.autoScrollFast(mRandom.nextInt(bitmaps.size()), 6000);
-                mBitmapPicker03.autoScrollFast(mRandom.nextInt(bitmaps.size()), 7000);
+                // 开始滚动，模拟50％的中奖概率
+                if (mRandom.nextInt(2) != 5) { // 中奖
+                    mSlotMachine.play(mRandom.nextInt(bitmaps.size()));
+                } else { //
+                    mSlotMachine.play(-1);
+                }
             }
         });
+
+
+        mPicker02.setData(bitmaps);
+        mPicker02.setIsCirculation(false); // 设置非循环滚动
+        mPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_FULL);
     }
 
     // 更新天数
