@@ -27,6 +27,9 @@ public class ImageLoaderConfig {
     private boolean mLoadOriginal;
     private boolean mAutoRotate; // rotate by exif info
 
+    /**
+     * 加载成功显示图片时的动画
+     */
     private Animation mAnimation;
     private Drawable mLoadingDrawable;
     private Drawable mLoadFailedDrawable;

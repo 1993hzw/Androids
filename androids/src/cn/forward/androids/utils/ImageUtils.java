@@ -16,6 +16,7 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Video;
 import android.provider.MediaStore.Video.Thumbnails;
@@ -27,6 +28,8 @@ import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
+
+import cn.forward.androids.Image.ImageCache;
 
 public class ImageUtils {
 
@@ -370,6 +373,39 @@ public class ImageUtils {
         return new int[]{width, height};
     }
 
+
+    /**
+     * 获取视频缩略图
+     *
+     * @param videoPath 视频路径
+     * @param width
+     * @param height
+     * @param kind MediaStore.Images.Thumbnails.MINI_KIND or MediaStore.Images.Thumbnails.MICRO_KIND
+     * @return
+     */
+    public static Bitmap getVideoThumbnail(String videoPath, int width,
+                                           int height, int kind, ImageCache imageCache) {
+        Bitmap bitmap = null;
+        String key = videoPath + width + height;
+        if (imageCache != null) {
+            bitmap = imageCache.getBitmap(key);
+            if (bitmap != null) {
+                return bitmap;
+            }
+        }
+        bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, kind);
+        if (bitmap == null) {
+            return null;
+        }
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        if (imageCache != null) {
+            if (bitmap != null) {
+                imageCache.save(bitmap, key, Bitmap.CompressFormat.JPEG);
+            }
+        }
+        return bitmap;
+    }
 
 }
 

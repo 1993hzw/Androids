@@ -231,7 +231,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private void readJournal() throws IOException {
-        StrictLineReader reader = new StrictLineReader(new FileInputStream(journalFile), Util.US_ASCII);
+        StrictLineReader reader = new StrictLineReader(new FileInputStream(journalFile), DiskLruUtil.US_ASCII);
         try {
             String magic = reader.readLine();
             String version = reader.readLine();
@@ -263,10 +263,10 @@ public final class DiskLruCache implements Closeable {
                 rebuildJournal();
             } else {
                 journalWriter = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(journalFile, true), Util.US_ASCII));
+                        new FileOutputStream(journalFile, true), DiskLruUtil.US_ASCII));
             }
         } finally {
-            Util.closeQuietly(reader);
+            DiskLruUtil.closeQuietly(reader);
         }
     }
 
@@ -342,7 +342,7 @@ public final class DiskLruCache implements Closeable {
         }
 
         Writer writer = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(journalFileTmp), Util.US_ASCII));
+                new OutputStreamWriter(new FileOutputStream(journalFileTmp), DiskLruUtil.US_ASCII));
         try {
             writer.write(MAGIC);
             writer.write("\n");
@@ -372,7 +372,7 @@ public final class DiskLruCache implements Closeable {
         journalFileBackup.delete();
 
         journalWriter = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(journalFile, true), Util.US_ASCII));
+                new OutputStreamWriter(new FileOutputStream(journalFile, true), DiskLruUtil.US_ASCII));
     }
 
     private static void deleteIfExists(File file) throws IOException {
@@ -419,7 +419,7 @@ public final class DiskLruCache implements Closeable {
             // A file must have been deleted manually!
             for (int i = 0; i < valueCount; i++) {
                 if (ins[i] != null) {
-                    Util.closeQuietly(ins[i]);
+                    DiskLruUtil.closeQuietly(ins[i]);
                 } else {
                     break;
                 }
@@ -645,7 +645,7 @@ public final class DiskLruCache implements Closeable {
      */
     public void delete() throws IOException {
         close();
-        Util.deleteContents(directory);
+        DiskLruUtil.deleteContents(directory);
     }
 
     private void validateKey(String key) {
@@ -657,7 +657,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     private static String inputStreamToString(InputStream in) throws IOException {
-        return Util.readFully(new InputStreamReader(in, Util.UTF_8));
+        return DiskLruUtil.readFully(new InputStreamReader(in, DiskLruUtil.UTF_8));
     }
 
     /** A snapshot of the values for an entry. */
@@ -700,7 +700,7 @@ public final class DiskLruCache implements Closeable {
 
         public void close() {
             for (InputStream in : ins) {
-                Util.closeQuietly(in);
+                DiskLruUtil.closeQuietly(in);
             }
         }
     }
@@ -795,10 +795,10 @@ public final class DiskLruCache implements Closeable {
         public void set(int index, String value) throws IOException {
             Writer writer = null;
             try {
-                writer = new OutputStreamWriter(newOutputStream(index), Util.UTF_8);
+                writer = new OutputStreamWriter(newOutputStream(index), DiskLruUtil.UTF_8);
                 writer.write(value);
             } finally {
-                Util.closeQuietly(writer);
+                DiskLruUtil.closeQuietly(writer);
             }
         }
 

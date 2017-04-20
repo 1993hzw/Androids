@@ -8,10 +8,12 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 
 import cn.forward.androids.SimpleAsyncTask;
 import cn.forward.androids.utils.ImageUtils;
@@ -243,11 +245,12 @@ public class LocalImagerLoader implements ImageLoader {
                 }
                 return;
             }
-            if (mViewRef != null) {
+            if (mViewRef != null) { // 需要绑定view
                 View view = mViewRef.get();
                 if (view != null) {
                     if (bitmap != null) {
                         mConfig.getImageSetter().setImage(view, bitmap);
+                        animationDisplay(view, mConfig.getAnimation());
                         if (mLoaderListener != null) {
                             mLoaderListener.onLoadCompleted(mPath, mConfig, bitmap);
                         }
@@ -262,7 +265,7 @@ public class LocalImagerLoader implements ImageLoader {
                         mLoaderListener.onLoadFailed(mPath, mConfig, ImageLoaderListener.FAILED_TASK_CANCELLED);
                     }
                 }
-            } else {
+            } else { // 不用绑定view
                 if (bitmap != null) {
                     if (mLoaderListener != null) {
                         mLoaderListener.onLoadCompleted(mPath, mConfig, bitmap);
@@ -363,5 +366,18 @@ public class LocalImagerLoader implements ImageLoader {
             }
         }
         return null;
+    }
+
+    private static void animationDisplay(View container, Animation animation) {
+        if (container == null || animation == null) {
+            return;
+        }
+        try {
+            Method cloneMethod = Animation.class.getDeclaredMethod("clone");
+            cloneMethod.setAccessible(true);
+            container.startAnimation((Animation) cloneMethod.invoke(animation));
+        } catch (Throwable e) {
+            container.startAnimation(animation);
+        }
     }
 }
