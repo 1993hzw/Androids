@@ -250,6 +250,12 @@ public class SlotMachine extends FrameLayout implements ScrollPickerView.OnSelec
 
     public interface SlotMachineListener {
 
+        /**
+         * 滚动结束时回调
+         * @param pos01
+         * @param pos02
+         * @param pos03
+         */
         void onFinish(int pos01, int pos02, int pos03);
 
         /**

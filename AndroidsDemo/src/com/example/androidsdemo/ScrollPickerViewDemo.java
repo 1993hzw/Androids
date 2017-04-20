@@ -161,7 +161,7 @@ public class ScrollPickerViewDemo extends Activity {
                 }
                 mIsPlaying = true;
                 // 开始滚动，模拟50％的中奖概率
-                if (mRandom.nextInt(2) != 5) { // 中奖
+                if (mRandom.nextInt(2) == 0) { // 中奖
                     mSlotMachine.play(mRandom.nextInt(bitmaps.size()));
                 } else { //
                     mSlotMachine.play(-1);
