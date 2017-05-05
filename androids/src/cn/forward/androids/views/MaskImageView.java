@@ -75,20 +75,27 @@ public class MaskImageView extends ImageView {
     // all drawables instances loaded from  the same resource share getScreenHeight common state
     // 从同一个资源文件获取的drawable对象共享一个状态信息，为了避免修改其中一个drawable导致其他drawable被影响，需要调用mutate()
     // 因为背景图在draw()阶段绘制，所以修改了背景图状态后必须调用invalidateSelf（）刷新
+    private ColorFilter mLastColorFilter; // 记录上一次设置的filter避免重复设置导致递归调用ondraw
+
     private void setDrawableColorFilter(ColorFilter colorFilter) {
         if (mMaskLevel == MASK_LEVEL_BACKGROUND) {
             if (getBackground() != null) {
+                if (mLastColorFilter == colorFilter) {
+                    return;
+                }
                 getBackground().mutate();
                 getBackground().setColorFilter(colorFilter);
-                getBackground().invalidateSelf();
             }
         } else if (mMaskLevel == MASK_LEVEL_FOREGROUND) {
             if (getDrawable() != null) {
+                if (mLastColorFilter == colorFilter) {
+                    return;
+                }
                 getDrawable().mutate();
                 getDrawable().setColorFilter(colorFilter);
-                getDrawable().invalidateSelf();
             }
         }
+        mLastColorFilter = colorFilter;
     }
 
 
