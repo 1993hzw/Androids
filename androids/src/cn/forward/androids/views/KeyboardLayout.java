@@ -1,6 +1,5 @@
 package cn.forward.androids.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;

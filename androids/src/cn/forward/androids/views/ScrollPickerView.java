@@ -61,8 +61,6 @@ public abstract class ScrollPickerView<T> extends View {
     private Paint mPaint; //
     private int mCenterItemBackground = Color.TRANSPARENT; // 中间选中item的背景色
 
-    private long mTouchDownTime;
-
     private boolean mCanTap = true; // 单击切换选项或触发点击监听器
 
     public ScrollPickerView(Context context, AttributeSet attrs) {
@@ -310,7 +308,7 @@ public abstract class ScrollPickerView<T> extends View {
     // 移动到中间位置
     private void moveToCenter() {
 
-        if (!mScroller.isFinished() || mIsFling) {
+        if (!mScroller.isFinished() || mIsFling || mMoveLength == 0) {
             return;
         }
         cancelScroll();
@@ -396,31 +394,36 @@ public abstract class ScrollPickerView<T> extends View {
         mAutoScrollAnimator.setInterpolator(interpolator);
         mAutoScrollAnimator.setDuration(duration);
         mAutoScrollAnimator.removeAllUpdateListeners();
-        mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                computeScroll((int) animation.getAnimatedValue(), endY);
-                float rate = 0;
-                if (Build.VERSION.SDK_INT >= 12) {
-                    rate = animation.getAnimatedFraction();
-                } else {
-                    rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
+        if (endY != 0) { // itemHeight为0导致endy=0
+            mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    computeScroll((int) animation.getAnimatedValue(), endY);
+                    float rate = 0;
+                    if (Build.VERSION.SDK_INT >= 12) {
+                        rate = animation.getAnimatedFraction();
+                    } else {
+                        rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
+                    }
+                    if (rate >= 1) {
+                        mIsAutoScrolling = false;
+                    }
                 }
-                if (rate >= 1) {
-                    mIsAutoScrolling = false;
-                }
-            }
-        });
-        mAutoScrollAnimator.start();
+            });
+            mAutoScrollAnimator.start();
+        } else {
+            computeScroll(endY, endY);
+            mIsAutoScrolling = false;
+        }
     }
 
     /**
-     * 自动滚动，默认速度为 0.5dp/ms
+     * 自动滚动，默认速度为 0.6dp/ms
      *
      * @see ScrollPickerView#autoScrollFast(int, long, float, Interpolator)
      */
     public void autoScrollFast(final int position, long duration) {
-        float speed = dip2px(0.50f);
+        float speed = dip2px(0.6f);
         autoScrollFast(position, duration, speed, sAutoScrollInterpolator);
     }
 
@@ -507,14 +510,16 @@ public abstract class ScrollPickerView<T> extends View {
      */
     private class FlingOnGestureListener extends SimpleOnGestureListener {
 
+        private boolean mIsScrollingLastTime = false;
+
         public boolean onDown(MotionEvent e) {
-            mTouchDownTime = System.currentTimeMillis();
             if (mDisallowInterceptTouch) {  // 不允许父组件拦截事件
                 ViewParent parent = getParent();
                 if (parent != null) {
                     parent.requestDisallowInterceptTouchEvent(true);
                 }
             }
+            mIsScrollingLastTime = isScrolling(); // 记录是否从滚动状态终止
             // 点击时取消所有滚动效果
             cancelScroll();
             mLastMoveY = e.getY();
@@ -533,20 +538,20 @@ public abstract class ScrollPickerView<T> extends View {
         }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent e) { // 单击时切换选项
-            // 滚动过程中单击，不切换选项
-            if (!mCanTap || mMoveLength != 0 || mLastScrollY != 0) {
-                return false;
-            }
+        public boolean onSingleTapUp(MotionEvent e) {
             mLastMoveY = e.getY();
-            if (mLastMoveY >= mCenterY && mLastMoveY <= mCenterY + mItemHeight) {
-                performClick();
-            } else if (mLastMoveY < mCenterY) {
-                int moveY = mItemHeight;
-                autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
-            } else if (mLastMoveY > mCenterY + mItemHeight) {
-                int moveY = -mItemHeight;
-                autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+            if (mCanTap && !isScrolling() && !mIsScrollingLastTime) {
+                if (mLastMoveY >= mCenterY && mLastMoveY <= mCenterY + mItemHeight) {
+                    performClick();
+                } else if (mLastMoveY < mCenterY) {
+                    int moveY = mItemHeight;
+                    autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+                } else if (mLastMoveY > mCenterY + mItemHeight) {
+                    int moveY = -mItemHeight;
+                    autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+                } else {
+                    moveToCenter();
+                }
             } else {
                 moveToCenter();
             }
@@ -678,12 +683,17 @@ public abstract class ScrollPickerView<T> extends View {
         return mCenterItemBackground;
     }
 
+    public boolean isScrolling() {
+        return mIsFling || mIsMovingCenter || mIsAutoScrolling;
+    }
+
     public boolean isCanTap() {
         return mCanTap;
     }
 
     /**
      * 设置 单击切换选项或触发点击监听器
+     *
      * @param canTap
      */
     public void setCanTap(boolean canTap) {
@@ -703,4 +713,11 @@ public abstract class ScrollPickerView<T> extends View {
         return (int) (dipVlue * sDensity + 0.5F);
     }
 
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        if (visibility == VISIBLE) {
+            moveToCenter();
+        }
+    }
 }
