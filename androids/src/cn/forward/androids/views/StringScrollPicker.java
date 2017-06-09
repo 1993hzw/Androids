@@ -64,18 +64,6 @@ public class StringScrollPicker extends ScrollPickerView<String> {
                     R.styleable.ScrollPickerView_spv_start_color, mStartColor);
             mEndColor = typedArray.getColor(
                     R.styleable.ScrollPickerView_spv_end_color, mEndColor);
-            setCenterItemBackground(typedArray.getColor(
-                    R.styleable.ScrollPickerView_spv_center_item_background,
-                    getCenterItemBackground()));
-            setVisibleItemCount(typedArray.getInt(
-                    R.styleable.ScrollPickerView_spv_visible_item_count,
-                    getVisibleItemCount()));
-            setCenterPosition(typedArray.getInt(
-                    R.styleable.ScrollPickerView_spv_center_item_position,
-                    getCenterPosition()));
-            setIsCirculation(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_is_circulation, isIsCirculation()));
-            setDisallowInterceptTouch(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_disallow_intercept_touch, isDisallowInterceptTouch()));
-
             typedArray.recycle();
         }
     }

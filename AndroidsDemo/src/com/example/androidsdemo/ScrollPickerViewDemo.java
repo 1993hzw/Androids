@@ -52,6 +52,8 @@ public class ScrollPickerViewDemo extends Activity {
 
     private ScrollPickerView mPicker01;
     private BitmapScrollPicker mPicker02;
+    private BitmapScrollPicker mPickerHorizontal;
+    private BitmapScrollPicker mPickerHorizontal2;
 
     private Button mBtnPlay;
     boolean mIsPlaying = false;
@@ -71,6 +73,8 @@ public class ScrollPickerViewDemo extends Activity {
 
         mPicker01 = (ScrollPickerView) findViewById(R.id.picker_01);
         mPicker02 = (BitmapScrollPicker) findViewById(R.id.picker_02);
+        mPickerHorizontal = (BitmapScrollPicker) findViewById(R.id.picker_03_horizontal);
+        mPickerHorizontal2 = (BitmapScrollPicker) findViewById(R.id.picker_04_horizontal);
 
         // 不允许父元素拦截事件，设置后可以保证在ScrollView下正常滚动
         mYearView.setDisallowInterceptTouch(true);
@@ -172,7 +176,12 @@ public class ScrollPickerViewDemo extends Activity {
 
         mPicker02.setData(bitmaps);
         mPicker02.setIsCirculation(false); // 设置非循环滚动
-        mPicker02.setDrawMode(BitmapScrollPicker.DRAW_MODE_FULL);
+
+        mPickerHorizontal.setHorizontal(true);
+        mPickerHorizontal.setData(bitmaps);
+
+        mPickerHorizontal2.setHorizontal(true);
+        mPickerHorizontal2.setData(bitmaps);
     }
 
     // 更新天数

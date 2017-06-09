@@ -2,6 +2,7 @@ package cn.forward.androids.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,6 +19,8 @@ import android.widget.Scroller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.forward.androids.R;
 
 /**
  * 滚动选择器,带惯性滑动
@@ -40,10 +43,15 @@ public abstract class ScrollPickerView<T> extends View {
 
     private int mSelected; // 当前选中的item下标
     private List<T> mData;
-    private int mItemHeight = 0; // 每个条目的高度=mMeasureHeight／mVisibleItemCount
-    private int mCenterPosition = -1; // 中间item的位置，mCenterPosition＜＝mVisibleItemCount，默认为 mVisibleItemCount / 2
-    private int mCenterY; // 中间item的起始坐标y = mCenterPosition*mItemHeight
+    private int mItemHeight = 0; // 每个条目的高度,当垂直滚动时，高度=mMeasureHeight／mVisibleItemCount
+    private int mItemWidth = 0; // 每个条目的宽度，当水平滚动时，宽度=mMeasureWidth／mVisibleItemCount
+    private int mItemSize; // 当垂直滚动时，mItemSize = mItemHeight;水平滚动时，mItemSize = mItemWidth
+    private int mCenterPosition = -1; // 中间item的位置，0<=mCenterPosition＜mVisibleItemCount，默认为 mVisibleItemCount / 2
+    private int mCenterY; // 中间item的起始坐标y(不考虑偏移),当垂直滚动时，y= mCenterPosition*mItemHeight
+    private int mCenterX; // 中间item的起始坐标x(不考虑偏移),当垂直滚动时，x = mCenterPosition*mItemWidth
+    private int mCenterPoint; // 当垂直滚动时，mCenterPoint = mCenterY;水平滚动时，mCenterPoint = mCenterX
     private float mLastMoveY; // 触摸的坐标y
+    private float mLastMoveX; // 触摸的坐标X
 
     private float mMoveLength = 0; // item移动长度，负数表示向上移动，正数表示向下移动
 
@@ -55,6 +63,7 @@ public abstract class ScrollPickerView<T> extends View {
     private boolean mIsMovingCenter; // 是否正在滑向中间
     // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次触屏滑动的坐标
     private int mLastScrollY = 0; // Scroller的坐标y
+    private int mLastScrollX = 0; // Scroller的坐标x
 
     private boolean mDisallowTouch = false; // 不允许触摸
 
@@ -62,6 +71,8 @@ public abstract class ScrollPickerView<T> extends View {
     private int mCenterItemBackground = Color.TRANSPARENT; // 中间选中item的背景色
 
     private boolean mCanTap = true; // 单击切换选项或触发点击监听器
+
+    private boolean mIsHorizontal = false; // 是否水平滚动
 
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -78,6 +89,28 @@ public abstract class ScrollPickerView<T> extends View {
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
 
+        init(attrs);
+
+    }
+
+    private void init(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ScrollPickerView);
+            setCenterItemBackground(typedArray.getColor(
+                    R.styleable.ScrollPickerView_spv_center_item_background,
+                    getCenterItemBackground()));
+            setVisibleItemCount(typedArray.getInt(
+                    R.styleable.ScrollPickerView_spv_visible_item_count,
+                    getVisibleItemCount()));
+            setCenterPosition(typedArray.getInt(
+                    R.styleable.ScrollPickerView_spv_center_item_position,
+                    getCenterPosition()));
+            setIsCirculation(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_is_circulation, isIsCirculation()));
+            setDisallowInterceptTouch(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_disallow_intercept_touch, isDisallowInterceptTouch()));
+
+            typedArray.recycle();
+        }
     }
 
 
@@ -87,13 +120,21 @@ public abstract class ScrollPickerView<T> extends View {
         if (mData == null || mData.size() <= 0) {
             return;
         }
+        if (mIsHorizontal) {
+            mCenterPoint = mCenterX;
+        } else {
+            mCenterPoint = mCenterY;
+        }
+
         // 中间item
         mPaint.setColor(mCenterItemBackground);
-        float y = mCenterY;
-        canvas.drawRect(0, y, getWidth(), y + mItemHeight, mPaint);
-        drawItem(canvas, mData, mSelected, 0, mMoveLength, mCenterY + mMoveLength);
 
-        int length = Math.max(mCenterPosition, mVisibleItemCount - mCenterPosition);
+        // 选中item的背景色
+        canvas.drawRect(mCenterX, mCenterY, mCenterX + mItemWidth, mCenterY + mItemHeight, mPaint);
+
+        drawItem(canvas, mData, mSelected, 0, mMoveLength, mCenterPoint + mMoveLength);
+
+        int length = Math.max(mCenterPosition + 1, mVisibleItemCount - mCenterPosition);
         int positon;
         // 上下两边
         for (int i = 1; i <= length && i <= mData.size(); i++) {
@@ -103,9 +144,9 @@ public abstract class ScrollPickerView<T> extends View {
                         : mSelected - i;
                 // 传入位置信息，绘制item
                 if (mIsCirculation) {
-                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
+                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
                 } else if (mSelected - i >= 0) { // 非循环滚动
-                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterY + mMoveLength - i * mItemHeight);
+                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
                 }
             }
             if (i <= mVisibleItemCount - mCenterPosition) {  // 下面的items,相对位置为 i
@@ -113,9 +154,9 @@ public abstract class ScrollPickerView<T> extends View {
                         - mData.size() : mSelected + i;
                 // 传入位置信息，绘制item
                 if (mIsCirculation) {
-                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
+                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
                 } else if (mSelected + i < mData.size()) { // 非循环滚动
-                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterY + mMoveLength + i * mItemHeight);
+                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
                 }
             }
         }
@@ -145,11 +186,31 @@ public abstract class ScrollPickerView<T> extends View {
     }
 
     private void reset() {
-        mItemHeight = getMeasuredHeight() / mVisibleItemCount;
         if (mCenterPosition < 0) {
             mCenterPosition = mVisibleItemCount / 2;
         }
-        mCenterY = mCenterPosition * mItemHeight;
+
+        if (mIsHorizontal) {
+            mItemHeight = getMeasuredHeight();
+            mItemWidth = getMeasuredWidth() / mVisibleItemCount;
+
+            mCenterY = 0;
+            mCenterX = mCenterPosition * mItemWidth;
+
+            mItemSize = mItemWidth;
+            mCenterPoint = mCenterX;
+        } else {
+            mItemHeight = getMeasuredHeight() / mVisibleItemCount;
+            mItemWidth = getMeasuredWidth();
+
+            mCenterY = mCenterPosition * mItemHeight;
+            mCenterX = 0;
+
+            mItemSize = mItemHeight;
+            mCenterPoint = mCenterY;
+        }
+
+
     }
 
     @Override
@@ -163,21 +224,27 @@ public abstract class ScrollPickerView<T> extends View {
         }
 
         switch (event.getActionMasked()) {
-            // ACTION_DOWN交给mGestureDetector处理
-           /* case MotionEvent.ACTION_DOWN:
-
-                break;*/
             case MotionEvent.ACTION_MOVE:
-                if (Math.abs(event.getY() - mLastMoveY) < 0.1f) {
-                    return true;
+
+                if (mIsHorizontal) {
+                    if (Math.abs(event.getX() - mLastMoveX) < 0.1f) {
+                        return true;
+                    }
+                    mMoveLength += event.getX() - mLastMoveX;
+                } else {
+                    if (Math.abs(event.getY() - mLastMoveY) < 0.1f) {
+                        return true;
+                    }
+                    mMoveLength += event.getY() - mLastMoveY;
                 }
-                mMoveLength += event.getY() - mLastMoveY;
                 mLastMoveY = event.getY();
+                mLastMoveX = event.getX();
                 checkCirculation();
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 mLastMoveY = event.getY();
+                mLastMoveX = event.getX();
                 moveToCenter();
                 break;
         }
@@ -186,41 +253,47 @@ public abstract class ScrollPickerView<T> extends View {
 
 
     /**
-     * @param currY
-     * @param endY
+     * @param curr
+     * @param end
      */
-    private void computeScroll(int currY, int endY) {
-        if (currY != endY) { // 正在滚动
-            // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
-            mMoveLength = mMoveLength + currY - mLastScrollY;
-            mLastScrollY = currY;
+    private void computeScroll(int curr, int end) {
+        if (curr != end) { // 正在滚动
+            if (mIsHorizontal) {
+                // 可以把scroller看做模拟的触屏滑动操作，mLastScrollX为上次滑动的坐标
+                mMoveLength = mMoveLength + curr - mLastScrollX;
+                mLastScrollX = curr;
+            } else {
+                // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
+                mMoveLength = mMoveLength + curr - mLastScrollY;
+                mLastScrollY = curr;
+            }
             checkCirculation();
             invalidate();
         } else { // 滚动完毕
             mIsMovingCenter = false;
             mLastScrollY = 0;
+            mLastScrollX = 0;
 
             // 直接居中，不通过动画
             if (mMoveLength > 0) { //// 向下滑动
-                if (mMoveLength < mItemHeight / 2) {
+                if (mMoveLength < mItemSize / 2) {
                     mMoveLength = 0;
                 } else {
-                    mMoveLength = mItemHeight;
+                    mMoveLength = mItemSize;
                 }
             } else {
-                if (-mMoveLength < mItemHeight / 2) {
+                if (-mMoveLength < mItemSize / 2) {
                     mMoveLength = 0;
                 } else {
-                    mMoveLength = -mItemHeight;
+                    mMoveLength = -mItemSize;
                 }
             }
             checkCirculation();
-//            scroll(mMoveLength, 0);
             mMoveLength = 0;
             mLastScrollY = 0;
+            mLastScrollX = 0;
             notifySelected();
             invalidate();
-//            moveToCenter();
         }
 
     }
@@ -228,9 +301,15 @@ public abstract class ScrollPickerView<T> extends View {
     @Override
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) { // 正在滚动
-            // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
-            mMoveLength = mMoveLength + mScroller.getCurrY() - mLastScrollY;
+            if (mIsHorizontal) {
+                // 可以把scroller看做模拟的触屏滑动操作，mLastScrollX为上次滑动的坐标
+                mMoveLength = mMoveLength + mScroller.getCurrX() - mLastScrollX;
+            } else {
+                // 可以把scroller看做模拟的触屏滑动操作，mLastScrollY为上次滑动的坐标
+                mMoveLength = mMoveLength + mScroller.getCurrY() - mLastScrollY;
+            }
             mLastScrollY = mScroller.getCurrY();
+            mLastScrollX = mScroller.getCurrX();
             checkCirculation(); //　检测当前选中的item
             invalidate();
         } else { // 滚动完毕
@@ -241,6 +320,7 @@ public abstract class ScrollPickerView<T> extends View {
                 mMoveLength = 0;
                 mIsMovingCenter = false;
                 mLastScrollY = 0;
+                mLastScrollX = 0;
                 notifySelected();
             }
         }
@@ -248,6 +328,7 @@ public abstract class ScrollPickerView<T> extends View {
 
     public void cancelScroll() {
         mLastScrollY = 0;
+        mLastScrollX = 0;
         mIsFling = mIsMovingCenter = false;
         mScroller.abortAnimation();
         stopAutoScroll();
@@ -255,19 +336,19 @@ public abstract class ScrollPickerView<T> extends View {
 
     // 检测当前选择的item位置
     private void checkCirculation() {
-        if (mMoveLength >= mItemHeight) { // 向下滑动
+        if (mMoveLength >= mItemSize) { // 向下滑动
             // 该次滚动距离中越过的item数量
-            int span = (int) (mMoveLength / mItemHeight);
+            int span = (int) (mMoveLength / mItemSize);
             mSelected -= span;
             if (mSelected < 0) {  // 滚动顶部，判断是否循环滚动
                 if (mIsCirculation) {
                     do {
                         mSelected = mData.size() + mSelected;
                     } while (mSelected < 0); // 当越过的item数量超过一圈时
-                    mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
+                    mMoveLength = (mMoveLength - mItemSize) % mItemSize;
                 } else { // 非循环滚动
                     mSelected = 0;
-                    mMoveLength = mItemHeight;
+                    mMoveLength = mItemSize;
                     if (mIsFling) { // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
                         mScroller.forceFinished(true);
                     }
@@ -276,22 +357,22 @@ public abstract class ScrollPickerView<T> extends View {
                     }
                 }
             } else {
-                mMoveLength = (mMoveLength - mItemHeight) % mItemHeight;
+                mMoveLength = (mMoveLength - mItemSize) % mItemSize;
             }
 
-        } else if (mMoveLength <= -mItemHeight) { // 向上滑动
+        } else if (mMoveLength <= -mItemSize) { // 向上滑动
             // 该次滚动距离中越过的item数量
-            int span = (int) (-mMoveLength / mItemHeight);
+            int span = (int) (-mMoveLength / mItemSize);
             mSelected += span;
             if (mSelected >= mData.size()) { // 滚动末尾，判断是否循环滚动
                 if (mIsCirculation) {
                     do {
                         mSelected = mSelected - mData.size();
                     } while (mSelected >= mData.size()); // 当越过的item数量超过一圈时
-                    mMoveLength = (mMoveLength + mItemHeight) % mItemHeight;
+                    mMoveLength = (mMoveLength + mItemSize) % mItemSize;
                 } else { // 非循环滚动
                     mSelected = mData.size() - 1;
-                    mMoveLength = -mItemHeight;
+                    mMoveLength = -mItemSize;
                     if (mIsFling) { // 停止惯性滑动，根据computeScroll()中的逻辑，下一步将调用moveToCenter()
                         mScroller.forceFinished(true);
                     }
@@ -300,7 +381,7 @@ public abstract class ScrollPickerView<T> extends View {
                     }
                 }
             } else {
-                mMoveLength = (mMoveLength + mItemHeight) % mItemHeight;
+                mMoveLength = (mMoveLength + mItemSize) % mItemSize;
             }
         }
     }
@@ -315,37 +396,67 @@ public abstract class ScrollPickerView<T> extends View {
 
         // 向下滑动
         if (mMoveLength > 0) {
-            if (mMoveLength < mItemHeight / 2) {
-                scroll(mMoveLength, 0);
+            if (mIsHorizontal) {
+                if (mMoveLength < mItemWidth / 2) {
+                    scroll(mMoveLength, 0);
+                } else {
+                    scroll(mMoveLength, mItemWidth);
+                }
             } else {
-                scroll(mMoveLength, mItemHeight);
+                if (mMoveLength < mItemHeight / 2) {
+                    scroll(mMoveLength, 0);
+                } else {
+                    scroll(mMoveLength, mItemHeight);
+                }
             }
         } else {
-            if (-mMoveLength < mItemHeight / 2) {
-                scroll(mMoveLength, 0);
+            if (mIsHorizontal) {
+                if (-mMoveLength < mItemWidth / 2) {
+                    scroll(mMoveLength, 0);
+                } else {
+                    scroll(mMoveLength, -mItemWidth);
+                }
             } else {
-                scroll(mMoveLength, -mItemHeight);
+                if (-mMoveLength < mItemHeight / 2) {
+                    scroll(mMoveLength, 0);
+                } else {
+                    scroll(mMoveLength, -mItemHeight);
+                }
             }
         }
     }
 
     // 平滑滚动
     private void scroll(float from, int to) {
-
-        mLastScrollY = (int) from;
-        mIsMovingCenter = true;
-        mScroller.startScroll(0, (int) from, 0, 0);
-        mScroller.setFinalY(to);
+        if (mIsHorizontal) {
+            mLastScrollX = (int) from;
+            mIsMovingCenter = true;
+            mScroller.startScroll((int) from, 0, 0, 0);
+            mScroller.setFinalX(to);
+        } else {
+            mLastScrollY = (int) from;
+            mIsMovingCenter = true;
+            mScroller.startScroll(0, (int) from, 0, 0);
+            mScroller.setFinalY(to);
+        }
         invalidate();
     }
 
     // 惯性滑动，
-    private void fling(float from, float vY) {
-        mLastScrollY = (int) from;
-        mIsFling = true;
-        // 最多可以惯性滑动10个item
-        mScroller.fling(0, (int) from, 0, (int) vY, 0, 0, -10 * mItemHeight,
-                10 * mItemHeight);
+    private void fling(float from, float vel) {
+        if (mIsHorizontal) {
+            mLastScrollX = (int) from;
+            mIsFling = true;
+            // 最多可以惯性滑动10个item
+            mScroller.fling((int) from, 0, (int) vel, 0, -10 * mItemWidth,
+                    10 * mItemWidth, 0, 0);
+        } else {
+            mLastScrollY = (int) from;
+            mIsFling = true;
+            // 最多可以惯性滑动10个item
+            mScroller.fling(0, (int) from, 0, (int) vel, 0, 0, -10 * mItemHeight,
+                    10 * mItemHeight);
+        }
         invalidate();
     }
 
@@ -387,18 +498,18 @@ public abstract class ScrollPickerView<T> extends View {
         int aPlan = circle * (mData.size()) * mItemHeight + (mSelected - position) * mItemHeight;
         int bPlan = aPlan + (mData.size()) * mItemHeight; // 多一圈
         // 让其尽量接近length
-        final int endY = Math.abs(length - aPlan) < Math.abs(length - bPlan) ? aPlan : bPlan;
+        final int end = Math.abs(length - aPlan) < Math.abs(length - bPlan) ? aPlan : bPlan;
 
         mAutoScrollAnimator.cancel();
-        mAutoScrollAnimator.setIntValues(0, endY);
+        mAutoScrollAnimator.setIntValues(0, end);
         mAutoScrollAnimator.setInterpolator(interpolator);
         mAutoScrollAnimator.setDuration(duration);
         mAutoScrollAnimator.removeAllUpdateListeners();
-        if (endY != 0) { // itemHeight为0导致endy=0
+        if (end != 0) { // itemHeight为0导致endy=0
             mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    computeScroll((int) animation.getAnimatedValue(), endY);
+                    computeScroll((int) animation.getAnimatedValue(), end);
                     float rate = 0;
                     if (Build.VERSION.SDK_INT >= 12) {
                         rate = animation.getAnimatedFraction();
@@ -412,7 +523,7 @@ public abstract class ScrollPickerView<T> extends View {
             });
             mAutoScrollAnimator.start();
         } else {
-            computeScroll(endY, endY);
+            computeScroll(end, end);
             mIsAutoScrolling = false;
         }
     }
@@ -523,6 +634,7 @@ public abstract class ScrollPickerView<T> extends View {
             // 点击时取消所有滚动效果
             cancelScroll();
             mLastMoveY = e.getY();
+            mLastMoveX = e.getX();
             return true;
         }
 
@@ -532,7 +644,11 @@ public abstract class ScrollPickerView<T> extends View {
             // 惯性滑动
             if (mIsInertiaScroll) {
                 cancelScroll();
-                fling(mMoveLength, velocityY);
+                if (mIsHorizontal) {
+                    fling(mMoveLength, velocityX);
+                } else {
+                    fling(mMoveLength, velocityY);
+                }
             }
             return true;
         }
@@ -540,15 +656,24 @@ public abstract class ScrollPickerView<T> extends View {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             mLastMoveY = e.getY();
+            mLastMoveX = e.getX();
+            float lastMove = 0;
+            if (isHorizontal()) {
+                mCenterPoint = mCenterX;
+                lastMove = mLastMoveX;
+            } else {
+                mCenterPoint = mCenterY;
+                lastMove = mLastMoveY;
+            }
             if (mCanTap && !isScrolling() && !mIsScrollingLastTime) {
-                if (mLastMoveY >= mCenterY && mLastMoveY <= mCenterY + mItemHeight) {
+                if (lastMove >= mCenterPoint && lastMove <= mCenterPoint + mItemSize) {
                     performClick();
-                } else if (mLastMoveY < mCenterY) {
-                    int moveY = mItemHeight;
-                    autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
-                } else if (mLastMoveY > mCenterY + mItemHeight) {
-                    int moveY = -mItemHeight;
-                    autoScrollTo(moveY, 150, sAutoScrollInterpolator, false);
+                } else if (lastMove < mCenterPoint) {
+                    int move = mItemSize;
+                    autoScrollTo(move, 150, sAutoScrollInterpolator, false);
+                } else if (lastMove > mCenterPoint + mItemSize) {
+                    int move = -mItemSize;
+                    autoScrollTo(move, 150, sAutoScrollInterpolator, false);
                 } else {
                     moveToCenter();
                 }
@@ -640,10 +765,47 @@ public abstract class ScrollPickerView<T> extends View {
         return mItemHeight;
     }
 
+    public int getItemWidth() {
+        return mItemWidth;
+    }
+
+    /**
+     * @return 当垂直滚动时，mItemSize = mItemHeight;水平滚动时，mItemSize = mItemWidth
+     */
+    public int getItemSize() {
+        return mItemSize;
+    }
+
+    /**
+     * @return 中间item的起始坐标x(不考虑偏移), 当垂直滚动时，x = mCenterPosition*mItemWidth
+     */
+    public int getCenterX() {
+        return mCenterX;
+    }
+
+    /**
+     * @return 中间item的起始坐标y(不考虑偏移), 当垂直滚动时，y= mCenterPosition*mItemHeight
+     */
+    public int getCenterY() {
+        return mCenterY;
+    }
+
+    /**
+     * @return 当垂直滚动时，mCenterPoint = mCenterY;水平滚动时，mCenterPoint = mCenterX
+     */
+    public int getCenterPoint() {
+        return mCenterPoint;
+    }
+
     public boolean isDisallowTouch() {
         return mDisallowTouch;
     }
 
+    /**
+     * 设置是否允许手动触摸滚动
+     *
+     * @param disallowTouch
+     */
     public void setDisallowTouch(boolean disallowTouch) {
         mDisallowTouch = disallowTouch;
     }
@@ -654,10 +816,10 @@ public abstract class ScrollPickerView<T> extends View {
      * @param centerPosition
      */
     public void setCenterPosition(int centerPosition) {
-        if (mCenterPosition < 0) {
+        if (centerPosition < 0) {
             mCenterPosition = 0;
-        } else if (mCenterPosition > mVisibleItemCount) {
-            mCenterPosition = mVisibleItemCount;
+        } else if (centerPosition >= mVisibleItemCount) {
+            mCenterPosition = mVisibleItemCount - 1;
         } else {
             mCenterPosition = centerPosition;
         }
@@ -698,6 +860,42 @@ public abstract class ScrollPickerView<T> extends View {
      */
     public void setCanTap(boolean canTap) {
         mCanTap = canTap;
+    }
+
+    public boolean isHorizontal() {
+        return mIsHorizontal;
+    }
+
+    public boolean isVertical() {
+        return !mIsHorizontal;
+    }
+
+    public void setHorizontal(boolean horizontal) {
+        if (mIsHorizontal == horizontal) {
+            return;
+        }
+        mIsHorizontal = horizontal;
+        reset();
+        if (mIsHorizontal) {
+            mItemSize = mItemWidth;
+        } else {
+            mItemSize = mItemHeight;
+        }
+        invalidate();
+    }
+
+    public void setVertical(boolean vertical) {
+        if (mIsHorizontal == !vertical) {
+            return;
+        }
+        mIsHorizontal = !vertical;
+        reset();
+        if (mIsHorizontal) {
+            mItemSize = mItemWidth;
+        } else {
+            mItemSize = mItemHeight;
+        }
+        invalidate();
     }
 
     /**
