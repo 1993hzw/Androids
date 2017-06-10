@@ -54,8 +54,9 @@ public class ScrollPickerViewDemo extends Activity {
     private BitmapScrollPicker mPicker02;
     private BitmapScrollPicker mPickerHorizontal;
     private BitmapScrollPicker mPickerHorizontal2;
+    private StringScrollPicker mPickerHorizontal3;
 
-    private Button mBtnPlay;
+    private Button mBtnPlay, mBtnPlay02;
     boolean mIsPlaying = false;
     private SlotMachine mSlotMachine;
 
@@ -75,15 +76,10 @@ public class ScrollPickerViewDemo extends Activity {
         mPicker02 = (BitmapScrollPicker) findViewById(R.id.picker_02);
         mPickerHorizontal = (BitmapScrollPicker) findViewById(R.id.picker_03_horizontal);
         mPickerHorizontal2 = (BitmapScrollPicker) findViewById(R.id.picker_04_horizontal);
-
-        // 不允许父元素拦截事件，设置后可以保证在ScrollView下正常滚动
-        mYearView.setDisallowInterceptTouch(true);
-        mMonthView.setDisallowInterceptTouch(true);
-        mDayView.setDisallowInterceptTouch(true);
-        mPicker01.setDisallowInterceptTouch(true);
-        mPicker02.setDisallowInterceptTouch(true);
+        mPickerHorizontal3 = (StringScrollPicker) findViewById(R.id.picker_05_horizontal);
 
         mBtnPlay = (Button) findViewById(R.id.btn_play);
+        mBtnPlay02 = (Button) findViewById(R.id.btn_play02);
 
         init();
 
@@ -175,13 +171,29 @@ public class ScrollPickerViewDemo extends Activity {
 
 
         mPicker02.setData(bitmaps);
-        mPicker02.setIsCirculation(false); // 设置非循环滚动
-
-        mPickerHorizontal.setHorizontal(true);
         mPickerHorizontal.setData(bitmaps);
-
-        mPickerHorizontal2.setHorizontal(true);
         mPickerHorizontal2.setData(bitmaps);
+        mPickerHorizontal3.setData(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH));
+
+        mPickerHorizontal3.setOnSelectedListener(new ScrollPickerView.OnSelectedListener() {
+            @Override
+            public void onSelected(ScrollPickerView scrollPickerView, int position) {
+                Toast.makeText(ScrollPickerViewDemo.this, "" + (position + 1), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mBtnPlay02.setOnClickListener(new View.OnClickListener() {
+            Random mRandom = new Random();
+
+            @Override
+            public void onClick(View v) {
+                if (mPickerHorizontal.isAutoScrolling() || mPickerHorizontal3.isAutoScrolling()) {
+                    return;
+                }
+                mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000);
+                mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000);
+            }
+        });
     }
 
     // 更新天数

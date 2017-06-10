@@ -5,11 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import java.util.List;
 
 import cn.forward.androids.R;
+import cn.forward.androids.utils.ColorUtil;
 
 /**
  * 图片滚动选择器
@@ -33,7 +35,12 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
     private int mMeasureWidth;
     private int mMeasureHeight;
     private Rect mRect1, mRect2, mSpecifiedSizeRect;
+    private Rect mRectTemp;
     private int mDrawMode = DRAW_MODE_CENTER;
+
+    // item内容缩放倍数
+    private float mMinScale = 1;
+    private float mMaxScale = 1;
 
 
     public BitmapScrollPicker(Context context, AttributeSet attrs) {
@@ -46,6 +53,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         mRect1 = new Rect();
         mRect2 = new Rect();
         mSpecifiedSizeRect = new Rect();
+        mRectTemp = new Rect();
 
         init(attrs);
     }
@@ -53,13 +61,15 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
     private void init(AttributeSet attrs) {
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
-                    R.styleable.ScrollPickerView);
+                    R.styleable.BitmapScrollPicker);
             mDrawMode = typedArray.getInt(
-                    R.styleable.ScrollPickerView_spv_draw_bitmap_mode, mDrawMode);
+                    R.styleable.BitmapScrollPicker_spv_draw_bitmap_mode, mDrawMode);
             mSpecifiedSizeWidth = typedArray.getDimensionPixelOffset(
-                    R.styleable.ScrollPickerView_spv_draw_bitmap_width, mSpecifiedSizeWidth);
+                    R.styleable.BitmapScrollPicker_spv_draw_bitmap_width, mSpecifiedSizeWidth);
             mSpecifiedSizeHeight = typedArray.getDimensionPixelOffset(
-                    R.styleable.ScrollPickerView_spv_draw_bitmap_height, mSpecifiedSizeHeight);
+                    R.styleable.BitmapScrollPicker_spv_draw_bitmap_height, mSpecifiedSizeHeight);
+            mMinScale = typedArray.getFloat(R.styleable.BitmapScrollPicker_spv_min_scale, mMinScale);
+            mMaxScale = typedArray.getFloat(R.styleable.BitmapScrollPicker_spv_max_scale, mMaxScale);
             typedArray.recycle();
         }
     }
@@ -124,26 +134,24 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
                 mRect2.top = (int) top + span;
                 mRect2.bottom = (int) (top + itemSize - span);
             }
-            canvas.drawBitmap(bitmap, mRect1, mRect2, null);
+            mRectTemp.set(mRect2);
+            scale(mRectTemp, relative, itemSize, moveLength);
+            canvas.drawBitmap(bitmap, mRect1, mRectTemp, null);
         } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
             if (isHorizontal()) {
                 span = (itemSize - mSpecifiedSizeWidth) / 2;
-                if (span < 0) { // 图片不能超过item
-                    span = 0;
-                }
 
                 mSpecifiedSizeRect.left = (int) top + span;
                 mSpecifiedSizeRect.right = (int) top + span + mSpecifiedSizeWidth;
             } else {
                 span = (itemSize - mSpecifiedSizeHeight) / 2;
-                if (span < 0) { // 图片不能超过item
-                    span = 0;
-                }
 
                 mSpecifiedSizeRect.top = (int) top + span;
                 mSpecifiedSizeRect.bottom = (int) top + span + mSpecifiedSizeHeight;
             }
-            canvas.drawBitmap(bitmap, mRect1, mSpecifiedSizeRect, null);
+            mRectTemp.set(mSpecifiedSizeRect);
+            scale(mRectTemp, relative, itemSize, moveLength);
+            canvas.drawBitmap(bitmap, mRect1, mRectTemp, null);
         } else {
             if (isHorizontal()) {
                 float scale = mRect2.height() * 1f / bitmap.getHeight();
@@ -151,9 +159,6 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
             } else {
                 float scale = mRect2.width() * 1f / bitmap.getWidth();
                 span = (int) ((itemSize - bitmap.getHeight() * scale) / 2);
-            }
-            if (span < 0) { // 图片不能超过item
-                span = 0;
             }
             if (isHorizontal()) {
                 mRect2.left = (int) (top + span);
@@ -163,9 +168,53 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
                 mRect2.top = (int) (top + span);
                 mRect2.bottom = (int) (top + itemSize - span);
             }
-            canvas.drawBitmap(bitmap, mRect1, mRect2, null);
+            mRectTemp.set(mRect2);
+            scale(mRectTemp, relative, itemSize, moveLength);
+            canvas.drawBitmap(bitmap, mRect1, mRectTemp, null);
+        }
+    }
+
+    private void scale(Rect rect, int relative, int itemSize, float moveLength) {
+        if (mMinScale == 1 && mMaxScale == 1) {
+            return;
         }
 
+        float spanWidth, spanHeight;
+
+        if (mMinScale == mMaxScale) {
+            spanWidth = (rect.width() - mMinScale * rect.width()) / 2;
+            spanHeight = (rect.height() - mMinScale * rect.height()) / 2;
+            rect.left += spanWidth;
+            rect.right -= spanWidth;
+            rect.top += spanHeight;
+            rect.bottom -= spanHeight;
+            return;
+        }
+
+        if (relative == -1 || relative == 1) { // 上一个或下一个
+            // 处理上一个item且向上滑动　或者　处理下一个item且向下滑动,
+            if ((relative == -1 && moveLength < 0)
+                    || (relative == 1 && moveLength > 0)) {
+                spanWidth = (rect.width() - mMinScale * rect.width()) / 2;
+                spanHeight = (rect.height() - mMinScale * rect.height()) / 2;
+            } else { // 计算渐变
+                float rate = Math.abs(moveLength) / itemSize;
+                spanWidth = (rect.width() - (mMinScale + (mMaxScale - mMinScale) * rate) * rect.width()) / 2;
+                spanHeight = (rect.height() - (mMinScale + (mMaxScale - mMinScale) * rate) * rect.height()) / 2;
+            }
+        } else if (relative == 0) { // 中间item
+            float rate = (itemSize - Math.abs(moveLength)) / itemSize;
+            spanWidth = (rect.width() - (mMinScale + (mMaxScale - mMinScale) * rate) * rect.width()) / 2;
+            spanHeight = (rect.height() - (mMinScale + (mMaxScale - mMinScale) * rate) * rect.height()) / 2;
+        } else {
+            spanWidth = (rect.width() - mMinScale * rect.width()) / 2;
+            spanHeight = (rect.height() - mMinScale * rect.height()) / 2;
+        }
+
+        rect.left += spanWidth;
+        rect.right -= spanWidth;
+        rect.top += spanHeight;
+        rect.bottom -= spanHeight;
 
     }
 
@@ -217,8 +266,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         }
         mSpecifiedSizeWidth = width;
         mSpecifiedSizeHeight = height;
-
-
+        invalidate();
     }
 
     /**
@@ -230,4 +278,23 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         return mDrawMode;
     }
 
+    /**
+     * item内容缩放倍数
+     *
+     * @param minScale 沒有被选中时的最小倍数
+     * @param maxScale 被选中时的最大倍数
+     */
+    public void setItemScale(float minScale, float maxScale) {
+        mMinScale = minScale;
+        mMaxScale = maxScale;
+        invalidate();
+    }
+
+    public float getMinScale() {
+        return mMinScale;
+    }
+
+    public float getMaxScale() {
+        return mMaxScale;
+    }
 }

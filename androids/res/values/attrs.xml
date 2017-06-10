@@ -50,11 +50,7 @@
     </declare-styleable>
 
     <declare-styleable name="ScrollPickerView">
-        <attr name="spv_min_text_size" format="dimension"/>
-        <attr name="spv_max_text_size" format="dimension"/>
-        <attr name="spv_start_color" format="color"/>
-        <attr name="spv_end_color" format="color"/>
-        <attr name="spv_center_item_background" format="color"/>
+        <attr name="spv_center_item_background" format="reference|color"/>
         <attr name="spv_visible_item_count" format="integer"/>
         <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
         <attr name="spv_center_item_position" format="integer"/>
@@ -62,12 +58,21 @@
         <attr name="spv_is_circulation" format="boolean"/>
         <!-- 不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效 -->
         <attr name="spv_disallow_intercept_touch" format="boolean"/>
-
         <!-- 滚动的方向-->
         <attr name="spv_orientation" format="string">
             <enum name="horizontal" value="1"/>
             <enum name="vertical" value="2"/>
         </attr>
+    </declare-styleable>
+
+    <declare-styleable name="StringScrollPicker">
+        <attr name="spv_min_text_size" format="dimension"/>
+        <attr name="spv_max_text_size" format="dimension"/>
+        <attr name="spv_start_color" format="color"/>
+        <attr name="spv_end_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="BitmapScrollPicker">
         <!-- 绘制图片的方式-->
         <attr name="spv_draw_bitmap_mode" format="string">
             <enum name="fill" value="1"/>
@@ -77,6 +82,9 @@
         <!-- 绘制图片的方式为size时，指定的图片绘制大小-->
         <attr name="spv_draw_bitmap_width" format="dimension"/>
         <attr name="spv_draw_bitmap_height" format="dimension"/>
+        <!-- item内容缩放倍数-->
+        <attr name="spv_min_scale" format="float"/>
+        <attr name="spv_max_scale" format="float"/>
     </declare-styleable>
 
     <declare-styleable name="RoundProgressBar">

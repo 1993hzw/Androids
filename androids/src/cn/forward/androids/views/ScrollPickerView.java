@@ -6,9 +6,12 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -68,7 +71,7 @@ public abstract class ScrollPickerView<T> extends View {
     private boolean mDisallowTouch = false; // 不允许触摸
 
     private Paint mPaint; //
-    private int mCenterItemBackground = Color.TRANSPARENT; // 中间选中item的背景色
+    private Drawable mCenterItemBackground = null; // 中间选中item的背景色
 
     private boolean mCanTap = true; // 单击切换选项或触发点击监听器
 
@@ -97,9 +100,10 @@ public abstract class ScrollPickerView<T> extends View {
         if (attrs != null) {
             TypedArray typedArray = getContext().obtainStyledAttributes(attrs,
                     R.styleable.ScrollPickerView);
-            setCenterItemBackground(typedArray.getColor(
-                    R.styleable.ScrollPickerView_spv_center_item_background,
-                    getCenterItemBackground()));
+
+            if (typedArray.hasValue(R.styleable.ScrollPickerView_spv_center_item_background)) {
+                    setCenterItemBackground(typedArray.getDrawable(R.styleable.ScrollPickerView_spv_center_item_background));
+            }
             setVisibleItemCount(typedArray.getInt(
                     R.styleable.ScrollPickerView_spv_visible_item_count,
                     getVisibleItemCount()));
@@ -108,7 +112,7 @@ public abstract class ScrollPickerView<T> extends View {
                     getCenterPosition()));
             setIsCirculation(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_is_circulation, isIsCirculation()));
             setDisallowInterceptTouch(typedArray.getBoolean(R.styleable.ScrollPickerView_spv_disallow_intercept_touch, isDisallowInterceptTouch()));
-
+            setHorizontal(typedArray.getInt(R.styleable.ScrollPickerView_spv_orientation, mIsHorizontal ? 1 : 2) == 1);
             typedArray.recycle();
         }
     }
@@ -120,46 +124,42 @@ public abstract class ScrollPickerView<T> extends View {
         if (mData == null || mData.size() <= 0) {
             return;
         }
-        if (mIsHorizontal) {
-            mCenterPoint = mCenterX;
-        } else {
-            mCenterPoint = mCenterY;
-        }
-
-        // 中间item
-        mPaint.setColor(mCenterItemBackground);
 
         // 选中item的背景色
-        canvas.drawRect(mCenterX, mCenterY, mCenterX + mItemWidth, mCenterY + mItemHeight, mPaint);
+        if (mCenterItemBackground != null) {
+            mCenterItemBackground.draw(canvas);
+        }
 
-        drawItem(canvas, mData, mSelected, 0, mMoveLength, mCenterPoint + mMoveLength);
-
+        // 只绘制可见的item
         int length = Math.max(mCenterPosition + 1, mVisibleItemCount - mCenterPosition);
-        int positon;
+        int position;
+        int start = Math.min(length, mData.size());
         // 上下两边
-        for (int i = 1; i <= length && i <= mData.size(); i++) {
+        for (int i = start; i >= 1; i--) { // 先从远离中间位置的item绘制，当item内容偏大时，较近的item覆盖在较远的上面
 
             if (i <= mCenterPosition + 1) {  // 上面的items,相对位置为 -i
-                positon = mSelected - i < 0 ? mData.size() + mSelected - i
+                position = mSelected - i < 0 ? mData.size() + mSelected - i
                         : mSelected - i;
                 // 传入位置信息，绘制item
                 if (mIsCirculation) {
-                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
+                    drawItem(canvas, mData, position, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
                 } else if (mSelected - i >= 0) { // 非循环滚动
-                    drawItem(canvas, mData, positon, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
+                    drawItem(canvas, mData, position, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
                 }
             }
             if (i <= mVisibleItemCount - mCenterPosition) {  // 下面的items,相对位置为 i
-                positon = mSelected + i >= mData.size() ? mSelected + i
+                position = mSelected + i >= mData.size() ? mSelected + i
                         - mData.size() : mSelected + i;
                 // 传入位置信息，绘制item
                 if (mIsCirculation) {
-                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
+                    drawItem(canvas, mData, position, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
                 } else if (mSelected + i < mData.size()) { // 非循环滚动
-                    drawItem(canvas, mData, positon, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
+                    drawItem(canvas, mData, position, i, mMoveLength, mCenterPoint + mMoveLength + i * mItemSize);
                 }
             }
         }
+        // 选中的item
+        drawItem(canvas, mData, mSelected, 0, mMoveLength, mCenterPoint + mMoveLength);
     }
 
     /**
@@ -210,6 +210,9 @@ public abstract class ScrollPickerView<T> extends View {
             mCenterPoint = mCenterY;
         }
 
+        if (mCenterItemBackground != null) {
+            mCenterItemBackground.setBounds(mCenterX, mCenterY, mCenterX + mItemWidth, mCenterY + mItemHeight);
+        }
 
     }
 
@@ -492,11 +495,11 @@ public abstract class ScrollPickerView<T> extends View {
 
 
         int length = (int) (speed * duration);
-        int circle = (int) (length * 1f / (mData.size() * mItemHeight) + 0.5f); // 圈数
+        int circle = (int) (length * 1f / (mData.size() * mItemSize) + 0.5f); // 圈数
         circle = circle <= 0 ? 1 : circle;
 
-        int aPlan = circle * (mData.size()) * mItemHeight + (mSelected - position) * mItemHeight;
-        int bPlan = aPlan + (mData.size()) * mItemHeight; // 多一圈
+        int aPlan = circle * (mData.size()) * mItemSize + (mSelected - position) * mItemSize;
+        int bPlan = aPlan + (mData.size()) * mItemSize; // 多一圈
         // 让其尽量接近length
         final int end = Math.abs(length - aPlan) < Math.abs(length - bPlan) ? aPlan : bPlan;
 
@@ -757,6 +760,9 @@ public abstract class ScrollPickerView<T> extends View {
         invalidate();
     }
 
+    /**
+     * 是否允许父元素拦截事件，设置true后可以保证在ScrollView下正常滚动
+     */
     public void setDisallowInterceptTouch(boolean disallowInterceptTouch) {
         mDisallowInterceptTouch = disallowInterceptTouch;
     }
@@ -836,17 +842,36 @@ public abstract class ScrollPickerView<T> extends View {
         return mCenterPosition;
     }
 
-    public void setCenterItemBackground(int centerItemBackground) {
+    public void setCenterItemBackground(Drawable centerItemBackground) {
         mCenterItemBackground = centerItemBackground;
+        mCenterItemBackground.setBounds(mCenterX, mCenterY, mCenterX + mItemWidth, mCenterY + mItemHeight);
         invalidate();
     }
 
-    public int getCenterItemBackground() {
+    public void setCenterItemBackground(int centerItemBackgroundColor) {
+        mCenterItemBackground = new ColorDrawable(centerItemBackgroundColor);
+        mCenterItemBackground.setBounds(mCenterX, mCenterY, mCenterX + mItemWidth, mCenterY + mItemHeight);
+        invalidate();
+    }
+
+    public Drawable getCenterItemBackground() {
         return mCenterItemBackground;
     }
 
     public boolean isScrolling() {
         return mIsFling || mIsMovingCenter || mIsAutoScrolling;
+    }
+
+    public boolean isFling() {
+        return mIsFling;
+    }
+
+    public boolean isMovingCenter() {
+        return mIsMovingCenter;
+    }
+
+    public boolean isAutoScrolling() {
+        return mIsAutoScrolling;
     }
 
     public boolean isCanTap() {

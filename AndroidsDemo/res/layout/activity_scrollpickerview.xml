@@ -47,7 +47,7 @@
         <com.example.androidsdemo.view.SlotMachine
             android:id="@+id/slotmachine"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></com.example.androidsdemo.view.SlotMachine>
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,6 +105,7 @@
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 app:spv_center_item_background="#22888888"
+                app:spv_disallow_intercept_touch="true"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -115,6 +116,7 @@
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 app:spv_center_item_background="#22888888"
+                app:spv_disallow_intercept_touch="true"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -125,6 +127,7 @@
                 android:layout_height="120dp"
                 android:layout_weight="1"
                 app:spv_center_item_background="#22888888"
+                app:spv_disallow_intercept_touch="true"
                 app:spv_max_text_size="30dp"
                 app:spv_min_text_size="24dp"
                 app:spv_visible_item_count="3"/>
@@ -156,6 +159,7 @@
                 android:layout_weight="1"
                 android:background="#eeeeee"
                 app:spv_center_item_position="0"
+                app:spv_disallow_intercept_touch="true"
                 app:spv_is_circulation="false"
                 app:spv_max_text_size="36dp"
                 app:spv_min_text_size="21dp"
@@ -168,49 +172,99 @@
                 android:layout_height="220dp"
                 android:layout_weight="1"
                 android:background="#888888"
+                app:spv_disallow_intercept_touch="true"
+                app:spv_draw_bitmap_height="50dp"
+                app:spv_draw_bitmap_mode="center"
+                app:spv_draw_bitmap_width="50dp"
+                app:spv_is_circulation="false"
+                app:spv_max_scale="1.2"
+                app:spv_min_scale="0.6"
                 app:spv_visible_item_count="3"
                 />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:minHeight="50dp"
-            android:text="水平滚动"
-            android:textColor="#000000"
-            android:textSize="18dp"
-            />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:minHeight="50dp"
+                android:text="水平滚动"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
+
+            <Button
+                android:id="@+id/btn_play02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="play"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                />
+        </LinearLayout>
+
+
+        <cn.forward.androids.views.StringScrollPicker
+            android:id="@+id/picker_05_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:background="#22888888"
+            app:spv_center_item_background="@drawable/slot_06"
+            app:spv_disallow_intercept_touch="true"
+            app:spv_draw_bitmap_height="40dp"
+            app:spv_draw_bitmap_mode="size"
+            app:spv_draw_bitmap_width="40dp"
+            app:spv_is_circulation="true"
+            app:spv_max_text_size="72dp"
+            app:spv_min_text_size="32dp"
+            app:spv_orientation="horizontal"
+            app:spv_visible_item_count="5"/>
 
         <cn.forward.androids.views.BitmapScrollPicker
             android:id="@+id/picker_03_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:layout_marginTop="10dp"
             android:background="#888888"
+            app:spv_center_item_background="#aa0000"
             app:spv_disallow_intercept_touch="true"
-            app:spv_draw_bitmap_mode="fill"
+            app:spv_draw_bitmap_height="50dp"
+            app:spv_draw_bitmap_mode="size"
+            app:spv_draw_bitmap_width="50dp"
+            app:spv_is_circulation="true"
+            app:spv_max_scale="1.3"
+            app:spv_min_scale="0.8"
+            app:spv_orientation="horizontal"
             app:spv_visible_item_count="5"
-            app:spv_center_item_background="#000099"
             />
 
         <cn.forward.androids.views.BitmapScrollPicker
             android:id="@+id/picker_04_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="30dp"
             android:layout_marginTop="10dp"
             android:background="#888888"
-            app:spv_center_item_background="#aa0000"
+            app:spv_center_item_background="#000099"
             app:spv_center_item_position="1"
             app:spv_disallow_intercept_touch="true"
-            app:spv_draw_bitmap_height="40dp"
-            app:spv_draw_bitmap_mode="size"
-            app:spv_draw_bitmap_width="40dp"
+            app:spv_draw_bitmap_mode="fill"
             app:spv_is_circulation="false"
-            app:spv_visible_item_count="4"
+            app:spv_orientation="horizontal"
+            app:spv_visible_item_count="5"
             />
+
+
     </LinearLayout>
 
 </ScrollView>
