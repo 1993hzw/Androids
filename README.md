@@ -4,7 +4,7 @@ Androids
 ### 使用
 ```
 dependencies {
-    compile 'com.forward.androids:androids:1.1'
+    compile 'com.forward.androids:androids:1.1.5'
 }
 ```
 
@@ -34,7 +34,9 @@ dependencies {
   滚动选择器，支持循环滚动，可实现生日选择器，老虎机等
 
   [《 Android自定义view——滚动选择器》](http://blog.csdn.net/u012964944/article/details/50847973)
-  
+ 
+  [《 android图片滚动选择器的实现》](http://blog.csdn.net/u012964944/article/details/70172885)
+    
   * #### AnimatorUtil
   对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
 
