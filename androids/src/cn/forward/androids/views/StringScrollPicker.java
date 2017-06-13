@@ -141,18 +141,18 @@ public class StringScrollPicker extends ScrollPickerView<String> {
         }
         float x = 0;
         float y = 0;
-        if (isHorizontal()) {
+        if (isHorizontal()) { // 水平滚动
             Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
             x = top + (itemSize - mPaint.measureText(text)) / 2;
             y = mMeasureHeight / 2 - fmi.descent + (fmi.bottom - fmi.top) / 2;
-        } else {
+        } else { // 垂直滚动
             x = (mMeasureWidth - mPaint.measureText(text)) / 2;
             Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
             // 绘制文字时，文字的baseline是对齐ｙ坐标的，下面换算使其垂直居中。fmi.top值是相对baseline的，为负值
             y = top + itemSize / 2
                     - fmi.descent + (fmi.bottom - fmi.top) / 2;
         }
-
+        // 计算渐变颜色
         computeColor(relative, itemSize, moveLength);
         canvas.drawText(text, x, y, mPaint);
     }

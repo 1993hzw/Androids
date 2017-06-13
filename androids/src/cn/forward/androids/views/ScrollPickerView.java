@@ -168,9 +168,9 @@ public abstract class ScrollPickerView<T> extends View {
      * @param canvas
      * @param data       　数据集
      * @param position   在data数据集中的位置
-     * @param relative   相对中间item的位置,relative=position-getSelected()
-     * @param moveLength 中间item滚动的距离，moveLength<0则表示向上滚动的距离，moveLength＞0则表示向上滚动
-     * @param top        当前绘制item的顶部坐标
+     * @param relative   相对中间item的位置,relative==0表示中间item,relative<0表示上（左）边的item,relative>0表示下(右)边的item
+     * @param moveLength 中间item滚动的距离，moveLength<0则表示向上（右）滚动的距离，moveLength＞0则表示向下（左）滚动的距离
+     * @param top        当前绘制item的坐标,当垂直滚动时为顶部y的坐标；当水平滚动时为item最左边x的坐标
      */
     public abstract void drawItem(Canvas canvas, List<T> data, int position, int relative, float moveLength, float top);
 

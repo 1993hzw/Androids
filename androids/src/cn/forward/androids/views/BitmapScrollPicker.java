@@ -79,18 +79,8 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         super.onSizeChanged(w, h, oldw, oldh);
         mMeasureWidth = getMeasuredWidth();
         mMeasureHeight = getMeasuredHeight();
-
-        mRect1.left = 0;
-        mRect1.top = 0;
-
-        int size;
-        if (isHorizontal()) {
-            size = Math.min(mMeasureHeight, getItemWidth());
-        } else {
-            size = Math.min(mMeasureWidth, getItemHeight());
-        }
-
-        if (mDrawMode == DRAW_MODE_FULL) {
+        // 当view的的大小确定后，选择器中item的某些位置也可确定。当水平滚动时，item的顶部和底部的坐标y可确定；当垂直滚动时，item的左边和右边的坐标x可确定
+        if (mDrawMode == DRAW_MODE_FULL) { // 填充
             if (isHorizontal()) {
                 mRect2.top = 0;
                 mRect2.bottom = mMeasureHeight;
@@ -98,13 +88,19 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
                 mRect2.left = 0;
                 mRect2.right = mMeasureWidth;
             }
-        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
+        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) { // 指定大小
             if (mSpecifiedSizeWidth == -1) {
                 mSpecifiedSizeWidth = mMeasureWidth;
                 mSpecifiedSizeHeight = mMeasureHeight;
             }
             setDrawModeSpecifiedSize(mSpecifiedSizeWidth, mSpecifiedSizeHeight);
         } else { // 居中
+            int size;
+            if (isHorizontal()) {
+                size = Math.min(mMeasureHeight, getItemWidth());
+            } else {
+                size = Math.min(mMeasureWidth, getItemHeight());
+            }
             if (isHorizontal()) {
                 mRect2.top = mMeasureHeight / 2 - size / 2;
                 mRect2.bottom = mMeasureHeight / 2 + size / 2;
@@ -125,7 +121,10 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
 
         int span = 0;
 
-        if (mDrawMode == DRAW_MODE_FULL) {
+        // 根据不同的绘制模式，计算出item内容的最终绘制位置和大小
+        // 当水平滚动时，计算item的左边和右边的坐标x；当垂直滚动时，item的顶部和底部的坐标y
+
+        if (mDrawMode == DRAW_MODE_FULL) { // 填充
             span = 0;
             if (isHorizontal()) {
                 mRect2.left = (int) top + span;
@@ -137,7 +136,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
             mRectTemp.set(mRect2);
             scale(mRectTemp, relative, itemSize, moveLength);
             canvas.drawBitmap(bitmap, mRect1, mRectTemp, null);
-        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) {
+        } else if (mDrawMode == DRAW_MODE_SPECIFIED_SIZE) { // 指定大小
             if (isHorizontal()) {
                 span = (itemSize - mSpecifiedSizeWidth) / 2;
 
@@ -152,7 +151,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
             mRectTemp.set(mSpecifiedSizeRect);
             scale(mRectTemp, relative, itemSize, moveLength);
             canvas.drawBitmap(bitmap, mRect1, mRectTemp, null);
-        } else {
+        } else { // 居中
             if (isHorizontal()) {
                 float scale = mRect2.height() * 1f / bitmap.getHeight();
                 span = (int) ((itemSize - bitmap.getWidth() * scale) / 2);
@@ -174,6 +173,7 @@ public class BitmapScrollPicker extends ScrollPickerView<Bitmap> {
         }
     }
 
+    // 缩放item内容
     private void scale(Rect rect, int relative, int itemSize, float moveLength) {
         if (mMinScale == 1 && mMaxScale == 1) {
             return;

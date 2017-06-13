@@ -36,6 +36,8 @@ dependencies {
   [《 Android自定义view——滚动选择器》](http://blog.csdn.net/u012964944/article/details/50847973)
  
   [《 android图片滚动选择器的实现》](http://blog.csdn.net/u012964944/article/details/70172885)
+ 
+  [《 Android滚动选择器——水平滚动》](http://blog.csdn.net/u012964944/article/details/73189206)
     
   * #### AnimatorUtil
   对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
