@@ -102,7 +102,7 @@ public abstract class ScrollPickerView<T> extends View {
                     R.styleable.ScrollPickerView);
 
             if (typedArray.hasValue(R.styleable.ScrollPickerView_spv_center_item_background)) {
-                    setCenterItemBackground(typedArray.getDrawable(R.styleable.ScrollPickerView_spv_center_item_background));
+                setCenterItemBackground(typedArray.getDrawable(R.styleable.ScrollPickerView_spv_center_item_background));
             }
             setVisibleItemCount(typedArray.getInt(
                     R.styleable.ScrollPickerView_spv_visible_item_count,
@@ -259,8 +259,8 @@ public abstract class ScrollPickerView<T> extends View {
      * @param curr
      * @param end
      */
-    private void computeScroll(int curr, int end) {
-        if (curr != end) { // 正在滚动
+    private void computeScroll(int curr, int end, float rate) {
+        if (rate < 1) { // 正在滚动
             if (mIsHorizontal) {
                 // 可以把scroller看做模拟的触屏滑动操作，mLastScrollX为上次滑动的坐标
                 mMoveLength = mMoveLength + curr - mLastScrollX;
@@ -512,13 +512,13 @@ public abstract class ScrollPickerView<T> extends View {
             mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    computeScroll((int) animation.getAnimatedValue(), end);
                     float rate = 0;
                     if (Build.VERSION.SDK_INT >= 12) {
                         rate = animation.getAnimatedFraction();
                     } else {
                         rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
                     }
+                    computeScroll((int) animation.getAnimatedValue(), end, rate);
                     if (rate >= 1) {
                         mIsAutoScrolling = false;
                     }
@@ -526,7 +526,7 @@ public abstract class ScrollPickerView<T> extends View {
             });
             mAutoScrollAnimator.start();
         } else {
-            computeScroll(end, end);
+            computeScroll(end, end, 1);
             mIsAutoScrolling = false;
         }
     }
@@ -584,13 +584,13 @@ public abstract class ScrollPickerView<T> extends View {
         mAutoScrollAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                computeScroll((int) animation.getAnimatedValue(), endY);
                 float rate = 0;
                 if (Build.VERSION.SDK_INT >= 12) {
                     rate = animation.getAnimatedFraction();
                 } else {
                     rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
                 }
+                computeScroll((int) animation.getAnimatedValue(), endY, rate);
                 if (rate >= 1) {
                     mIsAutoScrolling = false;
                     mDisallowTouch = temp;

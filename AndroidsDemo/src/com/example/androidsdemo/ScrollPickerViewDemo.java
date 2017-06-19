@@ -1,10 +1,13 @@
 package com.example.androidsdemo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -190,7 +193,25 @@ public class ScrollPickerViewDemo extends Activity {
                 if (mPickerHorizontal.isAutoScrolling() || mPickerHorizontal3.isAutoScrolling()) {
                     return;
                 }
-                mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000);
+                mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000, mPickerHorizontal.dip2px(0.6f),
+                        new BounceInterpolator() {
+
+                            // 回弹两次
+                            private float rebound(float fraction) {
+                                return fraction * fraction * 4;
+                            }
+
+                            @Override
+                            public float getInterpolation(float input) {
+                                if (input < 0.5)
+                                    return rebound(input);
+                                else if (input < 0.85)
+                                    return rebound(input - 0.675f) + 0.8875f;
+                                else
+                                    return rebound(input - 0.925f) + 0.9775f;
+                            }
+
+                        });
                 mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000);
             }
         });
