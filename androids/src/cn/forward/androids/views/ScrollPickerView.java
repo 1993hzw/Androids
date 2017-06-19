@@ -1,17 +1,16 @@
 package cn.forward.androids.views;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -513,15 +512,16 @@ public abstract class ScrollPickerView<T> extends View {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float rate = 0;
-                    if (Build.VERSION.SDK_INT >= 12) {
-                        rate = animation.getAnimatedFraction();
-                    } else {
-                        rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
-                    }
+                    rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
                     computeScroll((int) animation.getAnimatedValue(), end, rate);
-                    if (rate >= 1) {
-                        mIsAutoScrolling = false;
-                    }
+                }
+            });
+            mAutoScrollAnimator.removeAllListeners();
+            mAutoScrollAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mIsAutoScrolling = false;
                 }
             });
             mAutoScrollAnimator.start();
@@ -585,16 +585,17 @@ public abstract class ScrollPickerView<T> extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float rate = 0;
-                if (Build.VERSION.SDK_INT >= 12) {
-                    rate = animation.getAnimatedFraction();
-                } else {
-                    rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
-                }
+                rate = animation.getCurrentPlayTime() * 1f / animation.getDuration();
                 computeScroll((int) animation.getAnimatedValue(), endY, rate);
-                if (rate >= 1) {
-                    mIsAutoScrolling = false;
-                    mDisallowTouch = temp;
-                }
+            }
+        });
+        mAutoScrollAnimator.removeAllListeners();
+        mAutoScrollAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mIsAutoScrolling = false;
+                mDisallowTouch = temp;
             }
         });
         mAutoScrollAnimator.start();

@@ -193,7 +193,8 @@ public class ScrollPickerViewDemo extends Activity {
                 if (mPickerHorizontal.isAutoScrolling() || mPickerHorizontal3.isAutoScrolling()) {
                     return;
                 }
-                mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000, mPickerHorizontal.dip2px(0.6f),
+                mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000);
+                mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000,mPickerHorizontal.dip2px(0.6f),
                         new BounceInterpolator() {
 
                             // 回弹两次
@@ -212,7 +213,6 @@ public class ScrollPickerViewDemo extends Activity {
                             }
 
                         });
-                mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000);
             }
         });
     }
