@@ -76,6 +76,8 @@ public abstract class ScrollPickerView<T> extends View {
 
     private boolean mIsHorizontal = false; // 是否水平滚动
 
+    private boolean mDrawAllItem = false; // 是否绘制每个item(包括在边界外的item)
+
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -133,10 +135,13 @@ public abstract class ScrollPickerView<T> extends View {
         int length = Math.max(mCenterPosition + 1, mVisibleItemCount - mCenterPosition);
         int position;
         int start = Math.min(length, mData.size());
+        if (mDrawAllItem) {
+            start = mData.size();
+        }
         // 上下两边
         for (int i = start; i >= 1; i--) { // 先从远离中间位置的item绘制，当item内容偏大时，较近的item覆盖在较远的上面
 
-            if (i <= mCenterPosition + 1) {  // 上面的items,相对位置为 -i
+            if (mDrawAllItem || i <= mCenterPosition + 1) {  // 上面的items,相对位置为 -i
                 position = mSelected - i < 0 ? mData.size() + mSelected - i
                         : mSelected - i;
                 // 传入位置信息，绘制item
@@ -146,7 +151,7 @@ public abstract class ScrollPickerView<T> extends View {
                     drawItem(canvas, mData, position, -i, mMoveLength, mCenterPoint + mMoveLength - i * mItemSize);
                 }
             }
-            if (i <= mVisibleItemCount - mCenterPosition) {  // 下面的items,相对位置为 i
+            if (mDrawAllItem || i <= mVisibleItemCount - mCenterPosition) {  // 下面的items,相对位置为 i
                 position = mSelected + i >= mData.size() ? mSelected + i
                         - mData.size() : mSelected + i;
                 // 传入位置信息，绘制item
@@ -922,6 +927,14 @@ public abstract class ScrollPickerView<T> extends View {
             mItemSize = mItemHeight;
         }
         invalidate();
+    }
+
+    public boolean isDrawAllItem() {
+        return mDrawAllItem;
+    }
+
+    public void setDrawAllItem(boolean drawAllItem) {
+        mDrawAllItem = drawAllItem;
     }
 
     /**

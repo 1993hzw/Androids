@@ -4,7 +4,7 @@ Androids
 ### 使用
 ```
 dependencies {
-    compile 'com.forward.androids:androids:1.1.5'
+    compile 'com.forward.androids:androids:1.1.6'
 }
 ```
 
@@ -55,4 +55,8 @@ dependencies {
   [《Android自定义View——可拖拽的ListView》](http://blog.csdn.net/u012964944/article/details/52086674)
   
 
+### 更新
 
+* v1.1.6（9） 
+
+文字滚动选择器支持文字换行.

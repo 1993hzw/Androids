@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
@@ -90,9 +91,9 @@ public class ScrollPickerViewDemo extends Activity {
 
     private void init() {
         // 设置数据
-        mYearView.setData(new ArrayList<String>(Arrays.asList(YEARS)));
-        mMonthView.setData(new ArrayList<String>(Arrays.asList(MONTHS)));
-        mDayView.setData(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH));
+        mYearView.setData(new ArrayList<CharSequence>(Arrays.asList(YEARS)));
+        mMonthView.setData(new ArrayList<CharSequence>(Arrays.asList(MONTHS)));
+        mDayView.setData(new ArrayList<CharSequence>(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH)));
 
         // 设置初始值
         mYearView.setSelectedPosition(mYearView.getData().indexOf(
@@ -106,7 +107,7 @@ public class ScrollPickerViewDemo extends Activity {
             public void onSelected(ScrollPickerView view, int position) {
                 LogUtil.i("hzw", "year " + mYearView.getSelectedItem());
 
-                int month = Integer.parseInt(mMonthView.getSelectedItem());
+                int month = Integer.parseInt(mMonthView.getSelectedItem() + "");
                 // ２月份,更新天数
                 if (month == 2) {
                     changeMonthDays();
@@ -176,7 +177,13 @@ public class ScrollPickerViewDemo extends Activity {
         mPicker02.setData(bitmaps);
         mPickerHorizontal.setData(bitmaps);
         mPickerHorizontal2.setData(bitmaps);
-        mPickerHorizontal3.setData(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH));
+        List<String> list = DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH);
+        List<CharSequence> newList = new ArrayList<>();
+        for (String s : list) {
+            s = "No." + "<br/>" + "<font color='#ff0000'>" + s + "</font>";
+            newList.add(Html.fromHtml(s));
+        }
+        mPickerHorizontal3.setData(newList);
 
         mPickerHorizontal3.setOnSelectedListener(new ScrollPickerView.OnSelectedListener() {
             @Override
@@ -194,7 +201,7 @@ public class ScrollPickerViewDemo extends Activity {
                     return;
                 }
                 mPickerHorizontal.autoScrollFast(mRandom.nextInt(mPickerHorizontal.getData().size()), 4000);
-                mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000,mPickerHorizontal.dip2px(0.6f),
+                mPickerHorizontal3.autoScrollFast(mRandom.nextInt(mPickerHorizontal3.getData().size()), 5000, mPickerHorizontal.dip2px(0.6f),
                         new BounceInterpolator() {
 
                             // 回弹两次
@@ -219,10 +226,10 @@ public class ScrollPickerViewDemo extends Activity {
 
     // 更新天数
     private void changeMonthDays() {
-        int year = Integer.parseInt(mYearView.getSelectedItem());
-        int month = Integer.parseInt(mMonthView.getSelectedItem());
-        int day = Integer.parseInt(mDayView.getSelectedItem());
-        List<String> dayList = DateUtil.getMonthDaysArray(year, month);
+        int year = Integer.parseInt(mYearView.getSelectedItem() + "");
+        int month = Integer.parseInt(mMonthView.getSelectedItem() + "");
+        int day = Integer.parseInt(mDayView.getSelectedItem() + "");
+        List<CharSequence> dayList = new ArrayList<CharSequence>(DateUtil.getMonthDaysArray(year, month));
 
         mDayView.setData(dayList);
         mDayView.setSelectedPosition(day > dayList.size() ? dayList

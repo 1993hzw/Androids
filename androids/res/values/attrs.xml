@@ -70,6 +70,12 @@
         <attr name="spv_max_text_size" format="dimension"/>
         <attr name="spv_start_color" format="color"/>
         <attr name="spv_end_color" format="color"/>
+        <attr name="spv_max_line_width" format="dimension"/>
+        <attr name="spv_alignment" format="enum">
+            <enum name="center" value="1"/>
+            <enum name="left" value="2"/>
+            <enum name="right" value="3"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="BitmapScrollPicker">

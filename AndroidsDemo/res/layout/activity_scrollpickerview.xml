@@ -225,9 +225,11 @@
             app:spv_draw_bitmap_mode="size"
             app:spv_draw_bitmap_width="40dp"
             app:spv_is_circulation="true"
-            app:spv_max_text_size="72dp"
-            app:spv_min_text_size="32dp"
+            app:spv_max_text_size="38dp"
+            app:spv_min_text_size="28dp"
+            app:spv_max_line_width="300dp"
             app:spv_orientation="horizontal"
+            app:spv_alignment="center"
             app:spv_visible_item_count="5"/>
 
         <cn.forward.androids.views.BitmapScrollPicker

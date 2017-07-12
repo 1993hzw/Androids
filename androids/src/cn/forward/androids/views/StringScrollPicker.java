@@ -5,6 +5,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import java.util.ArrayList;
@@ -13,23 +17,27 @@ import java.util.List;
 
 import cn.forward.androids.R;
 import cn.forward.androids.utils.ColorUtil;
+import cn.forward.androids.utils.Util;
 
 /**
  * 字符串滚动选择器
  * Created by huangziwei on 16-12-6.
  */
-public class StringScrollPicker extends ScrollPickerView<String> {
+public class StringScrollPicker extends ScrollPickerView<CharSequence> {
 
 
     private int mMeasureWidth;
     private int mMeasureHeight;
 
-    private Paint mPaint; //
+    private TextPaint mPaint; //
     private int mMinTextSize = 24; // 最小的字体
     private int mMaxTextSize = 32; // 最大的字体
     // 字体渐变颜色
     private int mStartColor = Color.BLACK; // 中间选中ｉｔｅｍ的颜色
     private int mEndColor = Color.GRAY; // 上下两边的颜色
+
+    private int mMaxLineWidth = -1; // 最大的行宽,默认为itemWidth.超过后文字自动换行
+    private Layout.Alignment mAlignment = Layout.Alignment.ALIGN_CENTER; // 对齐方式,默认居中
 
 
     public StringScrollPicker(Context context, AttributeSet attrs) {
@@ -40,12 +48,12 @@ public class StringScrollPicker extends ScrollPickerView<String> {
                               int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setStyle(Paint.Style.FILL);
         mPaint.setColor(Color.BLACK);
         init(attrs);
 
-        setData(new ArrayList<String>(Arrays.asList(new String[]{
+        setData(new ArrayList<CharSequence>(Arrays.asList(new String[]{
                 "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"
         })));
 
@@ -64,6 +72,15 @@ public class StringScrollPicker extends ScrollPickerView<String> {
                     R.styleable.StringScrollPicker_spv_start_color, mStartColor);
             mEndColor = typedArray.getColor(
                     R.styleable.StringScrollPicker_spv_end_color, mEndColor);
+            mMaxLineWidth = typedArray.getDimensionPixelSize(R.styleable.StringScrollPicker_spv_max_line_width, mMaxLineWidth);
+            int align = typedArray.getInt(R.styleable.StringScrollPicker_spv_alignment, 1);
+            if (align == 2) {
+                mAlignment = Layout.Alignment.ALIGN_NORMAL;
+            } else if (align == 3) {
+                mAlignment = Layout.Alignment.ALIGN_OPPOSITE;
+            } else {
+                mAlignment = Layout.Alignment.ALIGN_CENTER;
+            }
             typedArray.recycle();
         }
     }
@@ -106,16 +123,44 @@ public class StringScrollPicker extends ScrollPickerView<String> {
         return mMaxTextSize;
     }
 
+
+    public int getMaxLineWidth() {
+        return mMaxLineWidth;
+    }
+
+    /**
+     * 最大的行宽,默认为itemWidth.超过后文字自动换行
+     * @param maxLineWidth
+     */
+    public void setMaxLineWidth(int maxLineWidth) {
+        mMaxLineWidth = maxLineWidth;
+    }
+
+    /**
+     * 最大的行宽,默认为itemWidth.超过后文字自动换行
+     * @return
+     */
+    public Layout.Alignment getAlignment() {
+        return mAlignment;
+    }
+
+    public void setAlignment(Layout.Alignment alignment) {
+        mAlignment = alignment;
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mMeasureWidth = getMeasuredWidth();
         mMeasureHeight = getMeasuredHeight();
+        if (mMaxLineWidth < 0) {
+            mMaxLineWidth = getItemWidth();
+        }
     }
 
     @Override
-    public void drawItem(Canvas canvas, List<String> data, int position, int relative, float moveLength, float top) {
-        String text = data.get(position);
+    public void drawItem(Canvas canvas, List<CharSequence> data, int position, int relative, float moveLength, float top) {
+        CharSequence text = data.get(position);
         int itemSize = getItemSize();
 
         // 设置文字大小
@@ -139,22 +184,27 @@ public class StringScrollPicker extends ScrollPickerView<String> {
         } else { // 其他
             mPaint.setTextSize(mMinTextSize);
         }
+
+        StaticLayout layout = new StaticLayout(text, 0, text.length(), mPaint, mMaxLineWidth, mAlignment, 1.0F, 0.0F, true, null, 0);
         float x = 0;
         float y = 0;
+        float lineWidth = layout.getWidth();
+
         if (isHorizontal()) { // 水平滚动
-            Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
-            x = top + (itemSize - mPaint.measureText(text)) / 2;
-            y = mMeasureHeight / 2 - fmi.descent + (fmi.bottom - fmi.top) / 2;
+            x = top + (getItemWidth() - lineWidth) / 2;
+            y = (getItemHeight() - layout.getHeight()) / 2;
         } else { // 垂直滚动
-            x = (mMeasureWidth - mPaint.measureText(text)) / 2;
-            Paint.FontMetricsInt fmi = mPaint.getFontMetricsInt();
-            // 绘制文字时，文字的baseline是对齐ｙ坐标的，下面换算使其垂直居中。fmi.top值是相对baseline的，为负值
-            y = top + itemSize / 2
-                    - fmi.descent + (fmi.bottom - fmi.top) / 2;
+            x = (getItemWidth() - lineWidth) / 2;
+            y = top + (getItemHeight() - layout.getHeight()) / 2;
         }
         // 计算渐变颜色
         computeColor(relative, itemSize, moveLength);
-        canvas.drawText(text, x, y, mPaint);
+//        canvas.drawText(text, x, y, mPaint);
+
+        canvas.save();
+        canvas.translate(x, y);
+        layout.draw(canvas);
+        canvas.restore();
     }
 
     /**
