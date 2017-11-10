@@ -28,9 +28,10 @@
                     android:clickable="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher"
-                    app:miv_is_ignore_alpha="false"
+                    app:miv_is_ignore_alpha="true"
                     app:miv_mask_color="#88000000"
-                    app:miv_mask_level="background"/>
+                    app:miv_mask_level="background"
+                    app:sel_background_corners="20dp"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -46,7 +47,8 @@
                     android:src="@drawable/ic_launcher"
                     app:miv_is_ignore_alpha="false"
                     app:miv_mask_color="#88ffffff"
-                    app:miv_mask_level="background"/>
+                    app:miv_mask_level="background"
+                    app:sel_background_corner_bottomRight="30dp"/>
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -158,19 +160,19 @@
                 <cn.forward.androids.views.STextView
                     android:layout_width="150dp"
                     android:layout_height="100dp"
+                    android:background="#00ff00"
                     android:clickable="true"
                     android:gravity="center"
                     android:text="TextView"
                     android:textColor="#000000"
-                    app:stv_text_color_pressed="#ff0000"
-                    app:sel_background="#00ff00"
                     app:sel_background_border_color="#ff0000"
                     app:sel_background_border_pressed="#888888"
                     app:sel_background_border_width="4dp"
                     app:sel_background_corner_topLeft="0dp"
                     app:sel_background_corner_topRight="0dp"
                     app:sel_background_corners="10dp"
-                    app:sel_background_pressed="#0000ff"
+                    app:sel_background_pressed="#ffffff"
+                    app:stv_text_color_pressed="#ff0000"
                     />
 
 
@@ -178,9 +180,9 @@
                     android:layout_width="150dp"
                     android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
+                    android:background="@drawable/bg"
                     android:clickable="true"
                     android:gravity="center"
-                    app:sel_background="#0000ff"
                     app:sel_background_border_color="#454545"
                     app:sel_background_border_pressed="#888888"
                     app:sel_background_border_width="8dp"
@@ -194,14 +196,12 @@
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
+                android:background="#00ff00"
                 android:clickable="true"
                 android:gravity="center"
                 android:text="TextView2"
                 android:textColor="#000000"
                 app:injectListener="true"
-                app:stv_text_color_pressed="#ff0000"
-                app:stv_text_color_selected="#ff8800"
-                app:sel_background="#00ff00"
                 app:sel_background_border_color="#ff0000"
                 app:sel_background_border_pressed="#888888"
                 app:sel_background_border_selected="#880088"
@@ -209,6 +209,8 @@
                 app:sel_background_corner_bottomRight="10dp"
                 app:sel_background_pressed="#0000ff"
                 app:sel_background_selected="#0088ff"
+                app:stv_text_color_pressed="#ff0000"
+                app:stv_text_color_selected="#ff8800"
                 />
         </LinearLayout>
     </ScrollView>

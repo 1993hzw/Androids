@@ -97,6 +97,8 @@ public class ShapeImageView extends ImageView {
         mRoundRadiusRightTop = a.getDimension(R.styleable.ShapeImageView_siv_round_radius_rightTop, mRoundRadius);
 
         a.recycle();
+
+        SelectorAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 
     /**

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
 import cn.forward.androids.R;
 
 /**
@@ -55,8 +56,8 @@ public class MaskImageView extends ImageView {
 
         // 忽略透明度时的颜色矩阵
         float r = Color.alpha(mShadeColor) / 255f;
-        r=r-(1 - r)*0.15f;
-        float rr = (1 - r)*1.15f;
+        r = r - (1 - r) * 0.15f;
+        float rr = (1 - r) * 1.15f;
         setColorMatrix(new float[]{
                 rr, 0, 0, 0, Color.red(mShadeColor) * r,
                 0, rr, 0, 0, Color.green(mShadeColor) * r,
@@ -65,6 +66,8 @@ public class MaskImageView extends ImageView {
         });
 
         a.recycle();
+
+        SelectorAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 
     private void setColorMatrix(float[] matrix) {
@@ -155,7 +158,7 @@ public class MaskImageView extends ImageView {
      * view状态改变
      */
     @Override
-    protected void drawableStateChanged(){
+    protected void drawableStateChanged() {
         super.drawableStateChanged();
         invalidate();
     }
@@ -186,8 +189,8 @@ public class MaskImageView extends ImageView {
         this.mShadeColor = mShadeColor;
         // 忽略透明度时的颜色矩阵
         float r = Color.alpha(mShadeColor) / 255f;
-        r=r-(1 - r)*0.15f;
-        float rr = (1 - r)*1.15f;
+        r = r - (1 - r) * 0.15f;
+        float rr = (1 - r) * 1.15f;
         setColorMatrix(new float[]{
                 rr, 0, 0, 0, Color.red(mShadeColor) * r,
                 0, rr, 0, 0, Color.green(mShadeColor) * r,

@@ -119,8 +119,6 @@
         <attr name="injectListener" format="boolean"/>
 
         <!-- 可以直接在布局文件中直接设置selector-->
-        <!--只有设置了mtv_background其他属性才生效-->
-        <attr name="sel_background" format="color"/>
         <attr name="sel_background_shape" format="enum">
             <enum name="rect" value="0"/>
             <enum name="oval" value="1"/>
@@ -135,9 +133,9 @@
         <attr name="sel_background_border_color" format="color"/>
         <attr name="sel_background_border_width" format="dimension"/>
 
-        <attr name="sel_background_pressed" format="color"/>
+        <attr name="sel_background_pressed" format="reference|color"/>
         <attr name="sel_background_border_pressed" format="color"/>
-        <attr name="sel_background_selected" format="color"/>
+        <attr name="sel_background_selected" format="reference|color"/>
         <attr name="sel_background_border_selected" format="color"/>
     </declare-styleable>
 

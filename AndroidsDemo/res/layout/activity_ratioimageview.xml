@@ -121,7 +121,7 @@
                 android:gravity="left"
                 android:textColor="#000000"
                 android:textSize="20dp"
-                android:text="高度120dp, 宽/高=1.5"
+                android:text="高度120dp, 宽/高=1.8"
                 />
 
       </LinearLayout>
