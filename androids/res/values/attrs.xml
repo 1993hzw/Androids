@@ -21,7 +21,7 @@
     </declare-styleable>
 
     <declare-styleable name="MaskImageView">
-
+        <!-- 遮罩的层面:背景\前景图-->
         <attr name="miv_mask_level" format="enum">
             <enum name="background" value="1"/>
             <enum name="foreground" value="2"/>
@@ -108,7 +108,7 @@
         <attr name="stv_text_color_pressed" format="color"/>
         <attr name="stv_text_color_disable" format="color"/>
 
-        <!-- 过时的配置，等于stv开头的熟悉-->
+        <!-- 过时的配置，等于stv开头的属性-->
         <attr name="mtv_text_color_pressed" format="color"/>
         <attr name="mtv_text_color_disable" format="color"/>
     </declare-styleable>
@@ -118,24 +118,27 @@
 
         <attr name="injectListener" format="boolean"/>
 
-        <!-- 可以直接在布局文件中直接设置selector-->
+        <!-- 背景形状 -->
         <attr name="sel_background_shape" format="enum">
             <enum name="rect" value="0"/>
             <enum name="oval" value="1"/>
             <enum name="line" value="2"/>
             <enum name="ring" value="3"/>
         </attr>
+        <!-- 背景圆角 -->
         <attr name="sel_background_corners" format="dimension"/>
         <attr name="sel_background_corner_topLeft" format="dimension"/>
         <attr name="sel_background_corner_topRight" format="dimension"/>
         <attr name="sel_background_corner_bottomLeft" format="dimension"/>
         <attr name="sel_background_corner_bottomRight" format="dimension"/>
+        <!-- 背景状态 -->
+        <attr name="sel_background_pressed" format="reference|color"/>
+        <attr name="sel_background_selected" format="reference|color"/>
+        <!-- 背景边框 -->
         <attr name="sel_background_border_color" format="color"/>
         <attr name="sel_background_border_width" format="dimension"/>
-
-        <attr name="sel_background_pressed" format="reference|color"/>
+        <!-- 背景边框状态 -->
         <attr name="sel_background_border_pressed" format="color"/>
-        <attr name="sel_background_selected" format="reference|color"/>
         <attr name="sel_background_border_selected" format="color"/>
     </declare-styleable>
 
