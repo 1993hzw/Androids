@@ -15,7 +15,7 @@ dependencies {
   * #### ShapeImageView
   可设置形状(圆形、圆角矩形)的ImageView
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_shapeimageview.xml)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_shapeimageview.xml)
   
   ```xml
   <attr name="siv_shape" format="enum">
@@ -37,7 +37,7 @@ dependencies {
   * #### MaskImageView
   可在背景图和前景图显示遮罩效果的ImageView
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
   
   ```xml
   <!-- 遮罩的层面:背景\前景图-->
@@ -57,7 +57,7 @@ dependencies {
   * #### STextView/SLayout
   可直接在布局文件设置shape和selector，实现点击效果
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
   
   STextView支持的属性
   ```xml
@@ -95,7 +95,7 @@ dependencies {
   * #### RatioImageView
   可以设置宽高比例的ImageView
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_ratioimageview.xml)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_ratioimageview.xml)
   
   ```xml
   <!-- 宽度是否根据src图片的比例来测量（高度已知） -->
@@ -120,7 +120,7 @@ dependencies {
   * #### ScrollPickerView
   滚动选择器，支持循环滚动，可实现生日选择器，老虎机等
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/ScrollPickerViewDemo.java)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/ScrollPickerViewDemo.java)
 
   [《 Android自定义view——滚动选择器》](http://blog.csdn.net/u012964944/article/details/50847973)
  
@@ -131,21 +131,21 @@ dependencies {
   * #### AnimatorUtil
   对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/AnimatorUtilDemo.java)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/AnimatorUtilDemo.java)
 
   [《Android属性动画封装之快速构建动画》](http://blog.csdn.net/u012964944/article/details/50854430)
 
   * #### KeyboardLayout
   监听输入法键盘的弹起与隐藏，可实现输入法和工具栏无缝切换
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/KeyboardLayoutDemo.java)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/KeyboardLayoutDemo.java)
 
   [《Android获取输入法高度——输入法与页面布局无缝切换》](http://blog.csdn.net/u012964944/article/details/52120726)
   
   * #### DragListView
   可拖拽的ListView，拖拽排序
   
-  [示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/DragListViewDemo.java)
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/DragListViewDemo.java)
 
   [《Android自定义View——可拖拽的ListView》](http://blog.csdn.net/u012964944/article/details/52086674)
   
