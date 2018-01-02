@@ -141,8 +141,9 @@ public class SelectorAttrs {
                 gradientDrawableSelected.setStroke(backgroundBorderWidth, 0);
             }
         }
-        int backgroundBorder = a.getColor(R.styleable.View_sel_background_border_color, -1);
-        if (backgroundBorder != -1) {
+
+        if (a.hasValue(R.styleable.View_sel_background_border_color)) {
+            int backgroundBorder = a.getColor(R.styleable.View_sel_background_border_color, -1);
             if (gradientDrawable != null) {
                 gradientDrawable.setStroke(backgroundBorderWidth, backgroundBorder);
             }

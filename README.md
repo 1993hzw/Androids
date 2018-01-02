@@ -4,7 +4,7 @@ Androids
 ### 使用
 ```
 dependencies {
-    compile 'com.forward.androids:androids:1.1.7'
+    compile 'com.forward.androids:androids:1.1.7.1'
 }
 ```
 
