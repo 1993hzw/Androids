@@ -127,7 +127,8 @@ dependencies {
   滚动选择器，支持循环滚动，可实现生日选择器，老虎机等
   
 ```xml
-   <declare-styleable name="ScrollPickerView">
+   <!--滚动选择器通用属性-->
+    <declare-styleable name="ScrollPickerView">
         <attr name="spv_center_item_background" format="reference|color"/>
         <attr name="spv_visible_item_count" format="integer"/>
         <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
@@ -142,13 +143,18 @@ dependencies {
             <enum name="vertical" value="2"/>
         </attr>
     </declare-styleable>
-
+    
+    <!--文字选择器-->
     <declare-styleable name="StringScrollPicker">
+        <!--文字渐变大小-->
         <attr name="spv_min_text_size" format="dimension"/>
         <attr name="spv_max_text_size" format="dimension"/>
+        <!--文字渐变颜色-->
         <attr name="spv_start_color" format="color"/>
         <attr name="spv_end_color" format="color"/>
+        <!--文字最大行宽-->
         <attr name="spv_max_line_width" format="dimension"/>
+        <!--文字对齐方式-->
         <attr name="spv_alignment" format="enum">
             <enum name="center" value="1"/>
             <enum name="left" value="2"/>
@@ -156,6 +162,7 @@ dependencies {
         </attr>
     </declare-styleable>
 
+    <!--图片选择器-->
     <declare-styleable name="BitmapScrollPicker">
         <!-- 绘制图片的方式-->
         <attr name="spv_draw_bitmap_mode" format="string">
