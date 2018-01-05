@@ -1,16 +1,22 @@
 Androids
 ======
 
+Androids是本人根据平时的项目实践经验，为了提高Android开发效率而写的一个工具SDK；里面提供了一些工具类以及自定义View，可在实际项目开发时直接使用。
+
+![ANDROIDS](https://raw.githubusercontent.com/1993hzw/common/master/Androids/androids.png)
+
 ### 使用
 ```
 dependencies {
     compile 'com.forward.androids:androids:1.1.7.1'
 }
 ```
+### 项目结构
+#### --AndroidsDemo　使用例子
 
-### --AndroidsDemo　使用例子
+#### --androids 库工程
 
-### --androids 库工程
+### 自定义View
   
   * #### ShapeImageView
   可设置形状(圆形、圆角矩形)的ImageView
@@ -120,6 +126,52 @@ dependencies {
   * #### ScrollPickerView
   滚动选择器，支持循环滚动，可实现生日选择器，老虎机等
   
+```xml
+   <declare-styleable name="ScrollPickerView">
+        <attr name="spv_center_item_background" format="reference|color"/>
+        <attr name="spv_visible_item_count" format="integer"/>
+        <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
+        <attr name="spv_center_item_position" format="integer"/>
+        <!-- 是否循环滚动，默认为true，开启-->
+        <attr name="spv_is_circulation" format="boolean"/>
+        <!-- 不允许父组件拦截触摸事件，设置为true为不允许拦截，此时该设置才生效 -->
+        <attr name="spv_disallow_intercept_touch" format="boolean"/>
+        <!-- 滚动的方向-->
+        <attr name="spv_orientation" format="string">
+            <enum name="horizontal" value="1"/>
+            <enum name="vertical" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="StringScrollPicker">
+        <attr name="spv_min_text_size" format="dimension"/>
+        <attr name="spv_max_text_size" format="dimension"/>
+        <attr name="spv_start_color" format="color"/>
+        <attr name="spv_end_color" format="color"/>
+        <attr name="spv_max_line_width" format="dimension"/>
+        <attr name="spv_alignment" format="enum">
+            <enum name="center" value="1"/>
+            <enum name="left" value="2"/>
+            <enum name="right" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BitmapScrollPicker">
+        <!-- 绘制图片的方式-->
+        <attr name="spv_draw_bitmap_mode" format="string">
+            <enum name="fill" value="1"/>
+            <enum name="center" value="2"/>
+            <enum name="size" value="3"/>
+        </attr>
+        <!-- 绘制图片的方式为size时，指定的图片绘制大小-->
+        <attr name="spv_draw_bitmap_width" format="dimension"/>
+        <attr name="spv_draw_bitmap_height" format="dimension"/>
+        <!-- item内容缩放倍数-->
+        <attr name="spv_min_scale" format="float"/>
+        <attr name="spv_max_scale" format="float"/>
+    </declare-styleable>
+```
+  
   [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/ScrollPickerViewDemo.java)
 
   [《 Android自定义view——滚动选择器》](http://blog.csdn.net/u012964944/article/details/50847973)
@@ -128,13 +180,6 @@ dependencies {
  
   [《 Android滚动选择器——水平滚动》](http://blog.csdn.net/u012964944/article/details/73189206)
     
-  * #### AnimatorUtil
-  对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
-  
-  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/AnimatorUtilDemo.java)
-
-  [《Android属性动画封装之快速构建动画》](http://blog.csdn.net/u012964944/article/details/50854430)
-
   * #### KeyboardLayout
   监听输入法键盘的弹起与隐藏，可实现输入法和工具栏无缝切换
   
@@ -149,8 +194,31 @@ dependencies {
 
   [《Android自定义View——可拖拽的ListView》](http://blog.csdn.net/u012964944/article/details/52086674)
   
+### 工具类
 
+* #### 图片加载器
+[点击查看示例代码](https://github.com/1993hzw/ImageSelector/blob/master/library/src/main/java/cn/hzw/imageselector/ImageLoader.java)
+
+* #### AnimatorUtil
+  对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
+  
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/AnimatorUtilDemo.java)
+
+  [《Android属性动画封装之快速构建动画》](http://blog.csdn.net/u012964944/article/details/50854430)
+
+* #### 其他
+  * [LogUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/LogUtil.java) 日志输出
+  * [ProcessUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ProcessUtil.java) 进程相关
+  * [ReflectUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ReflectUtil.java) 反射相关
+  * [StatusBarUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/StatusBarUtil.java) 设置页面为沉浸式状态栏
+  * [ThreadUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ThreadUtil.java) 线程相关，包括主线程和子线程
+  * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
+  * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
 ### 更新
+
+* v1.1.7.1（11） 
+
+1.修复SelectorAttrs中background_border的bug。
 
 * v1.1.7（10） 
 
