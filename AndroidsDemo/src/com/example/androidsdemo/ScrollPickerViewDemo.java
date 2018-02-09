@@ -91,9 +91,9 @@ public class ScrollPickerViewDemo extends Activity {
 
     private void init() {
         // 设置数据
-        mYearView.setData(new ArrayList<CharSequence>(Arrays.asList(YEARS)));
-        mMonthView.setData(new ArrayList<CharSequence>(Arrays.asList(MONTHS)));
-        mDayView.setData(new ArrayList<CharSequence>(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH)));
+        mYearView.setData(Arrays.asList(YEARS));
+        mMonthView.setData(Arrays.asList(MONTHS));
+        mDayView.setData(DateUtil.getMonthDaysArray(ORIGIN_YEAR, ORIGIN_MONTH));
 
         // 设置初始值
         mYearView.setSelectedPosition(mYearView.getData().indexOf(

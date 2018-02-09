@@ -697,11 +697,11 @@ public abstract class ScrollPickerView<T> extends View {
         return mData;
     }
 
-    public void setData(List<T> data) {
+    public void setData(List<? extends T> data) {
         if (data == null) {
             mData = new ArrayList<T>();
         } else {
-            this.mData = data;
+            this.mData = (List<T>) data;
         }
         mSelected = mData.size() / 2;
         invalidate();

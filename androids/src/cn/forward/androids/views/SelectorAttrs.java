@@ -35,135 +35,140 @@ public class SelectorAttrs {
     public static void obtainsAttrs(Context context, View view, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.View);
-        Drawable backgroundDrawable = view.getBackground();
-        if (backgroundDrawable instanceof ColorDrawable) { // 颜色值
-            backgroundDrawable = null;
+
+        // 背景图片和背景颜色互斥，只能设置其中之一
+
+        Drawable bitmapDrawable = view.getBackground();
+        if (bitmapDrawable instanceof ColorDrawable) { // 颜色值
+            bitmapDrawable = null;
         }
 
-        GradientDrawable gradientDrawable = null;
-        if (backgroundDrawable == null) {
-            gradientDrawable = new GradientDrawable();
+        GradientDrawable colorShapeDrawable = null;
+        if (bitmapDrawable == null) {
+            colorShapeDrawable = new GradientDrawable();
         }
 
-        GradientDrawable gradientDrawablePressed = null;
-        GradientDrawable gradientDrawableSelected = null;
+        // 用于设置背景的颜色和形状
+        GradientDrawable colorShapeDrawablePressed = null;
+        GradientDrawable colorShapeDrawableSelected = null;
 
-        Drawable backgroundDrawablePressed = null;
-        Drawable backgroundDrawableSelected = null;
+        // 用于设置背景的图片
+        Drawable bitmapDrawablePressed = null;
+        Drawable bitmapDrawableSelected = null;
 
         if (a.hasValue(R.styleable.View_sel_background_pressed) || a.hasValue(R.styleable.View_sel_background_border_pressed)) {
-            backgroundDrawablePressed = a.getDrawable(R.styleable.View_sel_background_pressed);
-            if (backgroundDrawablePressed instanceof ColorDrawable) {
-                backgroundDrawablePressed = null;
+            bitmapDrawablePressed = a.getDrawable(R.styleable.View_sel_background_pressed);
+            if (bitmapDrawablePressed instanceof ColorDrawable) {
+                bitmapDrawablePressed = null;
             }
-            if (backgroundDrawablePressed == null) {
-                gradientDrawablePressed = new GradientDrawable();
+            if (bitmapDrawablePressed == null) { // 接下来设置背景颜色
+                colorShapeDrawablePressed = new GradientDrawable();
             }
         }
         if (a.hasValue(R.styleable.View_sel_background_selected) || a.hasValue(R.styleable.View_sel_background_border_selected)) {
-            backgroundDrawableSelected = a.getDrawable(R.styleable.View_sel_background_selected);
-            if (backgroundDrawableSelected instanceof ColorDrawable) {
-                backgroundDrawableSelected = null;
+            bitmapDrawableSelected = a.getDrawable(R.styleable.View_sel_background_selected);
+            if (bitmapDrawableSelected instanceof ColorDrawable) {
+                bitmapDrawableSelected = null;
             }
-            if (backgroundDrawableSelected == null) {
-                gradientDrawableSelected = new GradientDrawable();
+            if (bitmapDrawableSelected == null) {
+                colorShapeDrawableSelected = new GradientDrawable();
             }
         }
 
         int background = Color.TRANSPARENT;
-        if (backgroundDrawable == null) {
+        if (bitmapDrawable == null) {
             Drawable bg = view.getBackground();
             if (bg instanceof ColorDrawable) {
                 background = ((ColorDrawable) bg).getColor();
             }
-            gradientDrawable.setColor(background);
+            colorShapeDrawable.setColor(background);
         }
-        if (gradientDrawablePressed != null) {
-            gradientDrawablePressed.setColor(background);
+        if (colorShapeDrawablePressed != null) {
+            colorShapeDrawablePressed.setColor(background);
         }
-        if (gradientDrawableSelected != null) {
-            gradientDrawableSelected.setColor(background);
+        if (colorShapeDrawableSelected != null) {
+            colorShapeDrawableSelected.setColor(background);
         }
 
 
         int shape = a.getInt(R.styleable.View_sel_background_shape, RECTANGLE);
         if (shape == LINE) {
-            if (gradientDrawable != null) {
-                gradientDrawable.setShape(GradientDrawable.LINE);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setShape(GradientDrawable.LINE);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setShape(GradientDrawable.LINE);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setShape(GradientDrawable.LINE);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setShape(GradientDrawable.LINE);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setShape(GradientDrawable.LINE);
             }
         } else if (shape == OVAL) {
-            if (gradientDrawable != null) {
-                gradientDrawable.setShape(GradientDrawable.OVAL);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setShape(GradientDrawable.OVAL);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setShape(GradientDrawable.OVAL);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setShape(GradientDrawable.OVAL);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setShape(GradientDrawable.OVAL);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setShape(GradientDrawable.OVAL);
             }
         } else if (shape == RING) {
-            if (gradientDrawable != null) {
-                gradientDrawable.setShape(GradientDrawable.RING);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setShape(GradientDrawable.RING);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setShape(GradientDrawable.RING);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setShape(GradientDrawable.RING);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setShape(GradientDrawable.RING);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setShape(GradientDrawable.RING);
             }
         } else {
-            if (gradientDrawable != null) {
-                gradientDrawable.setShape(GradientDrawable.RECTANGLE);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setShape(GradientDrawable.RECTANGLE);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setShape(GradientDrawable.RECTANGLE);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setShape(GradientDrawable.RECTANGLE);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setShape(GradientDrawable.RECTANGLE);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setShape(GradientDrawable.RECTANGLE);
             }
         }
 
         int backgroundBorderWidth = a.getDimensionPixelOffset(R.styleable.View_sel_background_border_width, -1);
         if (backgroundBorderWidth != -1) {
-            if (gradientDrawable != null) {
-                gradientDrawable.setStroke(backgroundBorderWidth, 0);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setStroke(backgroundBorderWidth, 0);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setStroke(backgroundBorderWidth, 0);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setStroke(backgroundBorderWidth, 0);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setStroke(backgroundBorderWidth, 0);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setStroke(backgroundBorderWidth, 0);
             }
         }
 
         if (a.hasValue(R.styleable.View_sel_background_border_color)) {
             int backgroundBorder = a.getColor(R.styleable.View_sel_background_border_color, -1);
-            if (gradientDrawable != null) {
-                gradientDrawable.setStroke(backgroundBorderWidth, backgroundBorder);
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setStroke(backgroundBorderWidth, backgroundBorder);
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setStroke(backgroundBorderWidth, backgroundBorder);
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setStroke(backgroundBorderWidth, backgroundBorder);
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorder);
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorder);
             }
         }
         int backgroundCorners = a.getDimensionPixelOffset(R.styleable.View_sel_background_corners, 0);
         final int radius = backgroundCorners;
-        if (gradientDrawable != null) {
-            gradientDrawable.setCornerRadius(backgroundCorners);
+        if (colorShapeDrawable != null) {
+            colorShapeDrawable.setCornerRadius(backgroundCorners);
         }
-        if (gradientDrawablePressed != null) {
-            gradientDrawablePressed.setCornerRadius(backgroundCorners);
+        if (colorShapeDrawablePressed != null) {
+            colorShapeDrawablePressed.setCornerRadius(backgroundCorners);
         }
-        if (gradientDrawableSelected != null) {
-            gradientDrawableSelected.setCornerRadius(backgroundCorners);
+        if (colorShapeDrawableSelected != null) {
+            colorShapeDrawableSelected.setCornerRadius(backgroundCorners);
         }
 
         final int topLeftRadius = a.getDimensionPixelSize(
@@ -176,24 +181,24 @@ public class SelectorAttrs {
                 R.styleable.View_sel_background_corner_bottomRight, radius);
         if (topLeftRadius != radius || topRightRadius != radius ||
                 bottomLeftRadius != radius || bottomRightRadius != radius) {
-            if (gradientDrawable != null) {
-                gradientDrawable.setCornerRadii(new float[]{
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setCornerRadii(new float[]{
                         topLeftRadius, topLeftRadius,
                         topRightRadius, topRightRadius,
                         bottomRightRadius, bottomRightRadius,
                         bottomLeftRadius, bottomLeftRadius
                 });
             }
-            if (gradientDrawablePressed != null) {
-                gradientDrawablePressed.setCornerRadii(new float[]{
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setCornerRadii(new float[]{
                         topLeftRadius, topLeftRadius,
                         topRightRadius, topRightRadius,
                         bottomRightRadius, bottomRightRadius,
                         bottomLeftRadius, bottomLeftRadius
                 });
             }
-            if (gradientDrawableSelected != null) {
-                gradientDrawableSelected.setCornerRadii(new float[]{
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setCornerRadii(new float[]{
                         topLeftRadius, topLeftRadius,
                         topRightRadius, topRightRadius,
                         bottomRightRadius, bottomRightRadius,
@@ -203,37 +208,39 @@ public class SelectorAttrs {
         }
 
 
-        if (gradientDrawablePressed != null && a.hasValue(R.styleable.View_sel_background_pressed)) {
+        // 如果没有设置背景图片，则读取背景颜色
+        if (colorShapeDrawablePressed != null && a.hasValue(R.styleable.View_sel_background_pressed)) {
             int backgroundPressed = a.getColor(R.styleable.View_sel_background_pressed, 0);
-            gradientDrawablePressed.setColor(backgroundPressed);
+            colorShapeDrawablePressed.setColor(backgroundPressed);
         }
-        if (gradientDrawablePressed != null && a.hasValue(R.styleable.View_sel_background_border_pressed)) {
+        if (colorShapeDrawablePressed != null && a.hasValue(R.styleable.View_sel_background_border_pressed)) {
             int backgroundBorderPressed = a.getColor(R.styleable.View_sel_background_border_pressed, -1);
-            gradientDrawablePressed.setStroke(backgroundBorderWidth, backgroundBorderPressed);
+            colorShapeDrawablePressed.setStroke(backgroundBorderWidth, backgroundBorderPressed);
         }
-        if (gradientDrawableSelected != null && a.hasValue(R.styleable.View_sel_background_selected)) {
+        if (colorShapeDrawableSelected != null && a.hasValue(R.styleable.View_sel_background_selected)) {
             int backgroundSelected = a.getColor(R.styleable.View_sel_background_selected, -1);
-            gradientDrawableSelected.setColor(backgroundSelected);
+            colorShapeDrawableSelected.setColor(backgroundSelected);
         }
-        if (gradientDrawableSelected != null && a.hasValue(R.styleable.View_sel_background_border_selected)) {
+        if (colorShapeDrawableSelected != null && a.hasValue(R.styleable.View_sel_background_border_selected)) {
             int backgroundBorderSelected = a.getColor(R.styleable.View_sel_background_border_selected, -1);
-            gradientDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorderSelected);
+            colorShapeDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorderSelected);
         }
 
+        // 设置不同状态下的显示
         StateListDrawable stateListDrawable = new StateListDrawable();
-        if (gradientDrawablePressed != null || backgroundDrawablePressed != null) {
+        if (colorShapeDrawablePressed != null || bitmapDrawablePressed != null) {
             stateListDrawable.addState(
                     new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed},
-                    backgroundDrawablePressed != null ? backgroundDrawablePressed : gradientDrawablePressed);
+                    bitmapDrawablePressed != null ? bitmapDrawablePressed : colorShapeDrawablePressed);
         }
-        if (gradientDrawableSelected != null || backgroundDrawableSelected != null) {
+        if (colorShapeDrawableSelected != null || bitmapDrawableSelected != null) {
             stateListDrawable.addState(
                     new int[]{android.R.attr.state_enabled, android.R.attr.state_selected},
-                    backgroundDrawableSelected != null ? backgroundDrawableSelected : gradientDrawableSelected);
+                    bitmapDrawableSelected != null ? bitmapDrawableSelected : colorShapeDrawableSelected);
         }
         stateListDrawable.addState(
                 new int[]{},
-                backgroundDrawable != null ? backgroundDrawable : gradientDrawable);
+                bitmapDrawable != null ? bitmapDrawable : colorShapeDrawable);
 
         view.setBackgroundDrawable(stateListDrawable);
         a.recycle();

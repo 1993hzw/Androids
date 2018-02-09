@@ -49,6 +49,7 @@
         <attr name="siv_border_color" format="color"/>
     </declare-styleable>
 
+    <!--滚动选择器通用属性-->
     <declare-styleable name="ScrollPickerView">
         <attr name="spv_center_item_background" format="reference|color"/>
         <attr name="spv_visible_item_count" format="integer"/>
@@ -65,12 +66,17 @@
         </attr>
     </declare-styleable>
 
+    <!--文字选择器-->
     <declare-styleable name="StringScrollPicker">
+        <!--文字渐变大小-->
         <attr name="spv_min_text_size" format="dimension"/>
         <attr name="spv_max_text_size" format="dimension"/>
+        <!--文字渐变颜色-->
         <attr name="spv_start_color" format="color"/>
         <attr name="spv_end_color" format="color"/>
+        <!--文字最大行宽-->
         <attr name="spv_max_line_width" format="dimension"/>
+        <!--文字对齐方式-->
         <attr name="spv_alignment" format="enum">
             <enum name="center" value="1"/>
             <enum name="left" value="2"/>
@@ -78,6 +84,7 @@
         </attr>
     </declare-styleable>
 
+    <!--图片选择器-->
     <declare-styleable name="BitmapScrollPicker">
         <!-- 绘制图片的方式-->
         <attr name="spv_draw_bitmap_mode" format="string">
@@ -140,6 +147,8 @@
         <!-- 背景边框状态 -->
         <attr name="sel_background_border_pressed" format="color"/>
         <attr name="sel_background_border_selected" format="color"/>
+        <!-- ripple水波纹效果-->
+        <!--<attr name="sel_background_ripple" format=""-->
     </declare-styleable>
 
 </resources>

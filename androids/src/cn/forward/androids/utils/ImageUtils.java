@@ -326,18 +326,25 @@ public class ImageUtils {
         }
 
         if (view != null) {
+
+            if (width <= 0) {
+                width = view.getWidth();
+            }
+            if (height <= 0) {
+                height = view.getHeight();
+            }
+            if (width > 0 && height > 0) {
+                return new int[]{width, height};
+            }
+
             final ViewGroup.LayoutParams params = view.getLayoutParams();
             if (params != null) {
                 if (params.width > 0) {
                     width = params.width;
-                } else if (params.width != ViewGroup.LayoutParams.WRAP_CONTENT) {
-                    width = view.getWidth();
                 }
 
                 if (params.height > 0) {
                     height = params.height;
-                } else if (params.height != ViewGroup.LayoutParams.WRAP_CONTENT) {
-                    height = view.getHeight();
                 }
             }
 
@@ -380,7 +387,7 @@ public class ImageUtils {
      * @param videoPath 视频路径
      * @param width
      * @param height
-     * @param kind MediaStore.Images.Thumbnails.MINI_KIND or MediaStore.Images.Thumbnails.MICRO_KIND
+     * @param kind      MediaStore.Images.Thumbnails.MINI_KIND or MediaStore.Images.Thumbnails.MICRO_KIND
      * @return
      */
     public static Bitmap getVideoThumbnail(String videoPath, int width,
