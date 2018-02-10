@@ -246,6 +246,8 @@ dependencies {
 
 1.SLayout支持水波纹效果
 
+2.兼容旧版本的sel_background属性
+
 * v1.1.7.1（11） 
 
 1.修复SelectorAttrs中background_border的bug。
