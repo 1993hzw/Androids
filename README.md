@@ -211,7 +211,7 @@ dependencies {
   
   [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/KeyboardLayoutDemo.java)
 
-  [《Android获取输入法高度——输入法与页面布局无缝切换》](http://blog.csdn.net/u012964944/article/details/52120726)
+  [《Android监听输入法并获取高度——输入法与页面布局无缝切换》](https://juejin.im/post/5a7eb8005188257a642693b3)
   
   * #### DragListView
   可拖拽的ListView，拖拽排序
