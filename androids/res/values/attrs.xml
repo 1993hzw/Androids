@@ -125,6 +125,9 @@
 
         <attr name="injectListener" format="boolean"/>
 
+        <!--该属性已过时，被废弃-->
+        <attr name="sel_background" format="color"/>
+
         <!-- 背景状态 -->
         <attr name="sel_background_pressed" format="reference|color"/>
         <attr name="sel_background_selected" format="reference|color"/>

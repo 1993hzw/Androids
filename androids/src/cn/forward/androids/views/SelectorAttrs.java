@@ -88,6 +88,9 @@ public class SelectorAttrs {
         int background = Color.TRANSPARENT;
         if (bitmapDrawable == null) {
             Drawable bg = view.getBackground();
+            if (bg == null && a.hasValue(R.styleable.View_sel_background)) { // 兼容旧版本属性
+                bg = a.getDrawable(R.styleable.View_sel_background);
+            }
             if (bg instanceof ColorDrawable) {
                 background = ((ColorDrawable) bg).getColor();
                 colorShapeDrawable = new GradientDrawable();
