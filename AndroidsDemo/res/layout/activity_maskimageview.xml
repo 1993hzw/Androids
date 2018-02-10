@@ -158,12 +158,12 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.STextView
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:background="#00ff00"
                     android:clickable="true"
                     android:gravity="center"
-                    android:text="TextView"
+                    android:text="STextView"
                     android:textColor="#000000"
                     app:sel_background_border_color="#ff0000"
                     app:sel_background_border_pressed="#888888"
@@ -172,12 +172,34 @@
                     app:sel_background_corner_topRight="0dp"
                     app:sel_background_corners="10dp"
                     app:sel_background_pressed="#ffffff"
+                    app:sel_background_shape="oval"
                     app:stv_text_color_pressed="#ff0000"
                     />
 
+                <cn.forward.androids.views.STextView
+                    android:id="@+id/stextview"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="#00ff00"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="STextView"
+                    android:textColor="#000000"
+                    app:injectListener="true"
+                    app:sel_background_border_color="#ff0000"
+                    app:sel_background_border_pressed="#888888"
+                    app:sel_background_border_selected="#880088"
+                    app:sel_background_border_width="4dp"
+                    app:sel_background_corner_bottomRight="30dp"
+                    app:sel_background_pressed="#0000ff"
+                    app:sel_background_selected="#0088ff"
+                    app:stv_text_color_pressed="#ff0000"
+                    app:stv_text_color_selected="#ff8800"
+                    />
 
                 <cn.forward.androids.views.SFrameLayout
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bg"
@@ -198,34 +220,29 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.STextView
-                    android:id="@+id/stextview"
                     android:layout_width="150dp"
                     android:layout_height="100dp"
-                    android:background="#00ff00"
                     android:clickable="true"
                     android:gravity="center"
-                    android:text="TextView2"
+                    android:text="水波纹"
                     android:textColor="#000000"
-                    app:injectListener="true"
-                    app:sel_background_border_color="#ff0000"
-                    app:sel_background_border_pressed="#888888"
-                    app:sel_background_border_selected="#880088"
-                    app:sel_background_border_width="4dp"
-                    app:sel_background_corner_bottomRight="10dp"
-                    app:sel_background_pressed="#0000ff"
-                    app:sel_background_selected="#0088ff"
-                    app:stv_text_color_pressed="#ff0000"
-                    app:stv_text_color_selected="#ff8800"
+                    app:sel_background_ripple="#ff0000"
+                    app:sel_background_ripple_mask="#00ff00"
+                    app:sel_background_ripple_mask_shape="oval"
+                    app:sel_background_shape="oval"
+                    android:background="@drawable/bg"
                     />
 
-                <TextView
-                    android:visibility="gone"
+                <cn.forward.androids.views.STextView
                     android:layout_width="150dp"
                     android:layout_height="100dp"
-                    android:background="#f00"
+                    android:clickable="true"
                     android:gravity="center"
-                    android:text="TextView2"
-                    android:textColor="#000000"/>
+                    android:text="图片水波纹"
+                    android:textColor="#000000"
+                    app:sel_background_ripple="#ff0000"
+                    app:sel_background_ripple_mask="@drawable/ic_launcher"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
