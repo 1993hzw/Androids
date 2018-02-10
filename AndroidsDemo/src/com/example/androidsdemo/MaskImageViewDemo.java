@@ -13,12 +13,7 @@ public class MaskImageViewDemo extends Activity {
 
         setTitle("MaskImageView");
 
-        findViewById(R.id.stextview).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.setSelected(!v.isSelected());
-            }
-        });
+
 
     }
 
