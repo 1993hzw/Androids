@@ -74,6 +74,10 @@ dependencies {
   
   STextView/SLayout支持的属性
   ```xml
+  <!-- 背景状态 -->
+  <attr name="sel_background_pressed" format="reference|color"/>
+  <attr name="sel_background_selected" format="reference|color"/>
+
   <!-- 背景形状 -->
   <attr name="sel_background_shape" format="enum">
       <enum name="rect" value="0"/>
@@ -87,15 +91,30 @@ dependencies {
   <attr name="sel_background_corner_topRight" format="dimension"/>
   <attr name="sel_background_corner_bottomLeft" format="dimension"/>
   <attr name="sel_background_corner_bottomRight" format="dimension"/>
-  <!-- 背景状态 -->
-  <attr name="sel_background_pressed" format="reference|color"/>
-  <attr name="sel_background_selected" format="reference|color"/>
-  <!-- 背景边框 -->
+
+  <!-- 背景边框默认状态 -->
   <attr name="sel_background_border_color" format="color"/>
   <attr name="sel_background_border_width" format="dimension"/>
   <!-- 背景边框状态 -->
   <attr name="sel_background_border_pressed" format="color"/>
   <attr name="sel_background_border_selected" format="color"/>
+
+  <!-- ripple水波纹效果-->
+  <attr name="sel_background_ripple" format="reference|color"/>
+  <attr name="sel_background_ripple_mask" format="reference|color"/>
+  <!-- ripple mask形状(仅在sel_background_ripple_mask为color时生效)-->
+  <attr name="sel_background_ripple_mask_shape" format="enum">
+      <enum name="rect" value="0"/>
+      <enum name="oval" value="1"/>
+      <enum name="line" value="2"/>
+      <enum name="ring" value="3"/>
+  </attr>
+  <!-- ripple mask圆角 -->
+  <attr name="sel_background_ripple_mask_corners" format="dimension"/>
+  <attr name="sel_background_ripple_mask_corner_topLeft" format="dimension"/>
+  <attr name="sel_background_ripple_mask_corner_topRight" format="dimension"/>
+  <attr name="sel_background_ripple_mask_corner_bottomLeft" format="dimension"/>
+  <attr name="sel_background_ripple_mask_corner_bottomRight" format="dimension"/>
   ```
   
   * #### RatioImageView
@@ -222,6 +241,10 @@ dependencies {
   * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
 ### 更新
+
+* v1.1.8（12） 
+
+1.SLayout支持水波纹效果
 
 * v1.1.7.1（11） 
 

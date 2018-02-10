@@ -16,6 +16,7 @@ import cn.forward.androids.R;
 import cn.forward.androids.annotation.ViewInjectProcessor;
 
 /**
+ * 在inflate布局文件时，对生成的每个view进行注入操作
  * Created by huangziwei on 16-11-4.
  */
 public class InjectionLayoutInflater extends LayoutInflater implements LayoutInflater.Factory {
@@ -188,6 +189,11 @@ public class InjectionLayoutInflater extends LayoutInflater implements LayoutInf
         View onViewCreated(Context context, View parent, View view, AttributeSet attrs);
     }
 
+    /**
+     * 注入OnClikcListener
+     * @param clickListener
+     * @return
+     */
     public static OnViewCreatedListener getViewOnClickListenerInjector(final View.OnClickListener clickListener) {
         if (clickListener == null) {
             return null;
@@ -205,6 +211,11 @@ public class InjectionLayoutInflater extends LayoutInflater implements LayoutInf
         };
     }
 
+    /**
+     * 通过注解注入view
+     * @param object
+     * @return
+     */
     public static OnViewCreatedListener getViewInjector(final Object object) {
         if (object == null) {
             return null;
