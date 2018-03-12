@@ -469,12 +469,7 @@ public abstract class ScrollPickerView<T> extends View {
         cancelScroll();
         if (mListener != null) {
             // 告诉监听器选择完毕
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    mListener.onSelected(ScrollPickerView.this, mSelected);
-                }
-            });
+            mListener.onSelected(ScrollPickerView.this, mSelected);
         }
     }
 
