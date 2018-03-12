@@ -319,7 +319,6 @@ public abstract class ScrollPickerView<T> extends View {
         } else { // 滚动完毕
             if (mIsFling) {
                 mIsFling = false;
-                mMoveLength = 0;
                 if (equalsFloat(mMoveLength, 0)) { //惯性滑动后的位置刚好居中的情况
                     notifySelected();
                 } else {
