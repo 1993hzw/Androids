@@ -26,7 +26,7 @@ public class RatioImageView extends ImageView {
     // 根据前景图宽高比例测量View,防止图片缩放变形
     private boolean mIsWidthFitDrawableSizeRatio; // 宽度是否根据src图片(前景图)的比例来测量（高度已知）
     private boolean mIsHeightFitDrawableSizeRatio; // 高度是否根据src图片(前景图)的比例来测量（宽度已知）
-    private int mMaxWidthWhenWidthFixDrawable = -1; // 当mIsWidthFitDrawableSizeRatio生效时，最大宽度
+    private int mMaxWidthWhenWidthFixDrawable = -1; // 当mIsWidthFitDrawableSizeRatio生效时，最大宽度(超过最大宽度时，宽度为最大值，且高度会按照比例重新计算)
     private int mMaxHeightWhenHeightFixDrawable = -1; // 当mIsHeightFitDrawableSizeRatio生效时，最大高度
 
     // 宽高比例
@@ -131,11 +131,15 @@ public class RatioImageView extends ImageView {
             } else {
                 height = MeasureSpec.getSize(heightMeasureSpec);
             }
+            if (height <= 0) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                return;
+            }
             int width = (int) (height * mWidthRatio);
             if (mIsWidthFitDrawableSizeRatio && mMaxWidthWhenWidthFixDrawable > 0
                     && width > mMaxWidthWhenWidthFixDrawable) { // 限制最大宽度
-                width = mMaxWidthWhenWidthFixDrawable;
-                height = (int) (width / mWidthRatio);
+                width = mMaxWidthWhenWidthFixDrawable; // 宽度为最大值
+                height = (int) (width / mWidthRatio); // 重新计算高度
             }
             super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
@@ -146,11 +150,15 @@ public class RatioImageView extends ImageView {
             } else {
                 width = MeasureSpec.getSize(widthMeasureSpec);
             }
+            if (width <= 0) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                return;
+            }
             int height = (int) (width * mHeightRatio);
             if (mIsHeightFitDrawableSizeRatio && mMaxHeightWhenHeightFixDrawable > 0
                     && height > mMaxHeightWhenHeightFixDrawable) { // 限制最大高度
-                height = mMaxHeightWhenHeightFixDrawable;
-                width = (int) (height / mHeightRatio);
+                height = mMaxHeightWhenHeightFixDrawable; // 高度为最大值
+                width = (int) (height / mHeightRatio); // 重新计算宽度
             }
             super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));

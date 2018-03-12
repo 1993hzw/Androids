@@ -296,9 +296,6 @@ public abstract class ScrollPickerView<T> extends View {
                 }
             }
             checkCirculation();
-            mMoveLength = 0;
-            mLastScrollY = 0;
-            mLastScrollX = 0;
             notifySelected();
             invalidate();
         }
@@ -322,12 +319,13 @@ public abstract class ScrollPickerView<T> extends View {
         } else { // 滚动完毕
             if (mIsFling) {
                 mIsFling = false;
-                moveToCenter(); // 滚动到中间位置
-            } else if (mIsMovingCenter) { // 选择完成，回调给监听器
                 mMoveLength = 0;
-                mIsMovingCenter = false;
-                mLastScrollY = 0;
-                mLastScrollX = 0;
+                if (equalsFloat(mMoveLength, 0)) { //惯性滑动后的位置刚好居中的情况
+                    notifySelected();
+                } else {
+                    moveToCenter(); // 滚动到中间位置
+                }
+            } else if (mIsMovingCenter) { // 选择完成，回调给监听器
                 notifySelected();
             }
         }
@@ -468,6 +466,8 @@ public abstract class ScrollPickerView<T> extends View {
     }
 
     private void notifySelected() {
+        mMoveLength = 0;
+        cancelScroll();
         if (mListener != null) {
             // 告诉监听器选择完毕
             post(new Runnable() {
@@ -723,9 +723,7 @@ public abstract class ScrollPickerView<T> extends View {
         }
         mSelected = position;
         invalidate();
-        if (mListener != null) {
-            notifySelected();
-        }
+        notifySelected();
     }
 
     public void setOnSelectedListener(OnSelectedListener listener) {
@@ -956,5 +954,12 @@ public abstract class ScrollPickerView<T> extends View {
         if (visibility == VISIBLE) {
             moveToCenter();
         }
+    }
+
+    /**
+     * 在一定精度内比较浮点数
+     */
+    public static boolean equalsFloat(double a, double b) {
+        return a == b || Math.abs(a - b) < 0.01f;
     }
 }
