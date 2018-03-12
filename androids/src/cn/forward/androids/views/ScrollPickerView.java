@@ -220,10 +220,18 @@ public abstract class ScrollPickerView<T> extends View {
 
     }
 
+    private int mSelectedOnTouch;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mDisallowTouch) { // 不允许触摸
             return true;
+        }
+
+        switch (event.getActionMasked()) { // 按下监听
+            case MotionEvent.ACTION_DOWN:
+                mSelectedOnTouch = mSelected;
+                break;
         }
 
         if (mGestureDetector.onTouchEvent(event)) {
@@ -252,7 +260,13 @@ public abstract class ScrollPickerView<T> extends View {
             case MotionEvent.ACTION_UP:
                 mLastMoveY = event.getY();
                 mLastMoveX = event.getX();
-                moveToCenter();
+                if (mMoveLength == 0) {
+                    if (mSelectedOnTouch != mSelected) { //前后发生变化
+                        notifySelected();
+                    }
+                } else {
+                    moveToCenter(); // 滚动到中间位置
+                }
                 break;
         }
         return true;
@@ -319,7 +333,7 @@ public abstract class ScrollPickerView<T> extends View {
         } else { // 滚动完毕
             if (mIsFling) {
                 mIsFling = false;
-                if (equalsFloat(mMoveLength, 0)) { //惯性滑动后的位置刚好居中的情况
+                if (mMoveLength == 0) { //惯性滑动后的位置刚好居中的情况
                     notifySelected();
                 } else {
                     moveToCenter(); // 滚动到中间位置
@@ -668,17 +682,15 @@ public abstract class ScrollPickerView<T> extends View {
                 mCenterPoint = mCenterY;
                 lastMove = mLastMoveY;
             }
-            if (mCanTap && !isScrolling() && !mIsScrollingLastTime) {
-                if (lastMove >= mCenterPoint && lastMove <= mCenterPoint + mItemSize) {
+            if (mCanTap && !mIsScrollingLastTime) {
+                if (lastMove >= mCenterPoint && lastMove <= mCenterPoint + mItemSize) { //点击中间item，回调点击事件
                     performClick();
-                } else if (lastMove < mCenterPoint) {
+                } else if (lastMove < mCenterPoint) { // 点击两边的item，移动到相应的item
                     int move = mItemSize;
                     autoScrollTo(move, 150, sAutoScrollInterpolator, false);
-                } else if (lastMove > mCenterPoint + mItemSize) {
+                } else { // lastMove > mCenterPoint + mItemSize
                     int move = -mItemSize;
                     autoScrollTo(move, 150, sAutoScrollInterpolator, false);
-                } else {
-                    moveToCenter();
                 }
             } else {
                 moveToCenter();
@@ -950,10 +962,4 @@ public abstract class ScrollPickerView<T> extends View {
         }
     }
 
-    /**
-     * 在一定精度内比较浮点数
-     */
-    public static boolean equalsFloat(double a, double b) {
-        return a == b || Math.abs(a - b) < 0.01f;
-    }
 }
