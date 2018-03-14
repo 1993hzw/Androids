@@ -148,7 +148,9 @@ dependencies {
 ```xml
    <!--滚动选择器通用属性-->
     <declare-styleable name="ScrollPickerView">
+        <!-- 中间item的背景-->
         <attr name="spv_center_item_background" format="reference|color"/>
+        <!-- 可见的item数量，默认为3个-->
         <attr name="spv_visible_item_count" format="integer"/>
         <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
         <attr name="spv_center_item_position" format="integer"/>
@@ -241,6 +243,9 @@ dependencies {
   * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
 ### 更新
+* v1.1.8.1（13） 
+
+1.修复某些情况下滚动选择器不回调监听器的问题
 
 * v1.1.8（12） 
 

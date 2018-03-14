@@ -51,7 +51,9 @@
 
     <!--滚动选择器通用属性-->
     <declare-styleable name="ScrollPickerView">
+        <!-- 中间item的背景-->
         <attr name="spv_center_item_background" format="reference|color"/>
+        <!-- 可见的item数量，默认为3个-->
         <attr name="spv_visible_item_count" format="integer"/>
         <!-- 中间item的位置,默认为 mVisibleItemCount / 2-->
         <attr name="spv_center_item_position" format="integer"/>
