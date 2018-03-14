@@ -8,7 +8,7 @@ Androids是本人根据平时的项目实践经验，为了提高Android开发�
 ### 使用
 ```
 dependencies {
-    compile 'com.forward.androids:androids:1.1.8'
+    compile 'com.forward.androids:androids:1.1.8.1'
 }
 ```
 ### 项目结构
