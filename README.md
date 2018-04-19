@@ -222,6 +222,13 @@ dependencies {
 
   [《Android自定义View——可拖拽的ListView》](http://blog.csdn.net/u012964944/article/details/52086674)
   
+  * #### EasyAdapter
+  用于RecyclerView的适配器，可支持设置点击、单选和多选模式
+  
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/src/com/example/androidsdemo/EasyAdapterDemo.java)
+  
+  [Kotlin版实现](https://github.com/1993hzw/EasyAdapterForRecyclerView-kotlin)
+
 ### 工具类
 
 * #### 图片加载器
@@ -242,7 +249,15 @@ dependencies {
   * [ThreadUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ThreadUtil.java) 线程相关，包括主线程和子线程
   * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
+
 ### 更新
+* v1.2（14） 
+
+1.新增EasyAdapter,用于RecyclerView的适配器，可支持设置点击、单选和多选模式。（[Kotlin版实现](https://github.com/1993hzw/EasyAdapterForRecyclerView-kotlin)
+）
+
+2.修复SLayout没有设置背景色时导致border异常的问题
+
 * v1.1.8.1（13） 
 
 1.修复某些情况下滚动选择器不回调监听器的问题
