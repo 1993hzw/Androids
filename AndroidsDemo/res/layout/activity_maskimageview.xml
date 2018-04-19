@@ -237,7 +237,6 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginLeft="5dp"
-                    android:background="#88000000"
                     android:clickable="true"
                     android:gravity="center"
                     android:text="水波纹"
@@ -247,6 +246,8 @@
                     app:sel_background_ripple_mask="#00ff00"
                     app:sel_background_ripple_mask_shape="oval"
                     app:sel_background_shape="oval"
+                    app:sel_background_border_color="#ff0000"
+                    app:sel_background_border_width="4dp"
                     />
 
                 <cn.forward.androids.views.STextView

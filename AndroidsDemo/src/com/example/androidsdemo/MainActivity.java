@@ -58,6 +58,9 @@ public class MainActivity extends ListActivity {
                     DragListViewDemo.class));
         } else if (position == 7) {
             startActivity(new Intent(getApplicationContext(),
+                    EasyAdapterDemo.class));
+        } else {
+            startActivity(new Intent(getApplicationContext(),
                     OtherDemo.class));
         }
     }
@@ -71,6 +74,7 @@ public class MainActivity extends ListActivity {
         data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         data.add(createItem("KeyboardLayout", "监听输入法键盘的弹起与隐藏"));
         data.add(createItem("DragListView", "可拖拽的ListView，拖拽排序"));
+        data.add(createItem("EasyAdapter", "用于RecyclerView的适配器，可支持设置点击、单选和多选模式"));
         data.add(createItem("其他", ""));
 
         return data;

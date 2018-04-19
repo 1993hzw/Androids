@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#454545"
+    android:orientation="vertical"
+    >
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#0f0"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        >
+
+        <Spinner
+            android:id="@+id/spinnerMode"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout
+            android:id="@+id/panelMultiSel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <cn.forward.androids.views.StringScrollPicker
+                android:id="@+id/pickerMaxSelect"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:background="#fff"
+                app:spv_max_text_size="18dp"
+                app:spv_min_text_size="12dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="selectAll"
+                android:text="全选"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="reverseSelectAll"
+                android:text="反选"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

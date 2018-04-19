@@ -46,6 +46,7 @@
         <activity
             android:name=".OtherDemo"
             android:label="@string/app_name"/>
+        <activity android:name=".EasyAdapterDemo"/>
     </application>
 
 </manifest>
