@@ -3,7 +3,7 @@ Androids
 
 Androids是本人根据平时的项目实践经验，为了提高Android开发效率而写的一个工具SDK；里面提供了一些工具类以及自定义View，可在实际项目开发时直接使用。
 
-![ANDROIDS](https://raw.githubusercontent.com/1993hzw/common/master/Androids/androids2.png)
+![ANDROIDS](https://raw.githubusercontent.com/1993hzw/common/master/Androids/androids3.png)
 
 ### 使用
 ```
