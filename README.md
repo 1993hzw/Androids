@@ -8,7 +8,7 @@ Androids是本人根据平时的项目实践经验，为了提高Android开发�
 ### 使用
 ```
 dependencies {
-    compile 'com.forward.androids:androids:1.1.8.1'
+    compile 'com.forward.androids:androids:1.2'
 }
 ```
 ### 项目结构
@@ -17,48 +17,6 @@ dependencies {
 #### --androids 库工程
 
 ### 自定义View
-  
-  * #### ShapeImageView
-  可设置形状(圆形、圆角矩形)的ImageView
-  
-  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_shapeimageview.xml)
-  
-  ```xml
-  <attr name="siv_shape" format="enum">
-      <enum name="rect" value="1"/>
-      <enum name="circle" value="2"/>
-      <enum name="oval" value="3"/>
-  </attr>
-  <attr name="siv_round_radius" format="dimension"/>
-  <attr name="siv_round_radius_leftTop" format="dimension"/>
-  <attr name="siv_round_radius_leftBottom" format="dimension"/>
-  <attr name="siv_round_radius_rightTop" format="dimension"/>
-  <attr name="siv_round_radius_rightBottom" format="dimension"/>
-  <attr name="siv_border_size" format="dimension"/>
-  <attr name="siv_border_color" format="color"/>
-  ```
-
-  [《Android自定义View——可设置形状(圆形、圆角矩形、椭圆)的ImageView，抗锯齿》](http://blog.csdn.net/u012964944/article/details/50548720)
-  
-  * #### MaskImageView
-  可在背景图和前景图显示遮罩效果的ImageView
-  
-  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
-  
-  ```xml
-  <!-- 遮罩的层面:背景\前景图-->
-  <attr name="miv_mask_level" format="enum">
-      <enum name="background" value="1"/>
-      <enum name="foreground" value="2"/>
-  </attr>
-  <!-- 设置了setClickable(true)才生效,默认开启遮罩-->
-  <attr name="miv_is_show_mask_on_click" format="boolean"/>
-  <attr name="miv_mask_color" format="color"/>
-  <!--是否忽略图片的透明度，默认为true,透明部分不显示遮罩 -->
-  <attr name="miv_is_ignore_alpha" format="boolean"/>
-  ```
-
-  [《Android自定义View——可在背景图和前景图显示遮罩效果的ImageView》](http://blog.csdn.net/u012964944/article/details/50560503)
 
   * #### STextView/SLayout
   可直接在布局文件设置shape和selector，实现点击效果
@@ -117,6 +75,48 @@ dependencies {
   <attr name="sel_background_ripple_mask_corner_bottomRight" format="dimension"/>
   ```
   
+  * #### ShapeImageView
+  可设置形状(圆形、圆角矩形)的ImageView
+  
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_shapeimageview.xml)
+  
+  ```xml
+  <attr name="siv_shape" format="enum">
+      <enum name="rect" value="1"/>
+      <enum name="circle" value="2"/>
+      <enum name="oval" value="3"/>
+  </attr>
+  <attr name="siv_round_radius" format="dimension"/>
+  <attr name="siv_round_radius_leftTop" format="dimension"/>
+  <attr name="siv_round_radius_leftBottom" format="dimension"/>
+  <attr name="siv_round_radius_rightTop" format="dimension"/>
+  <attr name="siv_round_radius_rightBottom" format="dimension"/>
+  <attr name="siv_border_size" format="dimension"/>
+  <attr name="siv_border_color" format="color"/>
+  ```
+
+  [《Android自定义View——可设置形状(圆形、圆角矩形、椭圆)的ImageView，抗锯齿》](http://blog.csdn.net/u012964944/article/details/50548720)
+  
+  * #### MaskImageView
+  可在背景图和前景图显示遮罩效果的ImageView
+  
+  [点击查看示例代码](https://github.com/1993hzw/Androids/blob/master/AndroidsDemo/res/layout/activity_maskimageview.xml)
+  
+  ```xml
+  <!-- 遮罩的层面:背景\前景图-->
+  <attr name="miv_mask_level" format="enum">
+      <enum name="background" value="1"/>
+      <enum name="foreground" value="2"/>
+  </attr>
+  <!-- 设置了setClickable(true)才生效,默认开启遮罩-->
+  <attr name="miv_is_show_mask_on_click" format="boolean"/>
+  <attr name="miv_mask_color" format="color"/>
+  <!--是否忽略图片的透明度，默认为true,透明部分不显示遮罩 -->
+  <attr name="miv_is_ignore_alpha" format="boolean"/>
+  ```
+
+  [《Android自定义View——可在背景图和前景图显示遮罩效果的ImageView》](http://blog.csdn.net/u012964944/article/details/50560503)
+
   * #### RatioImageView
   可以设置宽高比例的ImageView
   
