@@ -91,9 +91,9 @@ public class SelectorAttrs {
             if (bg == null && a.hasValue(R.styleable.View_sel_background)) { // 兼容旧版本属性
                 bg = a.getDrawable(R.styleable.View_sel_background);
             }
+            colorShapeDrawable = new GradientDrawable();
             if (bg instanceof ColorDrawable) {
                 background = ((ColorDrawable) bg).getColor();
-                colorShapeDrawable = new GradientDrawable();
                 colorShapeDrawable.setColor(background);
             }
         }
