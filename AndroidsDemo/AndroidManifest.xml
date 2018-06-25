@@ -47,6 +47,7 @@
             android:name=".OtherDemo"
             android:label="@string/app_name"/>
         <activity android:name=".EasyAdapterDemo"/>
+        <activity android:name=".TouchGestureDetectorDemo"/>
     </application>
 
 </manifest>

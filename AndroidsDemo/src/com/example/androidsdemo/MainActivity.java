@@ -8,12 +8,9 @@ import java.util.Map;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
-import cn.forward.androids.utils.LogUtil;
 
 /**
  * @author huangziwei
@@ -49,16 +46,19 @@ public class MainActivity extends ListActivity {
                     ScrollPickerViewDemo.class));
         } else if (position == 4) {
             startActivity(new Intent(getApplicationContext(),
-                    AnimatorUtilDemo.class));
+                    KeyboardLayoutDemo.class));
         } else if (position == 5) {
             startActivity(new Intent(getApplicationContext(),
-                    KeyboardLayoutDemo.class));
+                    DragListViewDemo.class));
         } else if (position == 6) {
             startActivity(new Intent(getApplicationContext(),
-                    DragListViewDemo.class));
+                    EasyAdapterDemo.class));
         } else if (position == 7) {
             startActivity(new Intent(getApplicationContext(),
-                    EasyAdapterDemo.class));
+                    TouchGestureDetectorDemo.class));
+        } else if (position == 8) {
+            startActivity(new Intent(getApplicationContext(),
+                    AnimatorUtilDemo.class));
         } else {
             startActivity(new Intent(getApplicationContext(),
                     OtherDemo.class));
@@ -71,10 +71,11 @@ public class MainActivity extends ListActivity {
         data.add(createItem("MaskImageView/STextView/SLayout", "可设置点击效果的自定义view"));
         data.add(createItem("RatioImageView", "可设置宽高比例的ImageView"));
         data.add(createItem("ScrollPickerView", "滚动选择器，可实现生日选择器，老虎机等"));
-        data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         data.add(createItem("KeyboardLayout", "监听输入法键盘的弹起与隐藏"));
         data.add(createItem("DragListView", "可拖拽的ListView，拖拽排序"));
         data.add(createItem("EasyAdapter", "用于RecyclerView的适配器，可支持设置点击、单选和多选模式"));
+        data.add(createItem("TouchGestureDetector", "识别常用手势，对特定场景下的手势识别进行优化"));
+        data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         data.add(createItem("其他", ""));
 
         return data;

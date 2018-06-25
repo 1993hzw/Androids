@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/container"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/image_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_launcher"
+        />
+
+    <com.example.androidsdemo.view.EasyPaintView
+        android:id="@+id/easy_paint_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:textSize="16dp"
+        android:padding="10dp"
+        android:background="#ffffff"
+        android:textColor="#454545"
+        android:text="绘画场景手势识别：单指涂鸦，双指移动和缩放图片。"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</FrameLayout>
