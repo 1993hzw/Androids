@@ -41,12 +41,14 @@ public class TouchGestureDetectorDemo extends Activity {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
+                Log.d(TAG, "onSingleTapConfirmed: ");
                 Toast.makeText(TouchGestureDetectorDemo.this, "onSingleTapConfirmed", Toast.LENGTH_SHORT).show();
                 return true;
             }
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
+                Log.d(TAG, "onDoubleTap: ");
                 Toast.makeText(TouchGestureDetectorDemo.this, "onDoubleTap", Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -54,13 +56,23 @@ public class TouchGestureDetectorDemo extends Activity {
             @Override
             public boolean onDown(MotionEvent e) {
                 Log.d(TAG, "onDown: ");
-                mEasyPaintView.addPoint(e.getX(), e.getY());
                 return true;
             }
 
             @Override
             public void onUpOrCancel(MotionEvent e) {
                 Log.d(TAG, "onUpOrCancel: ");
+            }
+
+            @Override
+            public void onScrollBegin(MotionEvent e) {
+                Log.d(TAG, "onScrollBegin: ");
+                mEasyPaintView.addPoint(e.getX(), e.getY());
+            }
+
+            @Override
+            public void onScrollEnd(MotionEvent e) {
+                Log.d(TAG, "onScrollEnd: ");
                 mEasyPaintView.reset();
             }
 
@@ -115,8 +127,11 @@ public class TouchGestureDetectorDemo extends Activity {
 
         // 结合绘画场景设置属性
         mTouchGestureDetector.setIsLongpressEnabled(false); // 绘画应该取消长按
-        mTouchGestureDetector.setScaleSpanSlop(1);  // 绘画应该设置间距为1，否则双指缩放后抬起其中一个手指仍然可以移动
-        mTouchGestureDetector.setScaleMinSpan(1);
+
+        // 下面两行绘画场景下应该设置间距为大于等于1，否则设为0双指缩放后抬起其中一个手指仍然可以移动
+        mTouchGestureDetector.setScaleSpanSlop(1);
+        mTouchGestureDetector.setScaleMinSpan(1); // 最小缩放距离，即双指大于这个值时才可以缩放
+
         mTouchGestureDetector.setIsScrollAfterScaled(false);
 
         findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {

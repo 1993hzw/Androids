@@ -101,7 +101,7 @@ public class TouchGestureDetector {
 
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP ||
-                event.getAction() == MotionEvent.ACTION_CANCEL) {
+                event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
             mOnTouchGestureListener.onUpOrCancel(event);
         }
         boolean ret = mScaleGestureDetector.onTouchEvent(event);
@@ -118,6 +118,9 @@ public class TouchGestureDetector {
 
         private IOnTouchGestureListener mListener;
         private boolean mHasScaled = false; // 当前触摸序列中是否已经识别了缩放手势，如果是的话，则后续不会触发onScroll
+        private boolean mIsScrolling = false;
+        private MotionEvent mLastScrollMotionEvent; // 最后一次滚动的事件
+
 
         public OnTouchGestureListenerProxy(IOnTouchGestureListener listener) {
             this.mListener = listener;
@@ -127,12 +130,18 @@ public class TouchGestureDetector {
         public boolean onDown(MotionEvent e) {
             // 触摸序列的开始，初始化
             mHasScaled = false;
+            mIsScrolling = false;
             return mListener.onDown(e);
         }
 
         @Override
         public void onUpOrCancel(MotionEvent e) {
             mListener.onUpOrCancel(e);
+            if (mIsScrolling) {
+                mIsScrolling = false;
+                mLastScrollMotionEvent = null;
+                onScrollEnd(e);
+            }
         }
 
         @Override
@@ -146,10 +155,26 @@ public class TouchGestureDetector {
         }
 
         @Override
+        public void onScrollBegin(MotionEvent e) {
+            mListener.onScrollBegin(e);
+        }
+
+        @Override
+        public void onScrollEnd(MotionEvent e) {
+            mListener.onScrollEnd(e);
+        }
+
+        @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             if (!mIsScrollAfterScaled && mHasScaled) { // 当前触摸序列中已经识别了缩放手势,后续不会触发onScroll
+                mIsScrolling = false;
                 return false;
             }
+            if (!mIsScrolling) { // 通知开始滚动
+                mIsScrolling = true;
+                onScrollBegin(e1);
+            }
+            mLastScrollMotionEvent = MotionEvent.obtain(e2);
             return mListener.onScroll(e1, e2, distanceX, distanceY);
         }
 
@@ -186,6 +211,10 @@ public class TouchGestureDetector {
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
             mHasScaled = true;
+            if (mIsScrolling) {
+                mIsScrolling = false;
+                onScrollEnd(mLastScrollMotionEvent);
+            }
             return mListener.onScaleBegin(detector);
         }
 
@@ -199,11 +228,37 @@ public class TouchGestureDetector {
      * 识别手势的回调接口
      */
     public static interface IOnTouchGestureListener extends GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetector.OnScaleGestureListener {
+        /**
+         * 监听ACTION_UP和ACTION_CANCEL、ACTION_OUTISIDE事件
+         * 该事件在其他事件之前调用
+         *
+         * @param e
+         */
         public void onUpOrCancel(MotionEvent e);
+
+        /**
+         * 标志滚动开始
+         *
+         * @param e
+         */
+        public void onScrollBegin(MotionEvent e);
+
+        /**
+         * 标志滚动结束
+         *
+         * @param e
+         */
+        public void onScrollEnd(MotionEvent e);
     }
 
     public static abstract class OnTouchGestureListener implements IOnTouchGestureListener {
 
+        /**
+         * 沿用系统的GestureDetector逻辑，双击时第二次onDown在onDoubleTap之后调用
+         *
+         * @param e
+         * @return
+         */
         @Override
         public boolean onDown(MotionEvent e) {
             return false;
@@ -221,6 +276,24 @@ public class TouchGestureDetector {
 
         @Override
         public void onLongPress(MotionEvent e) {
+        }
+
+        /**
+         * 标志滚动开始
+         *
+         * @param e
+         */
+        public void onScrollBegin(MotionEvent e) {
+
+        }
+
+        /**
+         * 标志滚动结束
+         *
+         * @param e
+         */
+        public void onScrollEnd(MotionEvent e) {
+
         }
 
         @Override
