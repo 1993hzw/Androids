@@ -251,6 +251,10 @@ dependencies {
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
 
 ### 更新
+* v1.2.2（16） 
+
+1.优化手势识别类TouchGestureDetector,ScaleGestureDetector使用Api27源码
+
 * v1.2（14） 
 
 1.新增EasyAdapter,用于RecyclerView的适配器，可支持设置点击、单选和多选模式。（[Kotlin版实现](https://github.com/1993hzw/EasyAdapterForRecyclerView-kotlin)
