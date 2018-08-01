@@ -1,5 +1,6 @@
 Androids
 ======
+[![](https://jitpack.io/v/1993hzw/Androids.svg)](https://jitpack.io/#1993hzw/Androids)
 
 Androids是本人根据平时的项目实践经验，为了提高Android开发效率而写的一个工具SDK；里面提供了一些工具类以及自定义View，可在实际项目开发时直接使用。
 
