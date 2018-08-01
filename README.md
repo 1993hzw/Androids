@@ -8,8 +8,15 @@ Androids是本人根据平时的项目实践经验，为了提高Android开发�
 
 ### 使用
 ```
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
-    compile 'com.forward.androids:androids:1.2.1'
+    compile 'com.forward.androids:androids:1.2.2'
 }
 ```
 ### 项目结构
