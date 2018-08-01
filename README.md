@@ -16,7 +16,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.forward.androids:androids:1.2.2'
+    compile 'com.github.1993hzw:Androids:1.2.2'
 }
 ```
 ### 项目结构
