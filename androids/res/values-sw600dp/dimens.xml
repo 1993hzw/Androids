@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Use a larger scaling span for larger screen devices. -->
+    <dimen name="androids_api27_config_minScalingSpan">32mm</dimen>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Minimum span needed to begin a touch scaling gesture.
+     If the span is equal to or greater than this size, a scaling gesture
+     will begin, where supported. (See android.view.ScaleGestureDetectorApi27)
+
+     This also takes into account the size of any active touch points.
+     Devices with screens that deviate too far from their assigned density
+     bucket should consider tuning this value in a device-specific overlay.
+     For best results, care should be taken such that this value remains
+     larger than the minimum reported touchMajor/touchMinor values
+     reported by the hardware. -->
+    <dimen name="androids_api27_config_minScalingSpan">27mm</dimen>
+</resources>

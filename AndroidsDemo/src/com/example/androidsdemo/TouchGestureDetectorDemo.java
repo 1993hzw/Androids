@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.androidsdemo.view.EasyPaintView;
 
+import cn.forward.androids.ScaleGestureDetectorApi27;
 import cn.forward.androids.TouchGestureDetector;
 
 /**
@@ -85,7 +85,7 @@ public class TouchGestureDetectorDemo extends Activity {
 
 
             @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
+            public boolean onScaleBegin(ScaleGestureDetectorApi27 detector) {
                 Log.d(TAG, "onScaleBegin: ");
                 mLastFocusX = null;
                 mLastFocusY = null;
@@ -93,12 +93,17 @@ public class TouchGestureDetectorDemo extends Activity {
             }
 
             @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
+            public void onScaleEnd(ScaleGestureDetectorApi27 detector) {
                 Log.d(TAG, "onScaleEnd: ");
+                float scale = 1f;
+                mTargetView.setScaleX(scale);
+                mTargetView.setScaleY(scale);
+                mTargetView.setTranslationX(0);
+                mTargetView.setTranslationY(0);
             }
 
             @Override
-            public boolean onScale(ScaleGestureDetector detector) {
+            public boolean onScale(ScaleGestureDetectorApi27 detector) {
                 Log.d(TAG, "onScale: ");
                 // 屏幕上的焦点
                 mTouchCentreX = detector.getFocusX();
@@ -109,8 +114,8 @@ public class TouchGestureDetectorDemo extends Activity {
                     final float dy = mTouchCentreY - mLastFocusY;
                     // 移动图片
 
-                    mTargetView.setTranslationX(mTargetView.getTranslationX() + dx);
-                    mTargetView.setTranslationY(mTargetView.getTranslationY() + dy);
+//                    mTargetView.setTranslationX(mTargetView.getTranslationX() + dx);
+//                    mTargetView.setTranslationY(mTargetView.getTranslationY() + dy);
                 }
 
                 // 缩放图片
@@ -134,13 +139,14 @@ public class TouchGestureDetectorDemo extends Activity {
 
         mTouchGestureDetector.setIsScrollAfterScaled(false);
 
-        findViewById(R.id.container).setOnTouchListener(new View.OnTouchListener() {
+        mEasyPaintView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return mTouchGestureDetector.onTouchEvent(event);
             }
         });
-
+        mEasyPaintView.setScaleX(0.5f);
+        mEasyPaintView.setScaleY(0.5f);
     }
 
 }

@@ -4,19 +4,15 @@ import android.content.Context;
 import android.os.Build;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-
-import java.lang.reflect.Field;
-
-import cn.forward.androids.utils.ReflectUtil;
 
 /**
  * 集成GestureDetector、ScaleGestureDetector，方便识别常用手势（点击、双击、长按、缩放等），并对特定场景下的手势识别进行优化
+ * (ScaleGestureDetector使用了Android Api 27的源码)
  */
 public class TouchGestureDetector {
 
     private final GestureDetector mGestureDetector;
-    private final ScaleGestureDetector mScaleGestureDetector;
+    private final ScaleGestureDetectorApi27 mScaleGestureDetectorApi27;
     private final IOnTouchGestureListener mOnTouchGestureListener;
     private boolean mIsScrollAfterScaled = true; // 在一串事件序列中，缩放onScale后继续识别onScroll手势
 
@@ -24,10 +20,10 @@ public class TouchGestureDetector {
         mOnTouchGestureListener = new OnTouchGestureListenerProxy(listener);
         mGestureDetector = new GestureDetector(context, mOnTouchGestureListener);
         mGestureDetector.setOnDoubleTapListener(mOnTouchGestureListener);
-        mScaleGestureDetector = new ScaleGestureDetector(context, mOnTouchGestureListener);
+        mScaleGestureDetectorApi27 = new ScaleGestureDetectorApi27(context, mOnTouchGestureListener);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mScaleGestureDetector.setQuickScaleEnabled(false);
+            mScaleGestureDetectorApi27.setQuickScaleEnabled(false);
         }
     }
 
@@ -37,16 +33,7 @@ public class TouchGestureDetector {
      * @param minSpan
      */
     public void setScaleMinSpan(int minSpan) {
-        Field field = ReflectUtil.getField(ScaleGestureDetector.class, "mMinSpan");
-        if (field == null) {
-            return;
-        }
-        field.setAccessible(true);
-        try {
-            field.set(mScaleGestureDetector, minSpan);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        mScaleGestureDetectorApi27.setMinSpan(minSpan);
     }
 
     /**
@@ -55,17 +42,7 @@ public class TouchGestureDetector {
      * @param spanSLop
      */
     public void setScaleSpanSlop(int spanSLop) {
-        //mSpanSlop
-        Field field = ReflectUtil.getField(ScaleGestureDetector.class, "mSpanSlop");
-        if (field == null) {
-            return;
-        }
-        field.setAccessible(true);
-        try {
-            field.set(mScaleGestureDetector, spanSLop);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        mScaleGestureDetectorApi27.setSpanSlop(spanSLop);
     }
 
     /**
@@ -104,8 +81,8 @@ public class TouchGestureDetector {
                 event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_OUTSIDE) {
             mOnTouchGestureListener.onUpOrCancel(event);
         }
-        boolean ret = mScaleGestureDetector.onTouchEvent(event);
-        if (!mScaleGestureDetector.isInProgress()) {
+        boolean ret = mScaleGestureDetectorApi27.onTouchEvent(event);
+        if (!mScaleGestureDetectorApi27.isInProgress()) {
             ret |= mGestureDetector.onTouchEvent(event);
         }
         return ret;
@@ -204,12 +181,12 @@ public class TouchGestureDetector {
         }
 
         @Override
-        public boolean onScale(ScaleGestureDetector detector) {
+        public boolean onScale(ScaleGestureDetectorApi27 detector) {
             return mListener.onScale(detector);
         }
 
         @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
+        public boolean onScaleBegin(ScaleGestureDetectorApi27 detector) {
             mHasScaled = true;
             if (mIsScrolling) {
                 mIsScrolling = false;
@@ -219,7 +196,7 @@ public class TouchGestureDetector {
         }
 
         @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
+        public void onScaleEnd(ScaleGestureDetectorApi27 detector) {
             mListener.onScaleEnd(detector);
         }
     }
@@ -227,7 +204,7 @@ public class TouchGestureDetector {
     /**
      * 识别手势的回调接口
      */
-    public static interface IOnTouchGestureListener extends GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetector.OnScaleGestureListener {
+    public static interface IOnTouchGestureListener extends GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, ScaleGestureDetectorApi27.OnScaleGestureListener {
         /**
          * 监听ACTION_UP和ACTION_CANCEL、ACTION_OUTISIDE事件
          * 该事件在其他事件之前调用
@@ -326,17 +303,17 @@ public class TouchGestureDetector {
         }
 
         @Override
-        public boolean onScale(ScaleGestureDetector detector) {
+        public boolean onScale(ScaleGestureDetectorApi27 detector) {
             return false;
         }
 
         @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector) {
+        public boolean onScaleBegin(ScaleGestureDetectorApi27 detector) {
             return false;
         }
 
         @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
+        public void onScaleEnd(ScaleGestureDetectorApi27 detector) {
         }
     }
 }

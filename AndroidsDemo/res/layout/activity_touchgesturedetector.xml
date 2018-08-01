@@ -16,6 +16,7 @@
     <com.example.androidsdemo.view.EasyPaintView
         android:id="@+id/easy_paint_view"
         android:layout_width="match_parent"
+        android:background="#88888888"
         android:layout_height="match_parent"/>
 
     <TextView
