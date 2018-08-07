@@ -31,6 +31,7 @@
                     app:miv_is_ignore_alpha="true"
                     app:miv_mask_color="#88000000"
                     app:miv_mask_level="background"
+                    app:sel_background_shape="oval"
                     app:sel_background_corners="20dp"/>
 
                 <FrameLayout

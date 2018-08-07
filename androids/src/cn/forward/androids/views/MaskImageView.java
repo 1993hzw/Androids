@@ -92,9 +92,15 @@ public class MaskImageView extends ImageView {
         mLastColorFilter = colorFilter;
     }
 
+    /*
+    draw:
+    1.绘制背景。background.draw(canvas)(背景图是在draw()方法里面绘制的).
+    2.绘制自己。调用onDraw(canvas).
+    3.绘制子控件。调用dispatchDraw(canvas).
+    4.绘制装饰。调用onDrawScrollBars(canvas).
+     */
     @Override
-    protected void onDraw(Canvas canvas) {
-
+    public void draw(Canvas canvas) {
         if (mIsIgnoreAlpha) { // 忽略透明度，只在不透明部分绘制遮罩
             if (mIsShowMaskOnClick && isPressed()) {
                 // 绘制遮罩层
@@ -102,8 +108,14 @@ public class MaskImageView extends ImageView {
             } else {
                 setDrawableColorFilter(null);
             }
-            super.onDraw(canvas);
-        } else { // 不忽略透明度,直接通过canvas.drawColor绘制遮罩层
+        }
+        super.draw(canvas);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        if (!mIsIgnoreAlpha) { // 不忽略透明度,直接通过canvas.drawColor绘制遮罩层
             setDrawableColorFilter(null);
             if (mMaskLevel == MASK_LEVEL_BACKGROUND) { // 背景图
                 if (mIsShowMaskOnClick && isPressed()) {
@@ -118,6 +130,8 @@ public class MaskImageView extends ImageView {
                     canvas.drawColor(mMaskColor);
                 }
             }
+        } else {
+            super.onDraw(canvas);
         }
 
     }
