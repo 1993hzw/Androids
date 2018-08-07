@@ -76,7 +76,6 @@
                 <cn.forward.androids.views.MaskImageView
                     android:layout_width="110dp"
                     android:layout_height="110dp"
-                    android:background="@drawable/bg"
                     android:clickable="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher"

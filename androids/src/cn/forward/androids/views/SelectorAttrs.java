@@ -94,8 +94,9 @@ public class SelectorAttrs {
             colorShapeDrawable = new GradientDrawable();
             if (bg instanceof ColorDrawable) {
                 background = ((ColorDrawable) bg).getColor();
-                colorShapeDrawable.setColor(background);
             }
+            // 兼容低版本，需要设置颜色（没有设置背景颜色属性时必须设为透明）
+            colorShapeDrawable.setColor(background);
         }
         if (colorShapeDrawablePressed != null) {
             colorShapeDrawablePressed.setColor(background);
