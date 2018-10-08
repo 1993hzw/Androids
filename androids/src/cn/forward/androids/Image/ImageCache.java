@@ -1,8 +1,11 @@
 package cn.forward.androids.Image;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Environment;
 import android.util.LruCache;
 
@@ -11,7 +14,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import cn.forward.androids.base.BaseApplication;
 import cn.forward.androids.utils.LogUtil;
 import cn.forward.androids.utils.cache.DiskLruCache;
 
@@ -28,12 +30,14 @@ public class ImageCache {
     private final Object mDiskCacheLock = new Object();
     private DiskLruCache diskLruCache;
     private LruCache<String, Bitmap> memoryLruCache;
+    private Context mContext;
 
     public ImageCache(Context context, int memoryCacheMaxSize, long diskCacheMaxSize) {
         this(context, memoryCacheMaxSize, diskCacheMaxSize, new File(getDiskCacheDir(context, "androidsCache")));
     }
 
     public ImageCache(Context context, int memoryCacheMaxSize, long diskCacheMaxSize, File diskCacheDir) {
+        mContext = context;
         mMemoryCacheMaxSize = memoryCacheMaxSize;
         mDiskCacheMaxSize = diskCacheMaxSize;
         mDiskCacheDir = diskCacheDir;
@@ -59,9 +63,19 @@ public class ImageCache {
             if (diskLruCache != null && !diskLruCache.isClosed()) {
                 return;
             }
+            int vc = 0;
+            try {
+                PackageManager manager = mContext.getPackageManager();
+                PackageInfo info = manager.getPackageInfo(mContext.getPackageName(), 0);
+                if (info != null) {
+                    vc = info.versionCode;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
             try {
                 if (mDiskCacheDir.exists() || mDiskCacheDir.mkdirs()) {
-                    diskLruCache = DiskLruCache.open(mDiskCacheDir, BaseApplication.VERSION_CODE, 1, mDiskCacheMaxSize);
+                    diskLruCache = DiskLruCache.open(mDiskCacheDir, vc, 1, mDiskCacheMaxSize);
                 } else {
                     LogUtil.e("disk cache dir init failed");
                 }
@@ -270,7 +284,9 @@ public class ImageCache {
 
     public void setMemoryCacheMaxSize(int size) {
         if (memoryLruCache != null) {
-            memoryLruCache.resize(size);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                memoryLruCache.resize(size);
+            }
         }
     }
 
@@ -315,7 +331,6 @@ public class ImageCache {
 
         return cachePath + File.separator + dirName;
     }
-
 
 
 }

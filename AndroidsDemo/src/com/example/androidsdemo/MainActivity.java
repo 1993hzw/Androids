@@ -59,9 +59,6 @@ public class MainActivity extends ListActivity {
         } else if (position == 8) {
             startActivity(new Intent(getApplicationContext(),
                     AnimatorUtilDemo.class));
-        } else {
-            startActivity(new Intent(getApplicationContext(),
-                    OtherDemo.class));
         }
     }
 
@@ -76,8 +73,6 @@ public class MainActivity extends ListActivity {
         data.add(createItem("EasyAdapter", "用于RecyclerView的适配器，可支持设置点击、单选和多选模式"));
         data.add(createItem("TouchGestureDetector", "识别常用手势，对特定场景下的手势识别进行优化"));
         data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
-        data.add(createItem("其他", ""));
-
         return data;
     }
 

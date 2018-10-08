@@ -1,7 +1,6 @@
 package cn.forward.androids.utils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -27,7 +26,6 @@ public class ReflectUtil {
         }
     }
 
-
     /**
      * 获取对象里变量的值
      *
@@ -50,6 +48,27 @@ public class ReflectUtil {
     }
 
     /**
+     * 获取静态变量的值
+     *
+     * @param clazz
+     * @param fieldName
+     * @return 返回空则可能值不存在，或变量不存在
+     */
+    public static Object getValue(Class clazz, String fieldName) {
+        Field field = getField(clazz, fieldName);
+        if (field == null) {
+            return null;
+        }
+        // 参数值为true，禁用访问控制检查
+        field.setAccessible(true);
+        try {
+            return field.get(null);
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    /**
      * 获取类里的方法
      *
      * @param thisClass
@@ -58,7 +77,7 @@ public class ReflectUtil {
      * @return
      * @throws NoSuchMethodException
      */
-    private static Method getMethod(Class<?> thisClass, String methodName, Class<?>[] parameterTypes) {
+    public static Method getMethod(Class<?> thisClass, String methodName, Class<?>[] parameterTypes) {
         if (thisClass == null) {
             return null;
         }
@@ -96,5 +115,28 @@ public class ReflectUtil {
         }
         Method method = getMethod(instance.getClass(), methodName, parameterTypes);
         return method.invoke(instance, args);
+    }
+
+    /**
+     * 执行静态方法
+     *
+     * @param clazz
+     * @param methodName
+     * @param args       方法参数
+     * @return 返回值
+     * @throws Throwable 方法不存在或者执行失败跑出异常
+     */
+    public static Object invokeMethod(Class clazz, String methodName, Object... args) throws Throwable {
+        Class<?>[] parameterTypes = null;
+        if (args != null) {
+            parameterTypes = new Class[args.length];
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] != null) {
+                    parameterTypes[i] = args[i].getClass();
+                }
+            }
+        }
+        Method method = getMethod(clazz, methodName, parameterTypes);
+        return method.invoke(clazz, args);
     }
 }
