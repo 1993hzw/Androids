@@ -8,4 +8,8 @@
     <color name="item_bg_pressed">#707070</color>
 
     <color name="green">#00ff00</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 </resources>

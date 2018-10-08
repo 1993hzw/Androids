@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 26
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 19
+        targetSdkVersion 26
         versionCode 17
-        versionName "1.2.3"
+        versionName "1.3"
     }
     buildTypes {
         release {
@@ -35,8 +35,5 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided 'com.android.support:recyclerview-v7:23.2.0'
-}
-if (isForUpload2Maven()) {
-    apply from: "https://raw.githubusercontent.com/1993hzw/common/master/bintrayUpload.gradle"
+    provided 'com.android.support:recyclerview-v7:26.1.0'
 }
