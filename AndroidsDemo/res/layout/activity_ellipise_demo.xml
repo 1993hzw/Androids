@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/max_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max Line=1"
+            android:textColor="#333333"
+            android:textSize="16dp" />
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:hint="Search"
+            android:textColor="#333333"
+            android:textColorHint="#cccccc"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="原文"
+                android:textColor="#888888"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#333333"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="搜索结果(全部)"
+                android:textColor="#888888"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/search_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="搜索结果(仅一项不区分大小写)"
+                android:textColor="#888888"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/search_result2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="start"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="搜索结果(仅一项且区分大小写)"
+                android:textColor="#888888"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/search_result3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="start"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

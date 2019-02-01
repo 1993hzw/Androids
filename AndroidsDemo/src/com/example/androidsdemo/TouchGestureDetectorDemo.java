@@ -114,8 +114,8 @@ public class TouchGestureDetectorDemo extends Activity {
                     final float dy = mTouchCentreY - mLastFocusY;
                     // 移动图片
 
-//                    mTargetView.setTranslationX(mTargetView.getTranslationX() + dx);
-//                    mTargetView.setTranslationY(mTargetView.getTranslationY() + dy);
+                    mTargetView.setTranslationX(mTargetView.getTranslationX() + dx);
+                    mTargetView.setTranslationY(mTargetView.getTranslationY() + dy);
                 }
 
                 // 缩放图片
