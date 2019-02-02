@@ -46,7 +46,7 @@
         <activity android:name=".EasyAdapterDemo" />
         <activity android:name=".TouchGestureDetectorDemo" />
         <activity
-            android:name=".EllipiseUtilsDemo"
+            android:name=".EllipsizeUtilsDemo"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

@@ -1,7 +1,6 @@
 package cn.forward.androids.utils;
 
 import android.graphics.Point;
-import android.os.Build;
 import android.support.v4.widget.TextViewCompat;
 import android.text.Layout;
 import android.text.SpannableString;
@@ -20,7 +19,7 @@ import java.util.Locale;
 /**
  * @author ziwei huang
  */
-public class EllipiseUtils {
+public class EllipsizeUtils {
 
     public static final int HIGHLIGHT_FIRST = 0;
     public static final int HIGHLIGHT_LAST = 1;
@@ -203,27 +202,6 @@ public class EllipiseUtils {
         return list;
     }
 
-    private static int ellipsize(TextPaint tp, CharSequence cs, int maxLine, int lineWidth) {
-        StaticLayout layout = new StaticLayout(cs, tp, lineWidth, Layout.Alignment.ALIGN_NORMAL,
-                1.0f, 0.0f, true);
-        int count = layout.getLineCount();
-        int pos = -1;
-
-        if (count > maxLine) {
-            int start = layout.getLineStart(maxLine - 1);
-            final int range[] = {0};
-            TextUtils.ellipsize(cs.subSequence(start, cs.length()), tp, lineWidth,
-                    TextUtils.TruncateAt.END, false, new TextUtils.EllipsizeCallback() {
-                        @Override
-                        public void ellipsized(int start, int end) {
-                            range[0] = start;  // 单行文本缩略起始
-                        }
-                    });
-            pos = start + range[0];
-        }
-        return pos;
-    }
-
     private static class EllipseListener implements ViewTreeObserver.OnPreDrawListener {
         final TextView textView;
         final String content;
@@ -260,6 +238,66 @@ public class EllipiseUtils {
             textView.setText(s);
             return true;
         }
+    }
+
+    public static void ellipsize(TextView textView, String content) {
+        TextUtils.TruncateAt ellipsize = textView.getEllipsize();
+        if (ellipsize != TextUtils.TruncateAt.START && ellipsize != TextUtils.TruncateAt.MIDDLE) { // handle it over to the system
+            textView.setText(content);
+            return;
+        }
+
+        int maxLine = TextViewCompat.getMaxLines(textView);
+        int availableWidth = textView.getWidth() - textView.getPaddingLeft() - textView.getPaddingRight();
+        if (maxLine < 2) { // single line
+            textView.setText(content);
+        } else {
+            List<Point> linesStart = getLineStartAndEnd(textView.getPaint(), content, availableWidth);
+            if (linesStart.size() <= maxLine) {
+                textView.setText(content);
+                return;
+            }
+
+            if (ellipsize == TextUtils.TruncateAt.START) {
+                int start = linesStart.get(linesStart.size() - maxLine).x;
+                start = Math.max(start + ELLIPSIS_NORMAL.length(), 0);
+                String substring = content.substring(start);
+                while (getLayout(textView.getPaint(), ELLIPSIS_NORMAL + substring, availableWidth).getLineCount() > maxLine) {
+                    int firstSpace = substring.indexOf(' '); // break
+                    if (firstSpace == -1) {
+                        substring = substring.substring(1);
+                    } else {
+                        substring = substring.substring(firstSpace + 1);
+                    }
+                }
+                textView.setText(ELLIPSIS_NORMAL + substring);
+            } else { // middle
+                int middleLineStart = (maxLine - 1) / 2;
+                Point point = linesStart.get(middleLineStart);
+                int startEllipsize = point.y - ELLIPSIS_NORMAL.length();
+                final String substringStart = content.substring(0, startEllipsize);
+
+                int middleLineEnd = linesStart.size() - (maxLine - (maxLine - 1) / 2 - 1);
+                Point pointEnd = linesStart.get(middleLineEnd);
+                String substringEnd = content.substring(pointEnd.x);
+                while (getLayout(textView.getPaint(), substringStart + ELLIPSIS_NORMAL + substringEnd, availableWidth).getLineCount() > maxLine) {
+                    int firstSpace = substringEnd.indexOf(' '); // break
+                    if (firstSpace == -1) {
+                        substringEnd = substringEnd.substring(1);
+                    } else {
+                        substringEnd = substringEnd.substring(firstSpace + 1);
+                    }
+                }
+                textView.setText(substringStart + ELLIPSIS_NORMAL + substringEnd);
+            }
+
+        }
+    }
+
+    private static Layout getLayout(TextPaint tp, CharSequence cs, int lineWidth) {
+        StaticLayout layout = new StaticLayout(cs, tp, lineWidth, Layout.Alignment.ALIGN_NORMAL,
+                1.0f, 0.0f, true);
+        return layout;
     }
 
 }

@@ -7,17 +7,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import cn.forward.androids.utils.EllipiseUtils;
+import cn.forward.androids.utils.EllipsizeUtils;
 
 /**
  * @author ziwei huang
  */
-public class EllipiseUtilsDemo extends Activity {
+public class EllipsizeUtilsDemo extends Activity {
 
     private EditText mEditText;
     private TextView mOrigin;
@@ -33,7 +34,7 @@ public class EllipiseUtilsDemo extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ellipise_demo);
-        setTitle("EllipiseUtils");
+        setTitle("EllipsizeUtils");
 
         mEditText = findViewById(R.id.edit_text);
         mOrigin = findViewById(R.id.text);
@@ -45,8 +46,8 @@ public class EllipiseUtilsDemo extends Activity {
         mMaxLineView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] items = new String[]{"1", "2", "3", "不限"};
-                new AlertDialog.Builder(EllipiseUtilsDemo.this)
+                final String[] items = new String[]{"1", "2", "3", "4", "不限"};
+                new AlertDialog.Builder(EllipsizeUtilsDemo.this)
                         .setTitle("Max line")
                         .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
@@ -64,6 +65,10 @@ public class EllipiseUtilsDemo extends Activity {
                                 mSearchResult2.setMaxLines(max);
                                 mSearchResult3.setSingleLine(isSingleLine);
                                 mSearchResult3.setMaxLines(max);
+
+                                TextView textView = findViewById(R.id.test);
+                                textView.setSingleLine(isSingleLine);
+                                textView.setMaxLines(max);
 
                                 mMaxLineView.setText("Max Line=" + items[which]);
                                 mEditText.setText(mEditText.getText());
@@ -83,14 +88,19 @@ public class EllipiseUtilsDemo extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                EllipiseUtils.ellipiseAndHighlight(mSearchResult, TEXT, s.toString(),
+                EllipsizeUtils.ellipiseAndHighlight(mSearchResult, TEXT, s.toString(),
                         Color.RED, true, true);
 
-                EllipiseUtils.ellipiseAndHighlight(mSearchResult2, TEXT, s.toString(),
+                EllipsizeUtils.ellipiseAndHighlight(mSearchResult2, TEXT, s.toString(),
                         Color.RED, false, true);
 
-                EllipiseUtils.ellipiseAndHighlight(mSearchResult3, TEXT, s.toString(),
+                EllipsizeUtils.ellipiseAndHighlight(mSearchResult3, TEXT, s.toString(),
                         Color.RED, false, false);
+
+                TextView textView = findViewById(R.id.test);
+                textView.setText(TEXT);
+                textView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                EllipsizeUtils.ellipsize(textView, TEXT);
             }
 
             @Override

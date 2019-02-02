@@ -108,6 +108,15 @@
                 android:textColor="#333333"
                 android:textSize="13dp" />
 
+            <TextView
+                android:background="#f00"
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
