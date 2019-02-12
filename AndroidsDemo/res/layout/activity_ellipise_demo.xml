@@ -109,10 +109,36 @@
                 android:textSize="13dp" />
 
             <TextView
-                android:background="#f00"
-                android:id="@+id/test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="裁剪"
+                android:textColor="#888888"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/ellipsize_start"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:background="#88ff0000"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/ellipsize_middle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#8800ff00"
+                android:singleLine="true"
+                android:textColor="#333333"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/ellipsize_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#880000ff"
                 android:singleLine="true"
                 android:textColor="#333333"
                 android:textSize="13dp" />

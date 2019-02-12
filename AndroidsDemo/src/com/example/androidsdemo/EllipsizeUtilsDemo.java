@@ -27,6 +27,8 @@ public class EllipsizeUtilsDemo extends Activity {
     private TextView mSearchResult3;
     private TextView mMaxLineView;
 
+    private TextView mEllipsizeStart, mEllipsizeMiddle, mEllipsizeEnd;
+
     private static final String TEXT = "“I want to, very much,” the little prince replied. “But I have not much time. I have friends to discover, and a great many things to understand.”" +
             "“我非常想，”小王子回答道，“但是我没有太多时间，我要去找我的朋友，还有很多事情要弄明白。”";
 
@@ -42,6 +44,16 @@ public class EllipsizeUtilsDemo extends Activity {
         mSearchResult2 = findViewById(R.id.search_result2);
         mSearchResult3 = findViewById(R.id.search_result3);
         mMaxLineView = findViewById(R.id.max_line);
+        mEllipsizeStart = findViewById(R.id.ellipsize_start);
+        mEllipsizeMiddle = findViewById(R.id.ellipsize_middle);
+        mEllipsizeEnd = findViewById(R.id.ellipsize_end);
+        mEllipsizeStart.setEllipsize(TextUtils.TruncateAt.START);
+        mEllipsizeMiddle.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        mEllipsizeEnd.setEllipsize(TextUtils.TruncateAt.END);
+
+        mEllipsizeStart.setText(TEXT);
+        mEllipsizeMiddle.setText(TEXT);
+        mEllipsizeEnd.setText(TEXT);
 
         mMaxLineView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,9 +78,12 @@ public class EllipsizeUtilsDemo extends Activity {
                                 mSearchResult3.setSingleLine(isSingleLine);
                                 mSearchResult3.setMaxLines(max);
 
-                                TextView textView = findViewById(R.id.test);
-                                textView.setSingleLine(isSingleLine);
-                                textView.setMaxLines(max);
+                                mEllipsizeStart.setSingleLine(isSingleLine);
+                                mEllipsizeStart.setMaxLines(max);
+                                mEllipsizeMiddle.setSingleLine(isSingleLine);
+                                mEllipsizeMiddle.setMaxLines(max);
+                                mEllipsizeEnd.setSingleLine(isSingleLine);
+                                mEllipsizeEnd.setMaxLines(max);
 
                                 mMaxLineView.setText("Max Line=" + items[which]);
                                 mEditText.setText(mEditText.getText());
@@ -97,10 +112,9 @@ public class EllipsizeUtilsDemo extends Activity {
                 EllipsizeUtils.ellipiseAndHighlight(mSearchResult3, TEXT, s.toString(),
                         Color.RED, false, false);
 
-                TextView textView = findViewById(R.id.test);
-                textView.setText(TEXT);
-                textView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
-                EllipsizeUtils.ellipsize(textView, TEXT);
+                EllipsizeUtils.ellipsize(mEllipsizeStart, TEXT);
+                EllipsizeUtils.ellipsize(mEllipsizeMiddle, TEXT);
+                EllipsizeUtils.ellipsize(mEllipsizeEnd, TEXT);
             }
 
             @Override
