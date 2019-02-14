@@ -72,6 +72,20 @@ public class EllipsizeUtils {
         return ss;
     }
 
+    public static void ellipsizeByKeyword(final TextView textView, final String content, final String keyword, final boolean ignoreCase) {
+        if (TextUtils.isEmpty(content) || TextUtils.isEmpty(keyword)) {
+            textView.setText(null);
+            return;
+        }
+
+        if (textView.getWidth() <= 0) {
+            // Monitor layout completed
+            new EllipseListener(textView, content, keyword, ignoreCase);
+        } else {
+            ellipiseInner(textView, content, keyword, ignoreCase);
+        }
+    }
+
     /**
      * @param textView
      * @param content
@@ -80,7 +94,7 @@ public class EllipsizeUtils {
      * @param highlightAll   {@code true} if highlight all matched keyword. {@code true} if only highlight the first matched keyword from ellipised content
      * @param ignoreCase
      */
-    public static void ellipiseAndHighlight(final TextView textView, final String content, final String keyword, final int highlightColor, final boolean highlightAll, final boolean ignoreCase) {
+    public static void ellipsizeAndHighlight(final TextView textView, final String content, final String keyword, final int highlightColor, final boolean highlightAll, final boolean ignoreCase) {
         if (TextUtils.isEmpty(content) || TextUtils.isEmpty(keyword)) {
             textView.setText(null);
             return;
@@ -122,6 +136,11 @@ public class EllipsizeUtils {
         }
 
         int maxLine = TextViewCompat.getMaxLines(textView);
+        if (maxLine <= 0) {
+            textView.setText(content);
+            return;
+        }
+
         int availableWidth = textView.getWidth() - textView.getPaddingLeft() - textView.getPaddingRight();
         if (maxLine < 2) { // single line
             int availableCount = 0;
@@ -209,6 +228,12 @@ public class EllipsizeUtils {
         final int highlightColor;
         final boolean highlightAll;
         final boolean ignoreCase;
+        boolean needHighlight;
+
+        public EllipseListener(TextView tv, String content, String keyword, boolean ignoreCase) {
+            this(tv, content, keyword, 0, false, ignoreCase);
+            this.needHighlight = false;
+        }
 
         public EllipseListener(TextView tv, String content, String keyword, int highlightColor, boolean highlightAll, boolean ignoreCase) {
             this.textView = tv;
@@ -217,6 +242,7 @@ public class EllipsizeUtils {
             this.highlightColor = highlightColor;
             this.highlightAll = highlightAll;
             this.ignoreCase = ignoreCase;
+            this.needHighlight = true;
 
             tv.getViewTreeObserver().addOnPreDrawListener(this);
         }
@@ -226,6 +252,10 @@ public class EllipsizeUtils {
             textView.getViewTreeObserver().removeOnPreDrawListener(this);
 
             ellipiseInner(textView, content, keyword, ignoreCase);
+            if (!needHighlight) {
+                return true;
+            }
+
             int type = HIGHLIGHT_ALL;
             if (!highlightAll) {
                 if (textView.getEllipsize() == TextUtils.TruncateAt.START) {

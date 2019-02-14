@@ -103,13 +103,13 @@ public class EllipsizeUtilsDemo extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                EllipsizeUtils.ellipiseAndHighlight(mSearchResult, TEXT, s.toString(),
+                EllipsizeUtils.ellipsizeAndHighlight(mSearchResult, TEXT, s.toString(),
                         Color.RED, true, true);
 
-                EllipsizeUtils.ellipiseAndHighlight(mSearchResult2, TEXT, s.toString(),
+                EllipsizeUtils.ellipsizeAndHighlight(mSearchResult2, TEXT, s.toString(),
                         Color.RED, false, true);
 
-                EllipsizeUtils.ellipiseAndHighlight(mSearchResult3, TEXT, s.toString(),
+                EllipsizeUtils.ellipsizeAndHighlight(mSearchResult3, TEXT, s.toString(),
                         Color.RED, false, false);
 
                 EllipsizeUtils.ellipsize(mEllipsizeStart, TEXT);
