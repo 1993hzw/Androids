@@ -82,7 +82,7 @@ public class EllipsizeUtils {
             // Monitor layout completed
             new EllipseListener(textView, content, keyword, ignoreCase);
         } else {
-            ellipiseInner(textView, content, keyword, ignoreCase);
+            ellipsizeByKeywordInner(textView, content, keyword, ignoreCase);
         }
     }
 
@@ -104,7 +104,7 @@ public class EllipsizeUtils {
             // Monitor layout completed
             new EllipseListener(textView, content, keyword, highlightColor, highlightAll, ignoreCase);
         } else {
-            ellipiseInner(textView, content, keyword, ignoreCase);
+            ellipsizeByKeywordInner(textView, content, keyword, ignoreCase);
 
             int type = HIGHLIGHT_ALL;
             if (!highlightAll) {
@@ -119,7 +119,7 @@ public class EllipsizeUtils {
         }
     }
 
-    private static void ellipiseInner(final TextView textView, String content, String keyword, boolean ignoreCase) {
+    private static void ellipsizeByKeywordInner(final TextView textView, String content, String keyword, boolean ignoreCase) {
         TextPaint paint = textView.getPaint();
         if (paint == null) {
             textView.setText(null);
@@ -130,21 +130,22 @@ public class EllipsizeUtils {
         String compareKeyword = ignoreCase ? keyword.toLowerCase(Locale.ENGLISH) : keyword;
 
         final int keywordStart = compareContent.indexOf(compareKeyword);
-        if (keywordStart < 0) {
+        if (keywordStart < 0) { // 找不到关键字
             textView.setText(null);
             return;
         }
 
         int maxLine = TextViewCompat.getMaxLines(textView);
-        if (maxLine <= 0) {
+        if (maxLine <= 0) { // 没有行数限制
             textView.setText(content);
             return;
         }
-
+        // 每行文字的最大显示宽度
         int availableWidth = textView.getWidth() - textView.getPaddingLeft() - textView.getPaddingRight();
-        if (maxLine < 2) { // single line
-            int availableCount = 0;
-            // ellipse end
+        // 区分单行和多行做不同的处理
+        if (maxLine < 2) { // 单行
+            int availableCount = 0; // 一行可显示的字符数
+            //　如果关键字可在截断尾部后的内容中找到，则直接截断尾部
             String newCharSeq = TextUtils.ellipsize(compareContent, paint, availableWidth, TextUtils.TruncateAt.END).toString();
             availableCount = newCharSeq.length();
             if (newCharSeq.contains(compareKeyword)) {
@@ -152,7 +153,8 @@ public class EllipsizeUtils {
                 textView.setText(content);
                 return;
             }
-            // ellipse start
+
+            //　如果关键字可在截断首部后的内容中找到，则直接截断首部
             newCharSeq = TextUtils.ellipsize(compareContent, paint, availableWidth, TextUtils.TruncateAt.START).toString();
             availableCount = Math.max(newCharSeq.length(), availableCount);
             if (newCharSeq.contains(compareKeyword)) {
@@ -161,35 +163,44 @@ public class EllipsizeUtils {
                 return;
             }
 
-            // keyword is too long
+            // 关键字太长了，一行不够显示
             if (availableCount <= keyword.length()) {
-                // keyword is too long. display: ELLIPSIS_NORMAL + keyword + ...
+                // display: ELLIPSIS_NORMAL + keyword + ...
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setText(ELLIPSIS_NORMAL + keyword);
                 return;
             }
 
+            // 关键字在内容中间位置，则首尾都要加上省略号
             // display: ELLIPSIS_NORMAL + xxx + keyword + xxx +...
             textView.setEllipsize(TextUtils.TruncateAt.END);
             int start = keywordStart - (availableCount - keyword.length()) / 2;
-            textView.setText(ELLIPSIS_NORMAL + content.substring(start >= 0 ? start : 0));
+
+            String text = ELLIPSIS_NORMAL + content.substring(start >= 0 ? start : 0);
+            newCharSeq = TextUtils.ellipsize(text, paint, availableWidth, TextUtils.TruncateAt.END).toString();
+            if (newCharSeq.contains(compareKeyword)) {
+                textView.setText(text);
+            } else {
+                textView.setText(ELLIPSIS_NORMAL + content.substring(keywordStart));
+            }
         } else { // multi line
             List<Point> linesStart = getLineStartAndEnd(textView.getPaint(), compareContent, availableWidth);
-            int keywordLineStart = getKeywordLine(keywordStart, linesStart);
-            int keywordLineEnd = getKeywordLine(keywordStart + compareKeyword.length() + 1, linesStart);
+            int keywordLineStart = getKeywordLine(keywordStart, linesStart); // 在原始内容中，关键字第一个字符的行位置
+            int keywordLineEnd = getKeywordLine(keywordStart + compareKeyword.length() + 1, linesStart); // 在原始内容中，关键字最后一个字符的行位置
             if (keywordLineEnd - keywordLineStart < maxLine) {
                 int endLine = Math.min(keywordLineStart + maxLine / 2, linesStart.size() - 1); // linesStart.size() - 1 = lastLines
                 int startLine = Math.max(endLine - (maxLine - 1) + maxLine % 2, 0); // if maxline is odd, starline+1
-                // display: ELLIPSIS_NORMAL + xxx + keyword + xxx +...
                 textView.setEllipsize(TextUtils.TruncateAt.END);
-                int start = linesStart.get(startLine).x;
                 if (startLine == 0) {
-                    textView.setText(content.substring(start >= 0 ? start : 0));
+                    // display: xxx + keyword + xxx +...
+                    textView.setText(content);
                 } else {
-                    textView.setText(ELLIPSIS_NORMAL + content.substring(start >= 0 ? start : 0));
+                    // display: ELLIPSIS_NORMAL + xxx + keyword + xxx +...
+                    int start = linesStart.get(startLine).x;
+                    textView.setText(ELLIPSIS_NORMAL + content.substring(start));
                 }
-            } else { // keyword is too long
-                // keyword is too long. display: ELLIPSIS_NORMAL + keyword + xx ...
+            } else { // // 关键字太长了
+                // display: ELLIPSIS_NORMAL + keyword + xx ...
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setText(ELLIPSIS_NORMAL + content.substring(keywordStart));
             }
@@ -206,15 +217,16 @@ public class EllipsizeUtils {
     }
 
     /**
-     * @return point.x is start position, point.y is end position
+     * 计算每一行的开始字符位置和结束字符位置
+     *
+     * @return List.size()为总行数．point.x 为当前行的开始字符位置， point.y 为当前行的结束字符位置
      */
     private static List<Point> getLineStartAndEnd(TextPaint tp, CharSequence cs, int lineWidth) {
+        // StaticLayout是android中处理文字换行的一个工具类，StaticLayout已经实现了文本绘制换行处理
         StaticLayout layout = new StaticLayout(cs, tp, lineWidth, Layout.Alignment.ALIGN_NORMAL,
                 1.0f, 0.0f, true);
         int count = layout.getLineCount();
-
         List<Point> list = new ArrayList<>();
-
         for (int i = 0; i < count; i++) {
             list.add(new Point(layout.getLineStart(i), layout.getLineEnd(i)));
         }
@@ -251,7 +263,7 @@ public class EllipsizeUtils {
         public boolean onPreDraw() {
             textView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-            ellipiseInner(textView, content, keyword, ignoreCase);
+            ellipsizeByKeywordInner(textView, content, keyword, ignoreCase);
             if (!needHighlight) {
                 return true;
             }
@@ -272,18 +284,18 @@ public class EllipsizeUtils {
 
     public static void ellipsize(TextView textView, String content) {
         TextUtils.TruncateAt ellipsize = textView.getEllipsize();
-        if (ellipsize != TextUtils.TruncateAt.START && ellipsize != TextUtils.TruncateAt.MIDDLE) { // handle it over to the system
+        if (ellipsize != TextUtils.TruncateAt.START && ellipsize != TextUtils.TruncateAt.MIDDLE) { // 只处理start和middle的截断
             textView.setText(content);
             return;
         }
 
         int maxLine = TextViewCompat.getMaxLines(textView);
         int availableWidth = textView.getWidth() - textView.getPaddingLeft() - textView.getPaddingRight();
-        if (maxLine < 2) { // single line
+        if (maxLine < 2) { // 单行，或没做行数限制
             textView.setText(content);
         } else {
             List<Point> linesStart = getLineStartAndEnd(textView.getPaint(), content, availableWidth);
-            if (linesStart.size() <= maxLine) {
+            if (linesStart.size() <= maxLine) { // 行数没有超过限制，不做处理
                 textView.setText(content);
                 return;
             }
@@ -292,8 +304,9 @@ public class EllipsizeUtils {
                 int start = linesStart.get(linesStart.size() - maxLine).x;
                 start = Math.max(start + ELLIPSIS_NORMAL.length(), 0);
                 String substring = content.substring(start);
+                // 裁剪文字，直到在行数范围内可显示
                 while (getLayout(textView.getPaint(), ELLIPSIS_NORMAL + substring, availableWidth).getLineCount() > maxLine) {
-                    int firstSpace = substring.indexOf(' '); // break
+                    int firstSpace = substring.indexOf(' '); // 空白字符
                     if (firstSpace == -1) {
                         substring = substring.substring(1);
                     } else {
@@ -304,14 +317,15 @@ public class EllipsizeUtils {
             } else { // middle
                 int middleLineStart = (maxLine - 1) / 2;
                 Point point = linesStart.get(middleLineStart);
-                int startEllipsize = point.y - ELLIPSIS_NORMAL.length();
-                final String substringStart = content.substring(0, startEllipsize);
+                int startEllipsize = point.y - ELLIPSIS_NORMAL.length();// 在中间行的末尾追加省略号
+                final String substringStart = content.substring(0, startEllipsize); // 省略号前面的文字
 
                 int middleLineEnd = linesStart.size() - (maxLine - (maxLine - 1) / 2 - 1);
                 Point pointEnd = linesStart.get(middleLineEnd);
                 String substringEnd = content.substring(pointEnd.x);
+                // 裁剪省略号后面的文字，直到整体在行数范围内可显示
                 while (getLayout(textView.getPaint(), substringStart + ELLIPSIS_NORMAL + substringEnd, availableWidth).getLineCount() > maxLine) {
-                    int firstSpace = substringEnd.indexOf(' '); // break
+                    int firstSpace = substringEnd.indexOf(' '); // 空白字符
                     if (firstSpace == -1) {
                         substringEnd = substringEnd.substring(1);
                     } else {
@@ -320,7 +334,6 @@ public class EllipsizeUtils {
                 }
                 textView.setText(substringStart + ELLIPSIS_NORMAL + substringEnd);
             }
-
         }
     }
 
