@@ -250,6 +250,7 @@ dependencies {
   [《Android属性动画封装之快速构建动画》](http://blog.csdn.net/u012964944/article/details/50854430)
 
 * #### 其他
+  * [EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/EllipsizeUtils.java)，文字截断和高亮，支持多行和根据关键字省略
   * [LogUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/LogUtil.java) 日志输出
   * [ProcessUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ProcessUtil.java) 进程相关
   * [ReflectUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ReflectUtil.java) 反射相关
@@ -259,6 +260,10 @@ dependencies {
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
 
 ### 更新
+* v1.2.4（18） 
+
+1.增加工具类[EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/EllipsizeUtils.java)，支持多行和根据关键字省略
+
 * v1.2.3（17） 
 
 1.fix:SelectorAttrs在低版本上没有设置背景色时显示黑色
