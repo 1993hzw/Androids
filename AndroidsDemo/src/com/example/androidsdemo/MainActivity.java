@@ -59,9 +59,6 @@ public class MainActivity extends ListActivity {
         } else if (position == 8) {
             startActivity(new Intent(getApplicationContext(),
                     EllipsizeUtilsDemo.class));
-        } else if (position == 9) {
-            startActivity(new Intent(getApplicationContext(),
-                    OverscrollDemo.class));
         } else {
             startActivity(new Intent(getApplicationContext(),
                     AnimatorUtilDemo.class));
@@ -79,7 +76,6 @@ public class MainActivity extends ListActivity {
         data.add(createItem("EasyAdapter", "用于RecyclerView的适配器，可支持设置点击、单选和多选模式"));
         data.add(createItem("TouchGestureDetector", "识别常用手势，对特定场景下的手势识别进行优化"));
         data.add(createItem("EllipsizeUtils", "高亮关键字，及根据关键字裁剪文字,支持多行"));
-        data.add(createItem("OverScrollBehavior", "惯性滑动"));
         data.add(createItem("AnimatorUtil", "对AnimatorSet进行封装，便以链式构建动画"));
         return data;
     }
