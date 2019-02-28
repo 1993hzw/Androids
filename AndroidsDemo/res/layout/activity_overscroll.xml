@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.androidsdemo.view.NestedOverscrollView
+    <com.example.androidsdemo.view.NestedOverScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="cn.forward.androids.views.behavior.OverscrollBehavior">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,33 +17,87 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#f00" />
+                android:background="#f00">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#0f0" />
+                android:background="#0f0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="2"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#00f" />
+                android:background="#00f">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="3"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#0ff" />
+                android:background="#0ff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="4"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#ff0" />
+                android:background="#ff0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="5"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#f0f" />
+                android:background="#f0f">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="6"
+                    android:textColor="#000"
+                    android:textSize="36dp" />
+            </FrameLayout>
         </LinearLayout>
-    </com.example.androidsdemo.view.NestedOverscrollView>
+    </com.example.androidsdemo.view.NestedOverScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
