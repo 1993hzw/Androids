@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.example.androidsdemo"
@@ -40,8 +39,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':androids')
-    compile 'com.android.support:recyclerview-v7:26.1.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':androids')
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 }
