@@ -164,9 +164,6 @@
                     app:sel_background_border_color="#ff0000"
                     app:sel_background_border_pressed="#888888"
                     app:sel_background_border_width="4dp"
-                    app:sel_background_corner_topLeft="0dp"
-                    app:sel_background_corner_topRight="0dp"
-                    app:sel_background_corners="10dp"
                     app:sel_background_pressed="#ffffff"
                     app:sel_background_shape="oval"
                     app:stv_text_color_pressed="#ff0000" />
@@ -181,7 +178,6 @@
                     android:gravity="center"
                     android:text="STextView"
                     android:textColor="#000000"
-                    app:injectListener="true"
                     app:sel_background_border_color="#ff0000"
                     app:sel_background_border_pressed="#888888"
                     app:sel_background_border_selected="#880088"
@@ -213,37 +209,41 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.STextView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:background="@drawable/bg"
                     android:clickable="true"
                     android:gravity="center"
                     android:text="水波纹"
                     android:textColor="#000000"
-                    app:sel_background_ripple="#88ff0000"
-                    app:sel_background_ripple_mask="#00ff00"
-                    app:sel_background_ripple_mask_shape="oval"
-                    app:sel_background_shape="oval" />
+                    app:sel_background_ripple="#88ff0000" />
 
                 <cn.forward.androids.views.STextView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
                     android:clickable="true"
                     android:gravity="center"
-                    android:text="水波纹"
+                    android:text="无约束水波纹"
                     android:textColor="#000000"
-                    app:sel_background_border_color="#ff0000"
-                    app:sel_background_border_width="4dp"
-                    app:sel_background_pressed="#ffff00"
-                    app:sel_background_ripple="#88ff0000"
-                    app:sel_background_ripple_mask="#00ff00"
-                    app:sel_background_ripple_mask_shape="oval"
-                    app:sel_background_shape="oval" />
+                    app:sel_background_ripple="#88ff0000" />
 
                 <cn.forward.androids.views.STextView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="圆形约束水波纹"
+                    android:textColor="#000000"
+                    app:sel_background_ripple="#88ff0000"
+                    app:sel_background_ripple_mask="#FFF"
+                    app:sel_background_ripple_mask_shape="oval" />
+
+                <cn.forward.androids.views.STextView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="10dp"
                     android:clickable="true"
                     android:gravity="center"
                     android:text="图片水波纹"

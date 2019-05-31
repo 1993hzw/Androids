@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="#ffffff"
-             android:orientation="vertical"
-             android:padding="5dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:src="@drawable/world_map"
-                    app:siv_shape="circle"/>
+                    app:siv_shape="circle" />
 
                 <cn.forward.androids.views.ShapeImageView
                     android:layout_width="110dp"
@@ -33,7 +33,7 @@
                     android:layout_marginLeft="5dp"
                     android:src="@drawable/world_map"
                     app:siv_round_radius="25dp"
-                    app:siv_shape="rect"/>
+                    app:siv_shape="rect" />
 
                 <cn.forward.androids.views.ShapeImageView
                     android:layout_width="80dp"
@@ -43,7 +43,7 @@
                     app:siv_border_color="#ffffff"
                     app:siv_border_size="0dp"
                     app:siv_round_radius="15dp"
-                    app:siv_shape="oval"/>
+                    app:siv_shape="oval" />
             </LinearLayout>
 
             <cn.forward.androids.views.ShapeImageView
@@ -52,12 +52,14 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:background="#000"
+                android:clickable="true"
                 android:src="@drawable/world_map"
                 app:sel_background_corners="50dp"
+                app:sel_background_ripple="#F00"
                 app:siv_border_color="#ffffff"
                 app:siv_border_size="2dp"
                 app:siv_round_radius="15dp"
-                app:siv_shape="circle"/>
+                app:siv_shape="circle" />
 
             <cn.forward.androids.views.ShapeImageView
                 android:layout_width="220dp"
@@ -71,7 +73,7 @@
                 app:siv_round_radius="15dp"
                 app:siv_round_radius_leftBottom="0dp"
                 app:siv_round_radius_rightBottom="0dp"
-                app:siv_shape="rect"/>
+                app:siv_shape="rect" />
 
             <cn.forward.androids.views.ShapeImageView
                 android:layout_width="220dp"
@@ -79,13 +81,15 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:background="#000"
+                android:clickable="true"
                 android:src="@drawable/world_map"
                 app:sel_background_border_color="#00ff00"
                 app:sel_background_border_width="5dp"
+                app:sel_background_pressed="#fff"
                 app:siv_border_color="#ff0000"
                 app:siv_border_size="5dp"
                 app:siv_round_radius="15dp"
-                app:siv_shape="oval"/>
+                app:siv_shape="oval" />
         </LinearLayout>
     </ScrollView>
 

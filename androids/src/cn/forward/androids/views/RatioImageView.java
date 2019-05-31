@@ -77,6 +77,8 @@ public class RatioImageView extends ImageView {
         mDesiredHeight = a.getDimensionPixelOffset(R.styleable.RatioImageView_riv_height, mDesiredHeight);
 
         a.recycle();
+
+        SelectorAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 
     private void onSetDrawable() {

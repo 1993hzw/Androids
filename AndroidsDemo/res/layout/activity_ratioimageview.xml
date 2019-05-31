@@ -1,155 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ffffff"
-              android:orientation="vertical">
-  <ScrollView
-          android:layout_width="match_parent"
-          android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-    <LinearLayout
-            android:padding="5dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            >
-      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingLeft="24dp"
-              android:paddingRight="24dp"
-              >
-        <cn.forward.androids.views.RatioImageView
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:riv_is_height_fix_drawable_size_ratio="true"
-                android:background="#aaaaaa"
-                android:src="@drawable/ic_launcher"/>
-        <FrameLayout android:layout_width="12dp"
-                     android:layout_height="1dp"/>
-        <cn.forward.androids.views.RatioImageView
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:riv_is_height_fix_drawable_size_ratio="true"
-                android:background="#aaaaaa"
-                android:src="@drawable/ic_launcher"/>
-        <FrameLayout android:layout_width="12dp" android:layout_height="1dp"/>
-        <cn.forward.androids.views.RatioImageView
-                android:layout_weight="1"
-                android:scaleType="fitXY"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:riv_is_height_fix_drawable_size_ratio="true"
-                android:background="#aaaaaa"
-                android:src="@drawable/ic_launcher"/>
+            android:padding="5dp">
 
-      </LinearLayout>
-
-      <LinearLayout
-              android:layout_marginTop="5dp"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              >
-        <cn.forward.androids.views.RatioImageView
-                android:layout_width="120dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:riv_is_height_fix_drawable_size_ratio="true"
-                android:src="@drawable/world_map"/>
-        <TextView
-                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp">
+
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aaaaaa"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_launcher"
+                    app:riv_is_height_fix_drawable_size_ratio="true"
+                    app:sel_background_pressed="#8FF"
+                    app:sel_background_shape="oval" />
+
+                <FrameLayout
+                    android:layout_width="12dp"
+                    android:layout_height="1dp" />
+
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aaaaaa"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_launcher"
+                    app:riv_is_height_fix_drawable_size_ratio="true"
+                    app:sel_background_corners="15dp"
+                    app:sel_background_pressed="#80F"
+                    app:sel_background_shape="rect" />
+
+                <FrameLayout
+                    android:layout_width="12dp"
+                    android:layout_height="1dp" />
+
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aaaaaa"
+                    android:clickable="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_launcher"
+                    app:riv_is_height_fix_drawable_size_ratio="true"
+                    app:sel_background_pressed="#700" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:gravity="left"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:text="宽度120dp,高度适应图片比例"
-                />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-      </LinearLayout>
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/world_map"
+                    app:riv_is_height_fix_drawable_size_ratio="true" />
 
-      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_marginTop="5dp"
-              >
-        <cn.forward.androids.views.RatioImageView
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                app:riv_is_width_fix_drawable_size_ratio="true"
-                android:src="@drawable/world_map"/>
-        <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text="宽度120dp,高度适应图片比例"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:gravity="left"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:text="高度120dp,宽度适应图片比例"
-                />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-      </LinearLayout>
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:src="@drawable/world_map"
+                    app:riv_is_width_fix_drawable_size_ratio="true" />
 
-      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_marginTop="5dp"
-              >
-        <cn.forward.androids.views.RatioImageView
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                app:riv_width_to_height_ratio="1.8"
-                android:scaleType="fitXY"
-                android:src="@drawable/world_map"/>
-        <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text="高度120dp,宽度适应图片比例"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:gravity="left"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:text="高度120dp, 宽/高=1.8"
-                />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-      </LinearLayout>
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/world_map"
+                    app:riv_width_to_height_ratio="1.8" />
 
-      <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:layout_marginTop="5dp"
-              >
-        <cn.forward.androids.views.RatioImageView
-                android:layout_width="120dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text="高度120dp, 宽/高=1.8"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:riv_height_to_width_ratio="1.8"
-                android:scaleType="fitXY"
-                android:src="@drawable/world_map"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:gravity="left"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:text="宽度120dp, 高/宽=1.5"
-                />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-      </LinearLayout>
-    </LinearLayout>
-  </ScrollView>
+                <cn.forward.androids.views.RatioImageView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/world_map"
+                    app:riv_height_to_width_ratio="1.8" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text="宽度120dp, 高/宽=1.5"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

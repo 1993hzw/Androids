@@ -68,7 +68,7 @@ public class MainActivity extends ListActivity {
     private List<Map<String, String>> createData() {
         List<Map<String, String>> data = new ArrayList<Map<String, String>>();
         data.add(createItem("ShapeImageView", "可设置形状(圆形、圆角矩形)的ImageView"));
-        data.add(createItem("MaskImageView/STextView/SLayout", "可设置点击效果的自定义view"));
+        data.add(createItem("MaskImageView/STextView/SLayout", "可直接在xml布局中设置点击效果"));
         data.add(createItem("RatioImageView", "可设置宽高比例的ImageView"));
         data.add(createItem("ScrollPickerView", "滚动选择器，可实现生日选择器，老虎机等"));
         data.add(createItem("KeyboardLayout", "监听输入法键盘的弹起与隐藏"));
