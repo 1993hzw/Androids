@@ -60,10 +60,12 @@ public class SelectorAttrs {
         GradientDrawable colorShapeDrawable = null;
         GradientDrawable colorShapeDrawablePressed = null;
         GradientDrawable colorShapeDrawableSelected = null;
+        GradientDrawable colorShapeDrawableDisable = null;
 
         // 用于设置背景的图片
         Drawable bitmapDrawablePressed = null;
         Drawable bitmapDrawableSelected = null;
+        Drawable bitmapDrawableDisable = null;
 
         if (a.hasValue(R.styleable.View_sel_background_pressed) || a.hasValue(R.styleable.View_sel_background_border_pressed)) {
             bitmapDrawablePressed = a.getDrawable(R.styleable.View_sel_background_pressed);
@@ -81,6 +83,15 @@ public class SelectorAttrs {
             }
             if (bitmapDrawableSelected == null) {
                 colorShapeDrawableSelected = new GradientDrawable();
+            }
+        }
+        if (a.hasValue(R.styleable.View_sel_background_disable) || a.hasValue(R.styleable.View_sel_background_border_disable)) {
+            bitmapDrawableDisable = a.getDrawable(R.styleable.View_sel_background_disable);
+            if (bitmapDrawableDisable instanceof ColorDrawable) {
+                bitmapDrawableDisable = null;
+            }
+            if (bitmapDrawableDisable == null) {
+                colorShapeDrawableDisable = new GradientDrawable();
             }
         }
 
@@ -105,51 +116,25 @@ public class SelectorAttrs {
         if (colorShapeDrawableSelected != null) {
             colorShapeDrawableSelected.setColor(background);
         }
+        if (colorShapeDrawableDisable != null) {
+            colorShapeDrawableDisable.setColor(background);
+        }
 
         // 形狀
         int shape = GradientDrawable.RECTANGLE;
         if (a.hasValue(R.styleable.View_sel_background_shape)) {
             shape = a.getInt(R.styleable.View_sel_background_shape, RECTANGLE);
-            if (shape == LINE) {
-                if (colorShapeDrawable != null) {
-                    colorShapeDrawable.setShape(GradientDrawable.LINE);
-                }
-                if (colorShapeDrawablePressed != null) {
-                    colorShapeDrawablePressed.setShape(GradientDrawable.LINE);
-                }
-                if (colorShapeDrawableSelected != null) {
-                    colorShapeDrawableSelected.setShape(GradientDrawable.LINE);
-                }
-            } else if (shape == OVAL) {
-                if (colorShapeDrawable != null) {
-                    colorShapeDrawable.setShape(GradientDrawable.OVAL);
-                }
-                if (colorShapeDrawablePressed != null) {
-                    colorShapeDrawablePressed.setShape(GradientDrawable.OVAL);
-                }
-                if (colorShapeDrawableSelected != null) {
-                    colorShapeDrawableSelected.setShape(GradientDrawable.OVAL);
-                }
-            } else if (shape == RING) {
-                if (colorShapeDrawable != null) {
-                    colorShapeDrawable.setShape(GradientDrawable.RING);
-                }
-                if (colorShapeDrawablePressed != null) {
-                    colorShapeDrawablePressed.setShape(GradientDrawable.RING);
-                }
-                if (colorShapeDrawableSelected != null) {
-                    colorShapeDrawableSelected.setShape(GradientDrawable.RING);
-                }
-            } else {
-                if (colorShapeDrawable != null) {
-                    colorShapeDrawable.setShape(GradientDrawable.RECTANGLE);
-                }
-                if (colorShapeDrawablePressed != null) {
-                    colorShapeDrawablePressed.setShape(GradientDrawable.RECTANGLE);
-                }
-                if (colorShapeDrawableSelected != null) {
-                    colorShapeDrawableSelected.setShape(GradientDrawable.RECTANGLE);
-                }
+            if (colorShapeDrawable != null) {
+                colorShapeDrawable.setShape(shape);
+            }
+            if (colorShapeDrawablePressed != null) {
+                colorShapeDrawablePressed.setShape(shape);
+            }
+            if (colorShapeDrawableSelected != null) {
+                colorShapeDrawableSelected.setShape(shape);
+            }
+            if (colorShapeDrawableDisable != null) {
+                colorShapeDrawableDisable.setShape(shape);
             }
         }
 
@@ -167,6 +152,9 @@ public class SelectorAttrs {
             }
             if (colorShapeDrawableSelected != null) {
                 colorShapeDrawableSelected.setCornerRadius(backgroundCorners);
+            }
+            if (colorShapeDrawableDisable != null) {
+                colorShapeDrawableDisable.setCornerRadius(backgroundCorners);
             }
 
             cornerRadii = new float[]{
@@ -202,6 +190,9 @@ public class SelectorAttrs {
             if (colorShapeDrawableSelected != null) {
                 colorShapeDrawableSelected.setCornerRadii(cornerRadii);
             }
+            if (colorShapeDrawableDisable != null) {
+                colorShapeDrawableDisable.setCornerRadii(cornerRadii);
+            }
         }
 
 
@@ -217,11 +208,9 @@ public class SelectorAttrs {
             if (colorShapeDrawableSelected != null) {
                 colorShapeDrawableSelected.setStroke(backgroundBorderWidth, 0);
             }
-        }
-
-        // ??必须最后设置颜色，否则水波纹ripple不能约束成相应的shape
-        if (colorShapeDrawable != null) {
-            colorShapeDrawable.setColor(background);
+            if (colorShapeDrawableDisable != null) {
+                colorShapeDrawableDisable.setStroke(backgroundBorderWidth, 0);
+            }
         }
 
         if (a.hasValue(R.styleable.View_sel_background_border_color)) {
@@ -235,6 +224,14 @@ public class SelectorAttrs {
             if (colorShapeDrawableSelected != null) {
                 colorShapeDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorder);
             }
+            if (colorShapeDrawableDisable != null) {
+                colorShapeDrawableDisable.setStroke(backgroundBorderWidth, backgroundBorder);
+            }
+        }
+
+        // ??必须最后设置颜色，否则水波纹ripple不能约束成相应的shape
+        if (colorShapeDrawable != null) {
+            colorShapeDrawable.setColor(background);
         }
 
         // 如果没有设置背景图片，则读取背景颜色
@@ -253,6 +250,14 @@ public class SelectorAttrs {
         if (colorShapeDrawableSelected != null && a.hasValue(R.styleable.View_sel_background_border_selected)) {
             int backgroundBorderSelected = a.getColor(R.styleable.View_sel_background_border_selected, -1);
             colorShapeDrawableSelected.setStroke(backgroundBorderWidth, backgroundBorderSelected);
+        }
+        if (colorShapeDrawableDisable != null && a.hasValue(R.styleable.View_sel_background_disable)) {
+            int backgroundDisable = a.getColor(R.styleable.View_sel_background_disable, -1);
+            colorShapeDrawableDisable.setColor(backgroundDisable);
+        }
+        if (colorShapeDrawableDisable != null && a.hasValue(R.styleable.View_sel_background_border_disable)) {
+            int backgroundBorderDisable = a.getColor(R.styleable.View_sel_background_border_disable, -1);
+            colorShapeDrawableDisable.setStroke(backgroundBorderWidth, backgroundBorderDisable);
         }
 
         // 设置不同状态下的显示
@@ -313,6 +318,14 @@ public class SelectorAttrs {
             }
             stateListDrawable.addState(
                     new int[]{android.R.attr.state_enabled, android.R.attr.state_selected}, drawable);
+        }
+        if (colorShapeDrawableDisable != null || bitmapDrawableDisable != null) {
+            Drawable drawable = bitmapDrawableDisable != null ? bitmapDrawableDisable : colorShapeDrawableDisable;
+            if (stateListDrawable == null) {
+                stateListDrawable = new StateListDrawable();
+            }
+            stateListDrawable.addState(
+                    new int[]{-android.R.attr.state_enabled}, drawable);
         }
         if (bitmapDrawable != null || colorShapeDrawable != null) {
             if (stateListDrawable == null) {

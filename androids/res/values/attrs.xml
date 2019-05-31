@@ -6,6 +6,7 @@
         <!-- 背景状态 -->
         <attr name="sel_background_pressed" format="reference|color" />
         <attr name="sel_background_selected" format="reference|color" />
+        <attr name="sel_background_disable" format="reference|color" />
 
         <!-- 背景形状 -->
         <attr name="sel_background_shape" format="enum">
@@ -27,6 +28,7 @@
         <!-- 背景边框状态 -->
         <attr name="sel_background_border_pressed" format="color" />
         <attr name="sel_background_border_selected" format="color" />
+        <attr name="sel_background_border_disable" format="color" />
 
         <!-- ripple水波纹效果-->
         <attr name="sel_background_ripple" format="reference|color" />
@@ -71,6 +73,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -81,6 +84,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -106,6 +110,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -116,6 +121,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -144,6 +150,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -154,6 +161,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -239,6 +247,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -249,6 +258,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -263,6 +273,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -273,6 +284,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -287,6 +299,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -297,6 +310,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -311,6 +325,7 @@
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
         <attr name="sel_background_selected" />
+        <attr name="sel_background_disable" />
         <attr name="sel_background_shape" />
         <attr name="sel_background_corners" />
         <attr name="sel_background_corner_topLeft" />
@@ -321,6 +336,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
+        <attr name="sel_background_border_disable"/>
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
