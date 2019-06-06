@@ -77,7 +77,7 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.RatioImageView
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:src="@drawable/world_map"
                     app:riv_is_height_fix_drawable_size_ratio="true" />
@@ -88,7 +88,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:text="宽度120dp,高度适应图片比例"
+                    android:text="宽度100dp,高度适应图片比例"
                     android:textColor="#000000"
                     android:textSize="20dp" />
 
@@ -102,7 +102,7 @@
 
                 <cn.forward.androids.views.RatioImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     android:src="@drawable/world_map"
                     app:riv_is_width_fix_drawable_size_ratio="true" />
 
@@ -112,7 +112,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:text="高度120dp,宽度适应图片比例"
+                    android:text="高度100dp,宽度适应图片比例"
                     android:textColor="#000000"
                     android:textSize="20dp" />
 
@@ -126,7 +126,7 @@
 
                 <cn.forward.androids.views.RatioImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"
+                    android:layout_height="100dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/world_map"
                     app:riv_width_to_height_ratio="1.8" />
@@ -137,7 +137,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:text="高度120dp, 宽/高=1.8"
+                    android:text="高度100dp, 宽/高=1.8"
                     android:textColor="#000000"
                     android:textSize="20dp" />
 
@@ -150,11 +150,11 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.RatioImageView
-                    android:layout_width="120dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/world_map"
-                    app:riv_height_to_width_ratio="1.8" />
+                    app:riv_height_to_width_ratio="1.5" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:gravity="left"
-                    android:text="宽度120dp, 高/宽=1.5"
+                    android:text="宽度100dp, 高/宽=1.5"
                     android:textColor="#000000"
                     android:textSize="20dp" />
 

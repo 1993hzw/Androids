@@ -30,6 +30,7 @@
                     app:miv_is_ignore_alpha="true"
                     app:miv_mask_color="#88000000"
                     app:miv_mask_level="background"
+                    app:miv_pressed_alpha="0.2"
                     app:sel_background_corners="20dp"
                     app:sel_background_shape="oval" />
 
@@ -41,14 +42,18 @@
                 <cn.forward.androids.views.MaskImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:background="#000000"
+                    android:background="#00ffff"
                     android:clickable="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_launcher"
-                    app:miv_is_ignore_alpha="false"
-                    app:miv_mask_color="#88ffffff"
-                    app:miv_mask_level="background"
-                    app:sel_background_corner_bottomRight="30dp" />
+                    app:miv_is_ignore_alpha="true"
+                    app:miv_mask_color="#88000000"
+                    app:miv_mask_level="foreground"
+                    app:sel_background_corner_bottomRight="30dp"
+                    app:vp_content_height="60dp"
+                    app:vp_content_padding_bottom="0dp"
+                    app:vp_content_padding_left="0dp"
+                    app:vp_content_width="60dp" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -64,7 +69,10 @@
                     android:src="@drawable/ic_launcher"
                     app:miv_is_ignore_alpha="true"
                     app:miv_mask_color="#88000000"
-                    app:miv_mask_level="background" />
+                    app:miv_mask_level="background"
+                    app:vp_content_height="60dp"
+                    app:vp_content_padding_bottom="0dp"
+                    app:vp_content_width="60dp" />
             </LinearLayout>
 
             <LinearLayout

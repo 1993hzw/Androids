@@ -23,11 +23,12 @@ public class MaskImageView extends ImageView {
 
     private boolean mIsShowMaskOnClick = true; // 点击时是否显示遮罩，默认开启
     private int mMaskColor = 0x00ffffff; // 遮罩颜色（argb,需要设置透明度）
+    private float mPressedAlpha = 1.0f;
 
     private int mMaskLevel = MASK_LEVEL_FOREGROUND; // 默认为前景图显示遮罩
 
-    ColorMatrix mColorMatrix = new ColorMatrix(); // 颜色矩阵
-    ColorFilter mColorFilter;
+    private ColorMatrix mColorMatrix = new ColorMatrix(); // 颜色矩阵
+    private ColorFilter mColorFilter;
 
 
     public MaskImageView(Context context) {
@@ -53,12 +54,14 @@ public class MaskImageView extends ImageView {
         mIsShowMaskOnClick = a.getBoolean(R.styleable.MaskImageView_miv_is_show_mask_on_click, mIsShowMaskOnClick);
         mMaskColor = a.getColor(R.styleable.MaskImageView_miv_mask_color, mMaskColor);
         mMaskLevel = a.getInt(R.styleable.MaskImageView_miv_mask_level, mMaskLevel);
+        mPressedAlpha = a.getFloat(R.styleable.MaskImageView_miv_pressed_alpha, mPressedAlpha);
 
         setMaskColor(mMaskColor);
 
         a.recycle();
 
         SelectorAttrs.obtainsAttrs(getContext(), this, attrs);
+        ViewPaddingAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 
     private void setColorMatrix(float[] matrix) {
@@ -134,6 +137,16 @@ public class MaskImageView extends ImageView {
             super.onDraw(canvas);
         }
 
+    }
+
+    @Override
+    public void setPressed(boolean pressed) {
+        super.setPressed(pressed);
+        if (pressed) {
+            setAlpha(mPressedAlpha);
+        } else {
+            setAlpha(1.0f);
+        }
     }
 
     /**
@@ -221,4 +234,8 @@ public class MaskImageView extends ImageView {
         invalidate();
     }
 
+    public void setPressedAlpha(float pressedAlpha) {
+        mPressedAlpha = pressedAlpha;
+        invalidate();
+    }
 }

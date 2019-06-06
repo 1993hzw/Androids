@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <declare-styleable name="View">
+    <declare-styleable name="SelectorAttrs">
         <!-- selector相关属性-->
         <!-- 背景状态 -->
         <attr name="sel_background_pressed" format="reference|color" />
@@ -52,6 +51,19 @@
 
     </declare-styleable>
 
+    <!--ImageView的padding相关设置, layout_width/height为精确值下列属性才生效-->
+    <declare-styleable name="ViewPaddingAttrs">
+        <!--src content的确切宽度，必填-->
+        <attr name="vp_content_width" format="dimension" />
+        <!--src content的确切高度，必填-->
+        <attr name="vp_content_height" format="dimension" />
+        <!--src content的padding，在未设置的情况下默认为居中效果-->
+        <attr name="vp_content_padding_left" format="dimension" />
+        <attr name="vp_content_padding_top" format="dimension" />
+        <attr name="vp_content_padding_right" format="dimension" />
+        <attr name="vp_content_padding_bottom" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="RatioImageView">
 
         <!-- 宽度是否根据src图片的比例来测量（高度已知） -->
@@ -84,7 +96,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -106,6 +118,8 @@
         <attr name="miv_mask_color" format="color" />
         <!--是否忽略图片的透明度，默认为true,透明部分不显示遮罩 -->
         <attr name="miv_is_ignore_alpha" format="boolean" />
+        <!--按下时view的透明度-->
+        <attr name="miv_pressed_alpha" format="float"/>
 
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
@@ -121,7 +135,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -131,6 +145,12 @@
         <attr name="sel_background_ripple_mask_corner_bottomLeft" />
         <attr name="sel_background_ripple_mask_corner_bottomRight" />
 
+        <attr name="vp_content_width" />
+        <attr name="vp_content_height" />
+        <attr name="vp_content_padding_left" />
+        <attr name="vp_content_padding_top" />
+        <attr name="vp_content_padding_right" />
+        <attr name="vp_content_padding_bottom" />
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
@@ -161,7 +181,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -258,7 +278,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -284,7 +304,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -310,7 +330,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
@@ -336,7 +356,7 @@
         <attr name="sel_background_border_width" />
         <attr name="sel_background_border_pressed" />
         <attr name="sel_background_border_selected" />
-        <attr name="sel_background_border_disable"/>
+        <attr name="sel_background_border_disable" />
         <attr name="sel_background_ripple" />
         <attr name="sel_background_ripple_mask" />
         <attr name="sel_background_ripple_mask_shape" />
