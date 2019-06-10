@@ -78,6 +78,8 @@ public abstract class ScrollPickerView<T> extends View {
 
     private boolean mDrawAllItem = false; // 是否绘制每个item(包括在边界外的item)
 
+    private boolean mHasCallSelectedListener = false; // 用于标志第一次设置selected时把事件通知给监听器
+
     public ScrollPickerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -724,9 +726,11 @@ public abstract class ScrollPickerView<T> extends View {
 
     public void setSelectedPosition(int position) {
         if (position < 0 || position > mData.size() - 1
-                || position == mSelected) {
+                || (position == mSelected && mHasCallSelectedListener)) {
             return;
         }
+
+        mHasCallSelectedListener = true;
         mSelected = position;
         invalidate();
         notifySelected();
