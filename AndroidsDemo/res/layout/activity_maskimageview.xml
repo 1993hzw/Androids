@@ -162,7 +162,7 @@
                 android:orientation="horizontal">
 
                 <cn.forward.androids.views.STextView
-                    android:layout_width="85dp"
+                    android:layout_width="81dp"
                     android:layout_height="85dp"
                     android:background="#00ff00"
                     android:clickable="true"
@@ -193,6 +193,7 @@
                     app:sel_background_corner_bottomRight="30dp"
                     app:sel_background_pressed="#0000ff"
                     app:sel_background_selected="#0088ff"
+                    app:stv_text_color_disable="#888888"
                     app:stv_text_color_pressed="#ff0000"
                     app:stv_text_color_selected="#ff8800" />
 

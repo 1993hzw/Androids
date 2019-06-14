@@ -11,7 +11,7 @@ public class MaskImageViewDemo extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maskimageview);
 
-        setTitle("MaskImageView/STextView/SLayout");
+        setTitle("MaskImageView/STextView/SView");
     }
 
 }
