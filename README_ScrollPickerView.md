@@ -3,6 +3,7 @@ ScrollPickerView
 滚动选择器，支持循环滚动，可实现生日选择器，老虎机等
 
 ![01](https://raw.githubusercontent.com/1993hzw/common/master/Androids/scrollpicker01.gif)
+
 ![02](https://raw.githubusercontent.com/1993hzw/common/master/Androids/scrollpicker02.gif)
 
 * 支持的View
