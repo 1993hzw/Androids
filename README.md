@@ -59,10 +59,13 @@ dependencies {
 
 ### 工具类
 
-* #### 图片加载器
-[点击查看示例代码](https://github.com/1993hzw/ImageSelector/blob/master/library/src/main/java/cn/hzw/imageselector/ImageLoader.java)
+* #### [ImageLoader(https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java)
+  
+  简单的图片加载器
 
-* #### AnimatorUtil
+* #### [AnimatorUtil](https://github.com/1993hzw/Androids/blob/master/README_AnimatorUtil.md)
+
+  对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
 
 * #### 其他
   * [EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/EllipsizeUtils.java)，文字截断和高亮，支持多行和根据关键字省略

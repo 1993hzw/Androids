@@ -1,4 +1,4 @@
-RadioImageView
+RatioImageView
 ======
 可以设置宽高比例的ImageView
 
