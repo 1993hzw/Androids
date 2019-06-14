@@ -59,7 +59,7 @@ dependencies {
 
 ### 工具类
 
-* #### [ImageLoader(https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java)
+* #### [ImageLoader](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java)
   
   简单的图片加载器
 
