@@ -59,15 +59,6 @@ dependencies {
 
 ### 工具类
 
-* #### [ImageLoader](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java)
-  
-  简单的图片加载器
-
-* #### [AnimatorUtil](https://github.com/1993hzw/Androids/blob/master/README_AnimatorUtil.md)
-
-  对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
-
-* #### 其他
   * [EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/EllipsizeUtils.java)，文字截断和高亮，支持多行和根据关键字省略
   * [LogUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/LogUtil.java) 日志输出
   * [ProcessUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ProcessUtil.java) 进程相关
@@ -76,6 +67,8 @@ dependencies {
   * [ThreadUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ThreadUtil.java) 线程相关，包括主线程和子线程
   * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
+  * [AnimatorUtil](https://github.com/1993hzw/Androids/blob/master/README_AnimatorUtil.md) 对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
+  * [ImageLoader](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java) 简单的图片加载器
 
 
 ### 项目结构
