@@ -7,7 +7,7 @@ Androids是本人根据平时的项目实践经验，为了提高Android开发�
 ![ANDROIDS](https://raw.githubusercontent.com/1993hzw/common/master/Androids/android4.png)
 
 ### 使用
-```
+```gradle
 allprojects {
     repositories {
         ...
@@ -16,7 +16,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.1993hzw:Androids:1.2.4'
+    implementation 'com.github.1993hzw:Androids:1.2.5'
 }
 ```
 ### 自定义View
@@ -69,10 +69,4 @@ dependencies {
   * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
   * [AnimatorUtil](https://github.com/1993hzw/Androids/blob/master/README_AnimatorUtil.md) 对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
   * [ImageLoader](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java) 简单的图片加载器
-
-
-### 项目结构
-#### --AndroidsDemo　使用例子
-
-#### --androids 库工程
 
