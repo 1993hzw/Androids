@@ -2,7 +2,7 @@ EllipsizeUtils
 ======
 文字截断和高亮，支持多行和根据关键字省略
 
-![01](https://raw.githubusercontent.com/1993hzw/common/master/Androids/ellipsizeutils.jpeg)
+![01](https://raw.githubusercontent.com/1993hzw/common/master/Androids/ellipsizeutils.png)
 
 * 示例
 
