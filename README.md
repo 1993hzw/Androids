@@ -16,7 +16,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.1993hzw:Androids:1.2.5'
+    implementation 'com.github.1993hzw:Androids:1.3'
 }
 ```
 ### 自定义View
@@ -70,7 +70,7 @@ dependencies {
   * [StatusBarUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/StatusBarUtil.java) 设置页面为沉浸式状态栏
   * [ThreadUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ThreadUtil.java) 线程相关，包括主线程和子线程
   * [DateUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/DateUtil.java) 日期相关
-  * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
   * [AnimatorUtil](https://github.com/1993hzw/Androids/blob/master/README_AnimatorUtil.md) 对AnimatorSet进行封装，便以链式构建动画；支持设置循环次数
+  * [Util](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/Util.java)
   * [ImageLoader](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/Image/LocalImagerLoader.java) 简单的图片加载器
 
