@@ -63,7 +63,7 @@ dependencies {
 
 ### 工具类
 
-  * [EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/EllipsizeUtils.java)，文字截断和高亮，支持多行和根据关键字省略
+  * [EllipsizeUtils](https://github.com/1993hzw/Androids/blob/master/README_EllipsizeUtils.md) 文字截断和高亮，支持多行和根据关键字省略
   * [LogUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/LogUtil.java) 日志输出
   * [ProcessUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ProcessUtil.java) 进程相关
   * [ReflectUtil](https://github.com/1993hzw/Androids/blob/master/androids/src/cn/forward/androids/utils/ReflectUtil.java) 反射相关
