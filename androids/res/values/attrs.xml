@@ -52,7 +52,7 @@
     </declare-styleable>
 
     <!--ImageView的padding相关设置, layout_width/height为精确值下列属性才生效-->
-    <declare-styleable name="ViewPaddingAttrs">
+    <declare-styleable name="PaddingViewAttrs">
         <!--src content的确切宽度，必填-->
         <attr name="vp_content_width" format="dimension" />
         <!--src content的确切高度，必填-->

@@ -27,6 +27,6 @@ public class PaddingImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
-        ViewPaddingAttrs.obtainsAttrs(getContext(), this, attrs);
+        PaddingViewAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 }

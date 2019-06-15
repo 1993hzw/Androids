@@ -13,7 +13,7 @@ import cn.forward.androids.R;
  * 直接在xml布局文件设置View的内容padding, 支持靠边对齐
  * 用于解决点击区域大于内容区域的问题
  */
-public class ViewPaddingAttrs {
+public class PaddingViewAttrs {
 
     @SuppressLint("ResourceType")
     public static void obtainsAttrs(Context context, View view, AttributeSet attrs) {
@@ -38,13 +38,13 @@ public class ViewPaddingAttrs {
             return;
         }
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewPaddingAttrs);
-        int mContentWidth = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_width, 0);
-        int mContentHeight = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_height, 0);
-        int mContentPaddingLeft = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_padding_left, -1);
-        int mContentPaddingTop = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_padding_top, -1);
-        int mContentPaddingRight = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_padding_right, -1);
-        int mContentPaddingBottom = a.getDimensionPixelOffset(R.styleable.ViewPaddingAttrs_vp_content_padding_bottom, -1);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaddingViewAttrs);
+        int mContentWidth = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_width, 0);
+        int mContentHeight = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_height, 0);
+        int mContentPaddingLeft = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_padding_left, -1);
+        int mContentPaddingTop = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_padding_top, -1);
+        int mContentPaddingRight = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_padding_right, -1);
+        int mContentPaddingBottom = a.getDimensionPixelOffset(R.styleable.PaddingViewAttrs_vp_content_padding_bottom, -1);
         a.recycle();
 
         if (mContentWidth <= 0 || mContentHeight <= 0 || mContentWidth > width || mContentHeight > height) {
