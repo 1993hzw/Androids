@@ -119,7 +119,7 @@
         <!--是否忽略图片的透明度，默认为true,透明部分不显示遮罩 -->
         <attr name="miv_is_ignore_alpha" format="boolean" />
         <!--按下时view的透明度-->
-        <attr name="miv_pressed_alpha" format="float"/>
+        <attr name="miv_pressed_alpha" format="float" />
 
         <attr name="sel_background" />
         <attr name="sel_background_pressed" />
@@ -144,13 +144,6 @@
         <attr name="sel_background_ripple_mask_corner_topRight" />
         <attr name="sel_background_ripple_mask_corner_bottomLeft" />
         <attr name="sel_background_ripple_mask_corner_bottomRight" />
-
-        <attr name="vp_content_width" />
-        <attr name="vp_content_height" />
-        <attr name="vp_content_padding_left" />
-        <attr name="vp_content_padding_top" />
-        <attr name="vp_content_padding_right" />
-        <attr name="vp_content_padding_bottom" />
     </declare-styleable>
 
     <declare-styleable name="ShapeImageView">
@@ -365,6 +358,24 @@
         <attr name="sel_background_ripple_mask_corner_topRight" />
         <attr name="sel_background_ripple_mask_corner_bottomLeft" />
         <attr name="sel_background_ripple_mask_corner_bottomRight" />
+    </declare-styleable>
+
+    <declare-styleable name="PaddingImageView">
+        <attr name="vp_content_width" />
+        <attr name="vp_content_height" />
+        <attr name="vp_content_padding_left" />
+        <attr name="vp_content_padding_top" />
+        <attr name="vp_content_padding_right" />
+        <attr name="vp_content_padding_bottom" />
+    </declare-styleable>
+
+    <declare-styleable name="PaddingTextView">
+        <attr name="vp_content_width" />
+        <attr name="vp_content_height" />
+        <attr name="vp_content_padding_left" />
+        <attr name="vp_content_padding_top" />
+        <attr name="vp_content_padding_right" />
+        <attr name="vp_content_padding_bottom" />
     </declare-styleable>
 
 </resources>

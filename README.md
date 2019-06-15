@@ -41,6 +41,10 @@ dependencies {
   
   可以设置宽高比例的ImageView
   
+  * #### [PaddingView](https://github.com/1993hzw/Androids/blob/master/README_PaddingView.md)
+    
+  在xml布局文件设置View的内容padding, 支持靠边对齐。用于解决点击区域大于内容区域的问题
+  
   * #### [ScrollPickerView](https://github.com/1993hzw/Androids/blob/master/README_ScrollPickerView.md)
   
   滚动选择器，支持循环滚动，可实现生日选择器，老虎机等

@@ -40,6 +40,6 @@ RatioImageView
 
 * 更多
 
-`RadioImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多]()
+`RadioImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多](https://github.com/1993hzw/Androids/blob/master/README_SView.md)
 
 [《Android自定View——可以设置宽高比例的ImageView》](http://blog.csdn.net/u012964944/article/details/50600078)

@@ -9,6 +9,10 @@ import android.view.View;
 
 import cn.forward.androids.R;
 
+/**
+ * 直接在xml布局文件设置View的内容padding, 支持靠边对齐
+ * 用于解决点击区域大于内容区域的问题
+ */
 public class ViewPaddingAttrs {
 
     @SuppressLint("ResourceType")

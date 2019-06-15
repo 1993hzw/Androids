@@ -27,4 +27,6 @@ STextView
 
 * 更多
 
-`STextView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多]()
+`STextView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多](https://github.com/1993hzw/Androids/blob/master/README_SView.md)
+
+[PaddingView](https://github.com/1993hzw/Androids/blob/master/README_PaddingView.md)

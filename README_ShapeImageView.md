@@ -37,6 +37,6 @@ ShapeImageView
 
 * 更多
 
-`ShapeImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多]()
+`ShapeImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多](https://github.com/1993hzw/Androids/blob/master/README_SView.md)
 
 [《Android自定义View——可设置形状(圆形、圆角矩形、椭圆)的ImageView，抗锯齿》](http://blog.csdn.net/u012964944/article/details/50548720)

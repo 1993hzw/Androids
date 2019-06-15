@@ -14,7 +14,7 @@ import cn.forward.androids.R;
  * @author huangziwei
  * @date 2015.12.29
  */
-public class MaskImageView extends ImageView {
+public class MaskImageView extends PaddingImageView {
 
     // 遮罩的范围
     public static final int MASK_LEVEL_BACKGROUND = 1; // 背景图显示遮罩
@@ -61,7 +61,6 @@ public class MaskImageView extends ImageView {
         a.recycle();
 
         SelectorAttrs.obtainsAttrs(getContext(), this, attrs);
-        ViewPaddingAttrs.obtainsAttrs(getContext(), this, attrs);
     }
 
     private void setColorMatrix(float[] matrix) {

@@ -39,6 +39,8 @@ MaskImageView
 
 * 更多
 
-`MaskImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多]()
+`MaskImageView`还支持在xml布局文件设置shape和selector，实现点击效果，[点击了解更多](https://github.com/1993hzw/Androids/blob/master/README_SView.md)
+
+[PaddingView](https://github.com/1993hzw/Androids/blob/master/README_PaddingView.md)
 
 [《Android自定义View——可在背景图和前景图显示遮罩效果的ImageView》](http://blog.csdn.net/u012964944/article/details/50560503)

@@ -13,7 +13,7 @@ import cn.forward.androids.R;
  * Created by Administrator on 2017/1/1.
  */
 
-public class STextView extends TextView {
+public class STextView extends PaddingTextView {
 
 
     public STextView(Context context) {
